@@ -1,0 +1,45 @@
+import { prisma } from "@/lib/db"
+import { AppError } from "@/lib/app-error"
+
+export async function toggleFavorite(userId: string, gameId: string) {
+  const game = await prisma.game.findUnique({ where: { id: gameId } })
+  if (!game) throw new AppError("NOT_FOUND", "Game not found")
+
+  const existing = await prisma.favorite.findUnique({
+    where: { userId_gameId: { userId, gameId } },
+  })
+
+  if (existing) {
+    await prisma.favorite.delete({ where: { id: existing.id } })
+    return { favorited: false }
+  }
+
+  await prisma.favorite.create({ data: { userId, gameId } })
+  return { favorited: true }
+}
+
+export async function isFavorited(userId: string, gameId: string) {
+  const fav = await prisma.favorite.findUnique({
+    where: { userId_gameId: { userId, gameId } },
+  })
+  return !!fav
+}
+
+export async function getUserFavorites(userId: string) {
+  return prisma.favorite.findMany({
+    where: { userId },
+    include: {
+      game: {
+        select: { id: true },
+      },
+    },
+  })
+}
+
+export async function getFavoritedGameIds(userId: string): Promise<string[]> {
+  const favorites = await prisma.favorite.findMany({
+    where: { userId },
+    select: { gameId: true },
+  })
+  return favorites.map((f) => f.gameId)
+}
