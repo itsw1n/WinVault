@@ -1,0 +1,48 @@
+import type { Metadata } from "next"
+import { Space_Grotesk, Inter } from "next/font/google"
+import { ThemeProvider } from "next-themes"
+import { Providers } from "@/components/providers"
+import "./globals.css"
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-space-grotesk",
+})
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-inter",
+})
+
+export const metadata: Metadata = {
+  title: "PlayVault — Discover Indie Games",
+  description:
+    "PlayVault is a community-driven platform to discover, share, and play indie games.",
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
+    >
+      <body>
+        <ThemeProvider
+          attribute="data-theme"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>{children}</Providers>
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}
