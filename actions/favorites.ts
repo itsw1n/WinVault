@@ -7,9 +7,10 @@ import { revalidatePath } from "next/cache"
 
 export async function toggleFavorite(gameId: string) {
   const session = await auth()
-  if (!session?.user?.id) return fail("UNAUTHORIZED")
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
 
-  const result = await wrap(() => toggleFav(session.user.id, gameId))
+  const result = await wrap(() => toggleFav(userId, gameId))
   if (!result.success) return result
 
   revalidatePath("/")

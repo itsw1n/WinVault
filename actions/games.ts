@@ -8,7 +8,8 @@ import { revalidatePath } from "next/cache"
 
 export async function createGame(_prev: unknown, formData: FormData) {
   const session = await auth()
-  if (!session?.user?.id) return fail("UNAUTHORIZED")
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
 
   const parsed = createGameSchema.safeParse({
     title: formData.get("title"),
@@ -24,7 +25,7 @@ export async function createGame(_prev: unknown, formData: FormData) {
   }
 
   const result = await wrap(() =>
-    gameService.createGame({ ...parsed.data, ownerId: session.user.id })
+    gameService.createGame({ ...parsed.data, ownerId: userId })
   )
 
   if (!result.success) return result
@@ -36,7 +37,8 @@ export async function createGame(_prev: unknown, formData: FormData) {
 
 export async function updateGame(_prev: unknown, formData: FormData) {
   const session = await auth()
-  if (!session?.user?.id) return fail("UNAUTHORIZED")
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
 
   const parsed = updateGameSchema.safeParse({
     id: formData.get("id"),
@@ -54,7 +56,7 @@ export async function updateGame(_prev: unknown, formData: FormData) {
 
   const game = await wrap(() => gameService.getGameById(parsed.data.id))
   if (!game.success) return game
-  if (game.data.ownerId !== session.user.id) return fail("FORBIDDEN")
+  if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
   const { id, ...data } = parsed.data
 
@@ -68,11 +70,12 @@ export async function updateGame(_prev: unknown, formData: FormData) {
 
 export async function deleteGame(id: string) {
   const session = await auth()
-  if (!session?.user?.id) return fail("UNAUTHORIZED")
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
 
   const game = await wrap(() => gameService.getGameById(id))
   if (!game.success) return game
-  if (game.data.ownerId !== session.user.id) return fail("FORBIDDEN")
+  if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
   const result = await wrap(() => gameService.deleteGame(id))
   if (!result.success) return result
