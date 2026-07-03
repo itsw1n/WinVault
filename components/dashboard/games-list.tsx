@@ -18,7 +18,7 @@ export function GamesList({ games, onEdit, onDelete }: GamesListProps) {
   if (games.length === 0) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-sm text-pv-muted">You haven't published any games yet.</p>
+        <p className="text-sm text-pv-muted">You haven&apos;t published any games yet.</p>
       </Card>
     )
   }

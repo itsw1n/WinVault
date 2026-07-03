@@ -26,7 +26,7 @@ export function FavoritesGrid({ favorites, onUnfavorite }: FavoritesGridProps) {
     return (
       <Card className="p-6 text-center">
         <p className="text-sm text-pv-muted">
-          You haven't favorited any games yet.
+          You haven&apos;t favorited any games yet.
         </p>
       </Card>
     )
