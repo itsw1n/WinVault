@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
 import { Space_Grotesk, Inter } from "next/font/google"
-import { ThemeProvider } from "next-themes"
 import { Providers } from "@/components/providers"
 import "./globals.css"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: ["700", "800"],
+  weight: ["400", "700"],
   variable: "--font-space-grotesk",
 })
 
@@ -34,14 +33,7 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable}`}
     >
       <body>
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Providers>{children}</Providers>
-        </ThemeProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
