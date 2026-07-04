@@ -1,31 +1,52 @@
-import { clsx } from "clsx"
+"use client"
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger"
-}
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
-export function Button({
-  variant = "primary",
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap font-bold border-solid rounded-pv-sm transition-all duration-100 focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-pv-primary text-[#111111] border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]",
+        active:
+          "bg-pv-primary text-[#111111] border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)]",
+        inactive:
+          "bg-pv-card text-pv-text border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]",
+      },
+      size: {
+        default: "h-10 px-4 py-2 text-sm tracking-wide uppercase",
+        sm: "px-3 py-1.5 text-[11px] tracking-[0.03em] uppercase",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+)
+
+function Button({
   className,
-  children,
+  variant,
+  size,
+  asChild = false,
   ...props
-}: ButtonProps) {
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }) {
+  const Comp = asChild ? Slot : "button"
+
   return (
-    <button
-      className={clsx(
-        "inline-flex items-center justify-center px-4 py-2 text-sm font-bold uppercase tracking-wide border-pv rounded-pv-sm transition-colors",
-        variant === "primary" &&
-          "bg-pv-primary text-[#111] border-pv-border hover:bg-[#e05e00]",
-        variant === "secondary" &&
-          "bg-pv-card text-pv-text border-pv-border hover:bg-pv-bg",
-        variant === "danger" &&
-          "bg-pv-card text-pv-heart border-pv-border hover:bg-pv-bg",
-        props.disabled && "opacity-50 cursor-not-allowed",
-        className
-      )}
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    >
-      {children}
-    </button>
+    />
   )
 }
+
+export { Button, buttonVariants }
