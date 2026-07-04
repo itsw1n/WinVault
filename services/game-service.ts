@@ -153,20 +153,10 @@ export async function getGamesFavoritedByUser(userId: string) {
   })
 }
 
-export const GENRES = [
-  "Action",
-  "Adventure",
-  "Puzzle",
-  "RPG",
-  "Simulation",
-  "Strategy",
-  "Sports",
-  "Racing",
-  "Horror",
-  "Platformer",
-  "Shooter",
-  "Fighting",
-  "Rhythm",
-  "Visual Novel",
-  "Other",
-] as const
+export async function getDeveloperCount() {
+  return prisma.user.count({
+    where: { games: { some: {} } },
+  })
+}
+
+
