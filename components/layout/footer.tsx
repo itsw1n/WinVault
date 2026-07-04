@@ -1,12 +1,88 @@
+import Link from "next/link"
+
 export function Footer() {
   return (
-    <footer className="border-t-pv border-t-pv-border mt-auto">
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-6 flex items-center justify-between">
-        <p className="text-xs text-pv-muted">
-          © {new Date().getFullYear()} PlayVault. Games are hosted by their
-          creators.
-        </p>
-        <p className="text-xs text-pv-muted">Discover indie games.</p>
+    <footer className="border-t-[3px] border-pv-border bg-pv-card mt-auto">
+      <div className="max-w-[1400px] mx-auto px-4 py-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-pv-primary border-2 border-pv-border rounded-[4px]" />
+            <span className="font-display font-black text-sm text-pv-text tracking-tight">
+              PLAYVAULT
+            </span>
+          </div>
+          <nav className="flex items-center gap-6">
+            <Link
+              href="/games"
+              className="text-xs text-pv-muted hover:text-pv-text transition-colors"
+            >
+              Browse Games
+            </Link>
+            <Link
+              href="/sign-in"
+              className="text-xs text-pv-muted hover:text-pv-text transition-colors"
+            >
+              Sign In
+            </Link>
+          </nav>
+        </div>
+
+        <div className="border-t border-pv-border my-4" />
+
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-pv-muted">
+            &copy; 2026 PlayVault. Made by{" "}
+            <a
+              href="https://github.com/itswin"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-pv-text font-medium hover:text-pv-primary transition-colors"
+            >
+              itswin
+            </a>
+          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="https://github.com/itswin"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile"
+              className="text-pv-muted hover:text-pv-text transition-colors"
+            >
+              <i
+                className="ti ti-brand-github"
+                style={{ fontSize: 18 }}
+                aria-hidden="true"
+              />
+            </a>
+            <a
+              href="https://linkedin.com/in/itswin"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
+              className="text-pv-muted hover:text-pv-text transition-colors"
+            >
+              <i
+                className="ti ti-brand-linkedin"
+                style={{ fontSize: 18 }}
+                aria-hidden="true"
+              />
+            </a>
+            <a
+              href="https://facebook.com/itswin"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook profile"
+              className="text-pv-muted hover:text-pv-text transition-colors"
+            >
+              <i
+                className="ti ti-brand-facebook"
+                style={{ fontSize: 18 }}
+                aria-hidden="true"
+              />
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   )
