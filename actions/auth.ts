@@ -1,13 +1,22 @@
 "use server"
 
+import { headers } from "next/headers"
 import { signIn } from "@/lib/auth"
-import { signUpSchema, signInSchema } from "@/lib/validations/auth"
-import { createUser } from "@/services/user-service"
+import { signUpSchema, signInSchema, updateProfileSchema } from "@/lib/validations/auth"
+import { createUser, updateUser } from "@/services/user-service"
 import { wrap, fail } from "@/lib/action-result"
+import { rateLimit } from "@/lib/rate-limiter"
+import { compare, hash } from "bcryptjs"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
+import { prisma } from "@/lib/db"
 
 export async function signUp(_prev: unknown, formData: FormData) {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
+  if (!rateLimit(`signup:${ip}`, 5, 15 * 60 * 1000)) {
+    return fail("VALIDATION", "Too many attempts. Please try again later.")
+  }
+
   const parsed = signUpSchema.safeParse({
     username: formData.get("username"),
     email: formData.get("email"),
@@ -41,6 +50,11 @@ export async function signUp(_prev: unknown, formData: FormData) {
 }
 
 export async function signInAction(_prev: unknown, formData: FormData) {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
+  if (!rateLimit(`signin:${ip}`, 5, 15 * 60 * 1000)) {
+    return fail("VALIDATION", "Too many attempts. Please try again later.")
+  }
+
   const parsed = signInSchema.safeParse({
     login: formData.get("login"),
     password: formData.get("password"),
@@ -62,4 +76,49 @@ export async function signInAction(_prev: unknown, formData: FormData) {
     }
     throw e
   }
+}
+
+export async function updateProfile(_prev: unknown, formData: FormData) {
+  const session = await auth()
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
+
+  const parsed = updateProfileSchema.safeParse({
+    username: formData.get("username"),
+    email: formData.get("email"),
+    currentPassword: formData.get("currentPassword") || undefined,
+    newPassword: formData.get("newPassword") || undefined,
+  })
+
+  if (!parsed.success) {
+    return fail("VALIDATION", parsed.error.errors[0].message)
+  }
+
+  const { currentPassword, newPassword, ...profile } = parsed.data
+
+  let passwordHash: string | undefined
+  if (currentPassword || newPassword) {
+    if (!currentPassword || !newPassword) {
+      return fail("VALIDATION", "Both current and new password are required to change password")
+    }
+
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { passwordHash: true } })
+    if (!user || !(await compare(currentPassword, user.passwordHash))) {
+      return fail("VALIDATION", "Current password is incorrect")
+    }
+
+    passwordHash = await hash(newPassword, 12)
+  }
+
+  const result = await wrap(() =>
+    updateUser(userId, {
+      username: profile.username,
+      email: profile.email,
+      ...(passwordHash ? { passwordHash } : {}),
+    })
+  )
+
+  if (!result.success) return result
+
+  return result
 }
