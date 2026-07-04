@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Space_Grotesk, Inter } from "next/font/google"
 import { Providers } from "@/components/providers"
-import "./globals.css"
+import "@/styles/globals.css"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -32,6 +32,12 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${inter.variable}`}
     >
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"
+        />
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
