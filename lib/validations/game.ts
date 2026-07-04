@@ -11,12 +11,30 @@ export const createGameSchema = z.object({
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean)
-  ),
+      .slice(0, 10)
+  ).pipe(z.array(z.string().max(30, "Each tag must be at most 30 characters")).max(10)),
 })
 
 export const updateGameSchema = createGameSchema.extend({
   id: z.string(),
 })
 
-export type CreateGameInput = z.infer<typeof createGameSchema>
-export type UpdateGameInput = z.infer<typeof updateGameSchema>
+export const GENRES = [
+  "Action",
+  "Adventure",
+  "Puzzle",
+  "RPG",
+  "Simulation",
+  "Strategy",
+  "Sports",
+  "Racing",
+  "Horror",
+  "Platformer",
+  "Shooter",
+  "Fighting",
+  "Rhythm",
+  "Visual Novel",
+  "Other",
+] as const
+
+

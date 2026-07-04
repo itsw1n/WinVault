@@ -4,6 +4,7 @@ import { GameGrid } from "@/components/games/game-grid"
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/services/favorite-service"
+import { GENRES } from "@/lib/validations/game"
 import * as gameService from "@/services/game-service"
 import Link from "next/link"
 
@@ -39,7 +40,7 @@ export default async function BrowsePage(props: {
           <Button variant={!searchParams.genre ? "active" : "inactive"} size="sm" asChild>
             <Link href="/games">All</Link>
           </Button>
-          {gameService.GENRES.map((g) => (
+          {GENRES.map((g) => (
             <Button key={g} variant={searchParams.genre === g ? "active" : "inactive"} size="sm" asChild>
               <Link href={`/games?genre=${encodeURIComponent(g)}`}>{g}</Link>
             </Button>
