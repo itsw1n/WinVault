@@ -1,7 +1,5 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
 import { GameGrid } from "@/components/games/game-grid"
 import * as gameService from "@/services/game-service"
 import { getUserByUsername } from "@/services/user-service"
@@ -43,12 +41,10 @@ export default async function DeveloperProfilePage(props: {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-8">
+    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-8">
         {/* Profile header */}
         <section className="border-pv border-pv-border rounded-pv p-6 bg-pv-card flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full border-pv border-pv-border bg-pv-bg flex items-center justify-center overflow-hidden">
+          <div className="w-16 h-16 rounded-pv border-pv border-pv-border bg-pv-bg flex items-center justify-center overflow-hidden">
             {user.avatarUrl ? (
               <img
                 src={user.avatarUrl}
@@ -88,8 +84,6 @@ export default async function DeveloperProfilePage(props: {
             favoritedIds={favoritedIds}
           />
         </section>
-      </main>
-      <Footer />
-    </div>
+      </div>
   )
 }

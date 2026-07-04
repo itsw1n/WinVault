@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
 import { GameGrid } from "@/components/games/game-grid"
-import { GenreBadge } from "@/components/games/genre-badge"
-import { SearchBar } from "@/components/games/search-bar"
+
+import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/services/favorite-service"
 import * as gameService from "@/services/game-service"
@@ -31,28 +29,20 @@ export default async function BrowsePage(props: {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <h1 className="font-display text-3xl font-bold text-pv-text">
-            Browse Games
-          </h1>
-          <SearchBar />
-        </div>
+    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-6">
+        <h1 className="font-display text-3xl font-bold text-pv-text">
+          Browse Games
+        </h1>
 
         {/* Genre filter */}
         <div className="flex flex-wrap gap-2">
-          <Link href="/games">
-            <GenreBadge
-              genre="All"
-              active={!searchParams.genre}
-            />
-          </Link>
+          <Button variant={!searchParams.genre ? "active" : "inactive"} size="sm" asChild>
+            <Link href="/games">All</Link>
+          </Button>
           {gameService.GENRES.map((g) => (
-            <Link key={g} href={`/games?genre=${encodeURIComponent(g)}`}>
-              <GenreBadge genre={g} active={searchParams.genre === g} />
-            </Link>
+            <Button key={g} variant={searchParams.genre === g ? "active" : "inactive"} size="sm" asChild>
+              <Link href={`/games?genre=${encodeURIComponent(g)}`}>{g}</Link>
+            </Button>
           ))}
         </div>
 
@@ -63,8 +53,6 @@ export default async function BrowsePage(props: {
         )}
 
         <GameGrid games={games} favoritedIds={favoritedIds} />
-      </main>
-      <Footer />
-    </div>
+      </div>
   )
 }

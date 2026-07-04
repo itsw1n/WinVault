@@ -1,6 +1,4 @@
 import type { Metadata } from "next"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { auth } from "@/lib/auth"
@@ -46,9 +44,7 @@ export default async function GameDetailPage(props: {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 max-w-[1400px] mx-auto px-4 lg:px-8 py-8">
+    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Thumbnail */}
           <Card className="overflow-hidden">
@@ -103,8 +99,6 @@ export default async function GameDetailPage(props: {
             />
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
   )
 }
