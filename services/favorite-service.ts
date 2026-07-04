@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db"
-import { AppError } from "@/lib/app-error"
+import { ActionError } from "@/lib/action-result"
 
 export async function toggleFavorite(userId: string, gameId: string) {
   const game = await prisma.game.findUnique({ where: { id: gameId } })
-  if (!game) throw new AppError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
 
   const existing = await prisma.favorite.findUnique({
     where: { userId_gameId: { userId, gameId } },

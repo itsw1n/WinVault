@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db"
 import { hash } from "bcryptjs"
-import { AppError } from "@/lib/app-error"
+import { ActionError } from "@/lib/action-result"
 
 export async function createUser(
   username: string,
@@ -12,25 +12,14 @@ export async function createUser(
     isEmailTaken(email),
   ])
 
-  if (usernameTaken) throw new AppError("CONFLICT", "Username is already taken")
-  if (emailTaken) throw new AppError("CONFLICT", "Email is already registered")
+  if (usernameTaken) throw new ActionError("CONFLICT", "Username is already taken")
+  if (emailTaken) throw new ActionError("CONFLICT", "Email is already registered")
 
   const passwordHash = await hash(password, 12)
 
   return prisma.user.create({
     data: { username, email, passwordHash },
   })
-}
-
-export async function getUserByLogin(login: string) {
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [{ email: login }, { username: login }],
-    },
-  })
-
-  if (!user) throw new AppError("UNAUTHORIZED", "Invalid username/email or password")
-  return user
 }
 
 export async function getUserByUsername(username: string) {
@@ -41,26 +30,39 @@ export async function getUserByUsername(username: string) {
     },
   })
 
-  if (!user) throw new AppError("NOT_FOUND", "User not found")
+  if (!user) throw new ActionError("NOT_FOUND", "User not found")
   return user
 }
 
 export async function getUserById(id: string) {
-  const user = await prisma.user.findUnique({ where: { id } })
-  if (!user) throw new AppError("NOT_FOUND", "User not found")
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: { id: true, username: true, email: true, avatarUrl: true, bio: true },
+  })
+  if (!user) throw new ActionError("NOT_FOUND", "User not found")
   return user
 }
 
 export async function updateUser(
   id: string,
-  data: { username?: string; avatarUrl?: string | null; bio?: string | null }
+  data: {
+    username?: string
+    email?: string
+    passwordHash?: string
+    avatarUrl?: string | null
+    bio?: string | null
+  }
 ) {
   const user = await prisma.user.findUnique({ where: { id } })
-  if (!user) throw new AppError("NOT_FOUND", "User not found")
+  if (!user) throw new ActionError("NOT_FOUND", "User not found")
 
   if (data.username && data.username !== user.username) {
     const taken = await isUsernameTaken(data.username, id)
-    if (taken) throw new AppError("CONFLICT", "Username is already taken")
+    if (taken) throw new ActionError("CONFLICT", "Username is already taken")
+  }
+  if (data.email && data.email !== user.email) {
+    const taken = await isEmailTaken(data.email)
+    if (taken) throw new ActionError("CONFLICT", "Email is already registered")
   }
 
   return prisma.user.update({ where: { id }, data })

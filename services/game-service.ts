@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db"
-import { AppError } from "@/lib/app-error"
+import { ActionError } from "@/lib/action-result"
 
 export async function getFeaturedGames() {
   return prisma.game.findMany({
@@ -78,7 +78,7 @@ export async function getGameById(id: string) {
     },
   })
 
-  if (!game) throw new AppError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
   return game
 }
 
@@ -134,14 +134,14 @@ export async function updateGame(
   }
 ) {
   const game = await prisma.game.findUnique({ where: { id } })
-  if (!game) throw new AppError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
 
   return prisma.game.update({ where: { id }, data })
 }
 
 export async function deleteGame(id: string) {
   const game = await prisma.game.findUnique({ where: { id } })
-  if (!game) throw new AppError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
 
   return prisma.game.delete({ where: { id } })
 }
