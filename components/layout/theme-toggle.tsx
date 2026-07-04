@@ -9,15 +9,18 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), [])
 
-  if (!mounted) return <div className="w-[72px] h-[34px]" />
+  if (!mounted) return <div className="w-[34px] h-[34px]" />
 
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="px-3 py-1.5 text-xs font-bold uppercase tracking-wide border-pv border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors"
+      className="w-[34px] h-[34px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors"
       aria-label="Toggle theme"
     >
-      {resolvedTheme === "dark" ? "☀ Light" : "☾ Dark"}
+      <i
+        className={`ti ${resolvedTheme === "dark" ? "ti-sun" : "ti-moon"} text-[16px]`}
+        aria-hidden="true"
+      />
     </button>
   )
 }
