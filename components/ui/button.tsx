@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "bg-pv-primary text-[#111111] border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)]",
         inactive:
           "bg-pv-card text-pv-text border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]",
+        destructive:
+          "bg-pv-card text-pv-heart border-[2px] border-pv-border shadow-[2px_2px_0px_0px_var(--pv-border)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]",
       },
       size: {
         default: "h-10 px-4 py-2 text-sm tracking-wide uppercase",
@@ -49,4 +51,4 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+export { Button }
