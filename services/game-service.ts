@@ -92,10 +92,6 @@ export async function getGamesByOwner(ownerId: string) {
   })
 }
 
-export async function getFavoriteCountByUser(userId: string) {
-  return prisma.favorite.count({ where: { userId } })
-}
-
 export async function getTotalFavoritesReceived(userId: string) {
   const result = await prisma.favorite.aggregate({
     _count: { id: true },
@@ -104,10 +100,6 @@ export async function getTotalFavoritesReceived(userId: string) {
     },
   })
   return result._count.id
-}
-
-export async function getPublishedGamesCount(userId: string) {
-  return prisma.game.count({ where: { ownerId: userId } })
 }
 
 export async function createGame(data: {

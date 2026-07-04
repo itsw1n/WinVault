@@ -18,24 +18,6 @@ export async function toggleFavorite(userId: string, gameId: string) {
   return { favorited: true }
 }
 
-export async function isFavorited(userId: string, gameId: string) {
-  const fav = await prisma.favorite.findUnique({
-    where: { userId_gameId: { userId, gameId } },
-  })
-  return !!fav
-}
-
-export async function getUserFavorites(userId: string) {
-  return prisma.favorite.findMany({
-    where: { userId },
-    include: {
-      game: {
-        select: { id: true },
-      },
-    },
-  })
-}
-
 export async function getFavoritedGameIds(userId: string): Promise<string[]> {
   const favorites = await prisma.favorite.findMany({
     where: { userId },
