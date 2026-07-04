@@ -29,6 +29,7 @@ studio:
 	npx prisma studio
 
 dev:
+	fuser -k 3000/tcp 2>/dev/null || true
 	npm run dev
 
 logs:
