@@ -14,14 +14,15 @@ export function Skeleton({ className }: { className?: string }) {
 export function GameCardSkeleton() {
   return (
     <div className="bg-pv-card border-pv border-pv-border rounded-pv overflow-hidden">
-      <Skeleton className="aspect-[16/9] rounded-none border-0" />
+      <Skeleton className="h-[100px] rounded-none border-0" />
       <div className="p-3 space-y-2">
         <Skeleton className="h-4 w-3/4" />
-        <div className="flex justify-between">
-          <Skeleton className="h-5 w-16" />
-          <Skeleton className="h-4 w-20" />
-        </div>
-        <Skeleton className="h-3 w-12" />
+        <Skeleton className="h-3 w-1/3" />
+        <Skeleton className="h-3 w-full" />
+      </div>
+      <div className="px-3 pb-3 flex gap-2">
+        <Skeleton className="w-[34px] h-[34px] rounded-pv-sm" />
+        <Skeleton className="flex-1 h-[34px] rounded-pv-sm" />
       </div>
     </div>
   )
@@ -39,8 +40,9 @@ export function GameGridSkeleton({ count = 4 }: { count?: number }) {
 
 export function HeroSkeleton() {
   return (
-    <div className="border-pv border-pv-border rounded-pv p-8 bg-pv-card space-y-4">
-      <Skeleton className="h-12 w-96" />
+    <div className="bg-pv-primary border-[3px] border-pv-border rounded-[10px] p-5 space-y-4">
+      <Skeleton className="h-4 w-40" />
+      <Skeleton className="h-8 w-96" />
       <Skeleton className="h-5 w-80" />
       <Skeleton className="h-10 w-64" />
     </div>

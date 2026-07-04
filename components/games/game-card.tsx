@@ -1,12 +1,35 @@
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { FavoriteButton } from "./favorite-button"
+import { Button } from "@/components/ui/button"
 import { clsx } from "clsx"
+
+const GENRE_ICONS: Record<string, string> = {
+  Action: "ti-sword",
+  Adventure: "ti-balloon",
+  Puzzle: "ti-puzzle",
+  RPG: "ti-sword",
+  Simulation: "ti-cpu",
+  Strategy: "ti-chess",
+  Sports: "ti-ball-baseball",
+  Racing: "ti-car",
+  Horror: "ti-ghost",
+  Platformer: "ti-stairs",
+  Shooter: "ti-crosshair",
+  Fighting: "ti-fist",
+  Rhythm: "ti-music",
+  "Visual Novel": "ti-book",
+  Other: "ti-gamepad",
+}
+
+function getGenreIcon(genre: string): string {
+  return GENRE_ICONS[genre] ?? "ti-gamepad"
+}
 
 interface GameCardProps {
   id: string
   title: string
   thumbnailUrl: string
+  shortDescription: string
   genre: string
   owner: { username: string }
   _count: { favorites: number }
@@ -18,55 +41,57 @@ export function GameCard({
   id,
   title,
   thumbnailUrl,
+  shortDescription,
   genre,
   owner,
-  _count,
   isFavorited,
   className,
 }: GameCardProps) {
   return (
-    <Link href={`/games/${id}`}>
-      <Card
-        className={clsx(
-          "group overflow-hidden transition-transform hover:-translate-y-0.5",
-          className
-        )}
-      >
-        <div className="aspect-[16/9] bg-pv-bg overflow-hidden">
+    <div
+      className={clsx(
+        "border-[2.5px] border-pv-border rounded-pv bg-pv-card overflow-hidden",
+        className
+      )}
+    >
+      <Link href={`/games/${id}`} className="block">
+        <div className="bg-pv-border h-[100px] relative p-2 overflow-hidden">
           {thumbnailUrl ? (
             <img
               src={thumbnailUrl}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+              className="w-full h-full object-cover"
             />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-pv-muted text-sm font-bold uppercase">
-              No image
-            </div>
+          ) : null}
+          <span className="bg-pv-primary text-[#111111] text-[10px] font-bold tracking-[0.03em] px-2 py-0.5 rounded-[4px] uppercase absolute top-2 left-2">
+            {genre}
+          </span>
+          <i
+            className={`ti ${getGenreIcon(genre)} absolute bottom-2 right-2 text-pv-primary text-[22px]`}
+            aria-hidden="true"
+          />
+        </div>
+        <div className="p-3">
+          <h3 className="font-display font-bold text-[15px] text-pv-text mt-0 mb-0.5 truncate">
+            {title}
+          </h3>
+          <p className="text-[12px] text-pv-muted mb-1.5">by {owner.username}</p>
+          {shortDescription && (
+            <p className="text-[12px] text-pv-muted leading-[1.4] mb-2.5 line-clamp-2">
+              {shortDescription}
+            </p>
           )}
         </div>
-        <div className="p-3 space-y-2">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-display font-bold text-sm text-pv-text truncate">
-              {title}
-            </h3>
-          </div>
-          <div className="flex items-center justify-between">
-            <Badge>{genre}</Badge>
-            <span className="text-xs text-pv-muted">by {owner.username}</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs text-pv-muted">
-            <span
-              className={clsx(
-                isFavorited ? "text-pv-heart" : "text-pv-muted"
-              )}
-            >
-              ♥
-            </span>
-            <span>{_count.favorites}</span>
-          </div>
-        </div>
-      </Card>
-    </Link>
+      </Link>
+      <div className="px-3 pb-3 flex gap-2">
+        <FavoriteButton gameId={id} isFavorited={!!isFavorited} />
+        <Button variant="default" size="sm" className="flex-1 gap-1.5" asChild>
+          <Link href={`/games/${id}`}>
+            <i className="ti ti-player-play text-[14px]" aria-hidden="true" />
+            PLAY
+          </Link>
+        </Button>
+      </div>
+    </div>
   )
 }

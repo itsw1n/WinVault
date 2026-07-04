@@ -1,4 +1,6 @@
-import { Badge } from "@/components/ui/badge"
+"use client"
+
+import { Button } from "@/components/ui/button"
 
 interface GenreBadgeProps {
   genre: string
@@ -7,21 +9,14 @@ interface GenreBadgeProps {
 }
 
 export function GenreBadge({ genre, active, onClick }: GenreBadgeProps) {
-  const content = (
-    <Badge
-      className={
-        active
-          ? "bg-pv-primary text-[#111] border-pv-primary cursor-pointer"
-          : "bg-pv-card text-pv-text cursor-pointer hover:bg-pv-bg transition-colors"
-      }
+  return (
+    <Button
+      variant={active ? "active" : "inactive"}
+      size="sm"
+      onClick={onClick}
+      tabIndex={onClick ? 0 : -1}
     >
       {genre}
-    </Badge>
+    </Button>
   )
-
-  if (onClick) {
-    return <button onClick={onClick}>{content}</button>
-  }
-
-  return content
 }

@@ -4,6 +4,7 @@ interface Game {
   id: string
   title: string
   thumbnailUrl: string
+  shortDescription: string
   genre: string
   owner: { username: string }
   _count: { favorites: number }
