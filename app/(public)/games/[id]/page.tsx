@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
+import { Thumbnail } from "@/components/games/thumbnail"
 import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/services/favorite-service"
 import * as gameService from "@/services/game-service"
@@ -48,17 +49,7 @@ export default async function GameDetailPage(props: {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Thumbnail */}
           <Card className="overflow-hidden">
-            {game.thumbnailUrl ? (
-              <img
-                src={game.thumbnailUrl}
-                alt={game.title}
-                className="w-full aspect-[16/10] object-cover"
-              />
-            ) : (
-              <div className="w-full aspect-[16/10] flex items-center justify-center text-pv-muted text-sm font-bold uppercase bg-pv-bg">
-                No image
-              </div>
-            )}
+            <Thumbnail src={game.thumbnailUrl} alt={game.title} className="w-full aspect-[16/10] object-cover" />
           </Card>
 
           {/* Info */}
@@ -87,7 +78,7 @@ export default async function GameDetailPage(props: {
               </div>
             )}
 
-            <p className="text-sm text-pv-text leading-relaxed">
+            <p className="text-sm text-pv-text leading-relaxed break-words">
               {game.shortDescription}
             </p>
 
