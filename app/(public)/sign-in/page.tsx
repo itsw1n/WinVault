@@ -11,7 +11,8 @@ import Link from "next/link"
 function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
+  const raw = searchParams.get("callbackUrl") || "/dashboard"
+  const callbackUrl = raw.startsWith("/") ? raw : "/dashboard"
   const [error, setError] = useState("")
   const [pending, setPending] = useState(false)
 
