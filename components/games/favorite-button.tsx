@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { toggleFavorite } from "@/actions/favorites"
 import { useFormStatus } from "react-dom"
 
@@ -21,10 +22,14 @@ export function FavoriteButton({
   gameId: string
   isFavorited: boolean
 }) {
+  const router = useRouter()
   const label = isFavorited ? "Remove from favorites" : "Add to favorites"
 
   async function handleToggle() {
-    await toggleFavorite(gameId)
+    const result = await toggleFavorite(gameId)
+    if (!result.success && result.code === "UNAUTHORIZED") {
+      router.push(`/sign-in?callbackUrl=/games`)
+    }
   }
 
   return (
