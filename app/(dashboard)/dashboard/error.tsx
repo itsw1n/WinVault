@@ -23,7 +23,7 @@ export default function DashboardError({
         <p className="text-sm text-pv-muted">
           Something went wrong loading your dashboard. Try again.
         </p>
-        <Button variant="primary" onClick={reset}>
+        <Button variant="default" onClick={reset}>
           Try Again
         </Button>
       </div>
