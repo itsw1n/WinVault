@@ -5,16 +5,19 @@ interface Game {
   id: string
   title: string
   genre: string
+  thumbnailUrl: string
+  shortDescription: string
+  externalUrl: string
+  tags: string[]
   _count: { favorites: number }
 }
 
 interface GamesListProps {
   games: Game[]
-  onEdit: (id: string) => void
   onDelete: (id: string) => void
 }
 
-export function GamesList({ games, onEdit, onDelete }: GamesListProps) {
+export function GamesList({ games, onDelete }: GamesListProps) {
   if (games.length === 0) {
     return (
       <Card className="p-6 text-center">
@@ -30,7 +33,6 @@ export function GamesList({ games, onEdit, onDelete }: GamesListProps) {
           <GameListRow
             key={game.id}
             game={game}
-            onEdit={onEdit}
             onDelete={onDelete}
           />
         ))}
