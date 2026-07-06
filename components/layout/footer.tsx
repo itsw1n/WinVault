@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -33,17 +33,17 @@ export function Footer() {
           <p className="text-xs text-pv-muted">
             &copy; 2026 PlayVault. Made by{" "}
             <a
-              href="https://github.com/itswin"
+              href="https://github.com/itsw1n"
               target="_blank"
               rel="noopener noreferrer"
               className="text-pv-text font-medium hover:text-pv-primary transition-colors"
             >
-              itswin
+              itsw1n
             </a>
           </p>
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com/itswin"
+              href="https://github.com/itsw1n"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub profile"
@@ -56,7 +56,7 @@ export function Footer() {
               />
             </a>
             <a
-              href="https://linkedin.com/in/itswin"
+              href="https://www.linkedin.com/in/erwin-curato-16b3ba3b7/"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn profile"
@@ -69,7 +69,7 @@ export function Footer() {
               />
             </a>
             <a
-              href="https://facebook.com/itswin"
+              href="https://www.facebook.com/erwin.curato"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook profile"
@@ -85,5 +85,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
