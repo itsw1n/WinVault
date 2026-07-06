@@ -68,12 +68,12 @@ export function FavoritesGrid({ favorites, onUnfavorite }: FavoritesGridProps) {
                 rel="noopener noreferrer"
                 className="flex-1"
               >
-                <Button variant="primary" className="w-full text-xs">
+                <Button variant="default" className="w-full text-xs">
                   Play
                 </Button>
               </a>
               <Button
-                variant="danger"
+                variant="inactive"
                 className="text-xs"
                 onClick={() => onUnfavorite(fav.game.id)}
               >
