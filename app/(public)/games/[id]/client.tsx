@@ -37,7 +37,7 @@ export function GameDetailClient({
   }, [status, action, gameId, externalUrl, router])
 
   function handlePlay() {
-    if (!session) {
+    if (status !== "authenticated") {
       router.push(
         `/sign-in?callbackUrl=/games/${gameId}?action=play`
       )
@@ -47,7 +47,7 @@ export function GameDetailClient({
   }
 
   async function handleFavorite() {
-    if (!session) {
+    if (status !== "authenticated") {
       router.push(
         `/sign-in?callbackUrl=/games/${gameId}?action=favorite`
       )
@@ -61,11 +61,11 @@ export function GameDetailClient({
 
   return (
     <div className="flex gap-3 pt-2">
-      <Button variant="primary" onClick={handlePlay}>
+      <Button variant="default" onClick={handlePlay}>
         Play
       </Button>
       <Button
-        variant={isFavorited ? "danger" : "secondary"}
+        variant="inactive"
         onClick={handleFavorite}
       >
         {isFavorited ? "♥ Favorited" : "♡ Favorite"}
