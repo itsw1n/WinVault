@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { FavoriteButton } from "./favorite-button"
+import { Thumbnail } from "./thumbnail"
 import { Button } from "@/components/ui/button"
 import { clsx } from "clsx"
 
@@ -50,19 +51,13 @@ export function GameCard({
   return (
     <div
       className={clsx(
-        "border-[2.5px] border-pv-border rounded-pv bg-pv-card overflow-hidden",
+        "border-[2.5px] border-pv-border rounded-pv bg-pv-card overflow-hidden flex flex-col",
         className
       )}
     >
-      <Link href={`/games/${id}`} className="block">
-        <div className="bg-pv-border h-[100px] relative p-2 overflow-hidden">
-          {thumbnailUrl ? (
-            <img
-              src={thumbnailUrl}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-          ) : null}
+      <Link href={`/games/${id}`} className="flex flex-col flex-1">
+        <div className="bg-pv-border h-[100px] relative p-2 overflow-hidden shrink-0">
+          <Thumbnail src={thumbnailUrl} alt={title} className="w-full h-full object-cover" />
           <span className="bg-pv-primary text-[#111111] text-[10px] font-bold tracking-[0.03em] px-2 py-0.5 rounded-[4px] uppercase absolute top-2 left-2">
             {genre}
           </span>
@@ -71,19 +66,19 @@ export function GameCard({
             aria-hidden="true"
           />
         </div>
-        <div className="p-3">
+        <div className="p-3 flex-1">
           <h3 className="font-display font-bold text-[15px] text-pv-text mt-0 mb-0.5 truncate">
             {title}
           </h3>
           <p className="text-[12px] text-pv-muted mb-1.5">by {owner.username}</p>
           {shortDescription && (
-            <p className="text-[12px] text-pv-muted leading-[1.4] mb-2.5 line-clamp-2">
+            <p className="text-[12px] text-pv-muted leading-[1.4] line-clamp-2 break-words">
               {shortDescription}
             </p>
           )}
         </div>
       </Link>
-      <div className="px-3 pb-3 flex gap-2">
+      <div className="px-3 pb-3 flex gap-2 shrink-0">
         <FavoriteButton gameId={id} isFavorited={!!isFavorited} />
         <Button variant="default" size="sm" className="flex-1 gap-1.5" asChild>
           <Link href={`/games/${id}`}>
