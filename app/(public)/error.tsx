@@ -23,7 +23,7 @@ export default function PublicError({
         <p className="text-sm text-pv-muted">
           An unexpected error occurred. Try refreshing the page.
         </p>
-        <Button variant="primary" onClick={reset}>
+        <Button variant="default" onClick={reset}>
           Try Again
         </Button>
       </div>
