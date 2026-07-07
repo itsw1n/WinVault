@@ -1,21 +1,22 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { prisma } from "@/lib/prisma"
-import { GENRES } from "@/schemas/game-schema"
-import { getDeveloperCount } from "@/server/services/game-service"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { prisma } from "@/lib/prisma";
+import { GENRES } from "@/schemas/game-schema";
+import { getDeveloperCount } from "@/server/services/game-service";
 
 export const metadata: Metadata = {
   title: "About — PlayVault",
-  description: "PlayVault is a community-driven game discovery platform built by itsw1n.",
-}
+  description:
+    "PlayVault is a community-driven game discovery platform built by itsw1n.",
+};
 
 export default async function AboutPage() {
   const [gamesCount, devCount, playerCount] = await Promise.all([
     prisma.game.count(),
     getDeveloperCount(),
     prisma.user.count(),
-  ])
+  ]);
   return (
     <div className="max-w-[1400px] mx-auto px-4 py-8 space-y-6">
       {/* Hero */}
@@ -256,12 +257,7 @@ export default async function AboutPage() {
             Create a free account and add your game in under 2 minutes.
           </p>
         </div>
-        <Button
-          variant="inactive"
-          size="default"
-          className="shrink-0 bg-[#111111] text-white border-[#111111] hover:bg-[#333333] hover:border-[#333333]"
-          asChild
-        >
+        <Button variant="inactive" className="text-xs">
           <Link href="/sign-up">GET STARTED</Link>
         </Button>
       </div>
