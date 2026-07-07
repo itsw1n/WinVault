@@ -1,7 +1,7 @@
 "use client";
 
 import { Modal, useModal } from "@/components/ui/modal";
-import { CreateGameForm } from "@/components/dashboard/create-game-form";
+import { CreateGameForm } from "@/components/games/create-game-form";
 import { Button } from "@/components/ui/button";
 
 export function DashboardHeader() {
