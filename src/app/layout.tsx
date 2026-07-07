@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: "PlayVault — Discover Indie Games",
   description:
     "PlayVault is a community-driven platform to discover, share, and play indie games.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/logo.png" },
 }
 
 export default function RootLayout({
