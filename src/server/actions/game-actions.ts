@@ -3,6 +3,7 @@
 import { auth } from "@/lib/auth"
 import { createGameSchema, updateGameSchema } from "@/schemas/game-schema"
 import * as gameService from "@/server/services/game-service"
+import { checkUrlRemote } from "@/server/url-safety"
 import { wrap, fail } from "@/server/errors/action-error"
 import { revalidatePath } from "next/cache"
 
@@ -23,6 +24,9 @@ export async function createGame(_prev: unknown, formData: FormData) {
   if (!parsed.success) {
     return fail("VALIDATION", parsed.error.errors[0].message)
   }
+
+  const sbReason = await checkUrlRemote(parsed.data.externalUrl)
+  if (sbReason) return fail("VALIDATION", sbReason)
 
   const result = await wrap(() =>
     gameService.createGame({ ...parsed.data, ownerId: userId })
@@ -53,6 +57,9 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   if (!parsed.success) {
     return fail("VALIDATION", parsed.error.errors[0].message)
   }
+
+  const sbReasonUpdate = await checkUrlRemote(parsed.data.externalUrl)
+  if (sbReasonUpdate) return fail("VALIDATION", sbReasonUpdate)
 
   const game = await wrap(() => gameService.getGameById(parsed.data.id))
   if (!game.success) return game
