@@ -9,28 +9,24 @@ down:
 restart: down up
 
 reset:
-	docker compose --env-file .env.local down -v
-	docker compose --env-file .env.local up -d
+	docker compose --env-file .env down -v
+	docker compose --env-file .env up -d
 	$(MAKE) migrate
 
 rebuild:
-	docker compose --env-file .env.local down
+	docker compose --env-file .env down
 	docker compose build --no-cache
-	docker compose --env-file .env.local up -d
+	docker compose --env-file .env up -d
 
 migrate:
-	DATABASE_URL="$$(grep -oP '^DATABASE_URL="?\K[^"]+' .env.local)" \
-	DIRECT_URL="$$(grep -oP '^DIRECT_URL="?\K[^"]+' .env.local)" \
+	DATABASE_URL="$$(grep -oP '^DATABASE_URL="?\K[^"]+' .env)" \
+	DIRECT_URL="$$(grep -oP '^DIRECT_URL="?\K[^"]+' .env)" \
 	npx prisma migrate dev --name "$${name:-auto}"
 
 studio:
-	DATABASE_URL="$$(grep -oP '^DATABASE_URL="?\K[^"]+' .env.local)" \
-	DIRECT_URL="$$(grep -oP '^DIRECT_URL="?\K[^"]+' .env.local)" \
+	DATABASE_URL="$$(grep -oP '^DATABASE_URL="?\K[^"]+' .env)" \
+	DIRECT_URL="$$(grep -oP '^DIRECT_URL="?\K[^"]+' .env)" \
 	npx prisma studio
 
-dev:
-	fuser -k 3000/tcp 2>/dev/null || true
-	npm run dev
-
 logs:
-	docker compose --env-file .env.local logs -f
+	docker compose --env-file .env logs -f

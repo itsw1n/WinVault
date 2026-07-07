@@ -14,7 +14,7 @@ Publish your game, find something new, favorite the ones you love. No store fees
 
 ```bash
 npm install
-cp .env.example .env.local
+cp .env.example .env
 make up        # start postgres
 make migrate   # run prisma migrations
 make dev       # start dev server at localhost:3000
