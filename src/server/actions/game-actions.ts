@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth"
 import { createGameSchema, updateGameSchema } from "@/schemas/game-schema"
 import * as gameService from "@/server/services/game-service"
-import { wrap, fail } from "@/lib/action-result"
+import { wrap, fail } from "@/server/errors/action-error"
 import { revalidatePath } from "next/cache"
 
 export async function createGame(_prev: unknown, formData: FormData) {

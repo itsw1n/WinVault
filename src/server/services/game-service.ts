@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { ActionError } from "@/lib/action-result"
+import { ActionError } from "@/server/errors/action-error"
 
 export async function getFeaturedGames() {
   return prisma.game.findMany({

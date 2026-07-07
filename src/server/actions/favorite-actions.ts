@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth"
 import { toggleFavorite as toggleFav } from "@/server/services/favorite-service"
-import { wrap, fail } from "@/lib/action-result"
+import { wrap, fail } from "@/server/errors/action-error"
 import { revalidatePath } from "next/cache"
 
 export async function toggleFavorite(gameId: string) {
