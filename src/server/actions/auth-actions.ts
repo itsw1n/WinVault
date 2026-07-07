@@ -9,7 +9,7 @@ import { rateLimit } from "@/lib/rate-limiter"
 import { compare, hash } from "bcryptjs"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 export async function signUp(_prev: unknown, formData: FormData) {
   const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"

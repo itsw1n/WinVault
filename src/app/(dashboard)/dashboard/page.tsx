@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 import { StatCard } from "@/components/dashboard/stat-card"
 import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/server/services/game-service"
 import { DashboardActions, DashboardFavorites } from "./dashboard-client"

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 import { GENRES } from "@/lib/validations/game"
 import { getDeveloperCount } from "@/server/services/game-service"
 

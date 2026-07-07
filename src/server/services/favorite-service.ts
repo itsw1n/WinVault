@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 import { ActionError } from "@/lib/action-result"
 
 export async function toggleFavorite(userId: string, gameId: string) {
