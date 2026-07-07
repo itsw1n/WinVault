@@ -5,6 +5,7 @@ const envSchema = z.object({
   DIRECT_URL: z.string().url("DIRECT_URL must be a valid connection string"),
   AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  GOOGLE_SAFE_BROWSING_API_KEY: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
