@@ -37,6 +37,7 @@ export function GameDetailClient({
   }, [status, action, gameId, externalUrl, router])
 
   function handlePlay() {
+    if (status === "loading") return
     if (status !== "authenticated") {
       router.push(
         `/sign-in?callbackUrl=/games/${gameId}?action=play`
@@ -47,6 +48,7 @@ export function GameDetailClient({
   }
 
   async function handleFavorite() {
+    if (status === "loading") return
     if (status !== "authenticated") {
       router.push(
         `/sign-in?callbackUrl=/games/${gameId}?action=favorite`
