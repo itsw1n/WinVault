@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="border-t-[3px] border-pv-border bg-pv-card mt-auto">
       <div className="max-w-[1400px] mx-auto px-4 py-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 bg-pv-primary border-2 border-pv-border rounded-[4px]" />
             <span className="font-display font-black text-sm text-pv-text tracking-tight">
@@ -29,7 +29,7 @@ export function Footer() {
 
         <div className="border-t border-pv-border my-4" />
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
           <p className="text-xs text-pv-muted">
             &copy; 2026 PlayVault. Made by{" "}
             <a
