@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
+import { useModal } from "@/hooks/use-modal"
 
 interface ModalProps {
   open: boolean
@@ -19,14 +20,7 @@ const sizeClasses: Record<string, string> = {
   lg: "max-w-[720px]",
 }
 
-export function useModal() {
-  const [open, setOpen] = useState(false)
-  return {
-    open,
-    openModal: () => setOpen(true),
-    closeModal: () => setOpen(false),
-  }
-}
+export { useModal }
 
 export function Modal({
   open,
