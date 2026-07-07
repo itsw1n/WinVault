@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { signUp } from "@/actions/auth"
+import { signUp } from "@/server/actions/auth-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"

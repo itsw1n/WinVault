@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
-import { updateProfile } from "@/actions/auth"
+import { updateProfile } from "@/server/actions/auth-actions"
 import Link from "next/link"
 
 interface UserData {

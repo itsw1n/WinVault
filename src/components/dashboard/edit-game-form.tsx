@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { updateGame } from "@/actions/games"
+import { updateGame } from "@/server/actions/game-actions"
 import { updateGameSchema } from "@/lib/validations/game"
 import { GENRES } from "@/lib/validations/game"
 

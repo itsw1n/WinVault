@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { toggleFavorite } from "@/actions/favorites"
+import { toggleFavorite } from "@/server/actions/favorite-actions"
 
 function HeartIcon({ filled }: { filled: boolean }) {
   if (filled) {

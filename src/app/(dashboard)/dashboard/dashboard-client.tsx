@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation"
 import { GamesList } from "@/components/dashboard/games-list"
 import { FavoritesGrid } from "@/components/dashboard/favorites-grid"
-import { deleteGame } from "@/actions/games"
-import { toggleFavorite } from "@/actions/favorites"
+import { deleteGame } from "@/server/actions/game-actions"
+import { toggleFavorite } from "@/server/actions/favorite-actions"
 
 interface Game {
   id: string
