@@ -25,7 +25,7 @@ export function SearchBar({ compact }: SearchBarProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search games..."
-          className="w-full min-w-[200px] border-solid border-[2px] border-pv-border rounded-pv-sm px-3 py-2 text-sm bg-pv-bg text-pv-text placeholder:text-pv-muted focus-visible:outline-none focus-visible:ring-0 focus-visible:border-pv-primary"
+          className="w-32 md:min-w-[200px] border-solid border-[2px] border-pv-border rounded-pv-sm px-3 py-2 text-sm bg-pv-bg text-pv-text placeholder:text-pv-muted focus-visible:outline-none focus-visible:ring-0 focus-visible:border-pv-primary"
         />
       </form>
     )
