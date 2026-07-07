@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -6,7 +7,7 @@ export function Footer() {
       <div className="max-w-[1400px] mx-auto px-4 py-6">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-4 h-4 bg-pv-primary border-2 border-pv-border rounded-[4px]" />
+            <Image src="/logo.png" alt="PlayVault" width={16} height={16} className="rounded-[4px]" />
             <span className="font-display font-black text-sm text-pv-text tracking-tight">
               PLAYVAULT
             </span>

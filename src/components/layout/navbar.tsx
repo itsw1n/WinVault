@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
 import { MobileNav } from "./mobile-nav";
 import { SearchBar } from "@/components/games/search-bar";
@@ -13,7 +14,7 @@ export async function Navbar() {
     <header className="bg-pv-card border-b-[3px] border-pv-border">
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span className="w-5 h-5 bg-pv-primary border-2 border-pv-border rounded-[4px]" />
+          <Image src="/logo.png" alt="PlayVault" width={20} height={20} className="rounded-[4px]" />
           <span className="font-display font-black text-lg tracking-tight text-pv-text">
             PLAYVAULT
           </span>

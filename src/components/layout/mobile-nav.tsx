@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
 import { SearchBar } from "@/components/games/search-bar";
@@ -71,7 +72,7 @@ export function MobileNav({
           <div className="fixed top-0 left-0 bottom-0 w-[280px] bg-pv-card border-r-[3px] border-pv-border z-50 md:hidden flex flex-col overflow-y-auto">
             <div className="p-4 border-b-[3px] border-pv-border flex items-center justify-between">
               <Link href="/" className="flex items-center gap-2" onClick={close}>
-                <span className="w-5 h-5 bg-pv-primary border-2 border-pv-border rounded-[4px]" />
+                <Image src="/logo.png" alt="PlayVault" width={20} height={20} className="rounded-[4px]" />
                 <span className="font-display font-black text-lg tracking-tight text-pv-text">
                   PLAYVAULT
                 </span>
