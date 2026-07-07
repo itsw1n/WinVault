@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { GameListRow } from "./game-list-row"
+import { GameListRow } from "../games/game-list-row"
 
 interface Game {
   id: string
