@@ -10,6 +10,7 @@ interface ModalProps {
   description?: string
   children: React.ReactNode
   size?: "sm" | "md" | "lg"
+  hideCloseButton?: boolean
 }
 
 const sizeClasses: Record<string, string> = {
@@ -34,6 +35,7 @@ export function Modal({
   description,
   children,
   size = "md",
+  hideCloseButton = false,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const previousActiveElement = useRef<HTMLElement | null>(null)
@@ -120,13 +122,15 @@ export function Modal({
               <p className="text-[12px] text-pv-muted mt-1">{description}</p>
             )}
           </div>
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            className="w-[32px] h-[32px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors shrink-0 ml-3"
-          >
-            <i className="ti ti-x text-[16px]" aria-hidden="true" />
-          </button>
+          {!hideCloseButton && (
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="w-[32px] h-[32px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors shrink-0 ml-3"
+            >
+              <i className="ti ti-x text-[16px]" aria-hidden="true" />
+            </button>
+          )}
         </div>
         <div className="p-4 overflow-y-auto">{children}</div>
       </div>
