@@ -1,10 +1,10 @@
 .PHONY: up down restart reset rebuild migrate studio dev logs
 
 up:
-	docker compose --env-file .env.local up -d
+	docker compose --env-file .env up -d
 
 down:
-	docker compose --env-file .env.local down
+	docker compose --env-file .env down
 
 restart: down up
 
