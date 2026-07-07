@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { AuthAwareLink } from "@/components/ui/auth-aware-link";
 
 export function Footer() {
   return (
@@ -19,12 +20,12 @@ export function Footer() {
             >
               Browse Games
             </Link>
-            <Link
+            <AuthAwareLink
               href="/sign-in"
               className="text-xs text-pv-muted hover:text-pv-text transition-colors"
             >
               Sign In
-            </Link>
+            </AuthAwareLink>
           </nav>
         </div>
 
