@@ -1,7 +1,7 @@
 "use server"
 
 import { headers } from "next/headers"
-import { signIn } from "@/lib/auth"
+import { signIn, auth } from "@/lib/auth"
 import { signUpSchema, signInSchema, updateProfileSchema } from "@/lib/validations/auth"
 import { createUser, updateUser } from "@/services/user-service"
 import { wrap, fail } from "@/lib/action-result"
@@ -120,5 +120,30 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
 
   if (!result.success) return result
 
+  if (passwordHash) {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { tokenVersion: { increment: 1 } },
+    })
+    await signIn("credentials", {
+      login: profile.username,
+      password: newPassword,
+      redirect: false,
+    })
+  }
+
   return result
+}
+
+export async function revokeAllSessions() {
+  const session = await auth()
+  const userId = session?.user?.id
+  if (!userId) return fail("UNAUTHORIZED")
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { tokenVersion: { increment: 1 } },
+  })
+
+  redirect("/sign-in")
 }
