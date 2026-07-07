@@ -4,7 +4,7 @@ import { GameGrid } from "@/components/games/game-grid"
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/server/services/favorite-service"
-import { GENRES } from "@/lib/validations/game"
+import { GENRES } from "@/schemas/game-schema"
 import * as gameService from "@/server/services/game-service"
 import Link from "next/link"
 

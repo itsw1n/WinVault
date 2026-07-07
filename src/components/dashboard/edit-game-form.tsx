@@ -6,8 +6,8 @@ import { z } from "zod"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { updateGame } from "@/server/actions/game-actions"
-import { updateGameSchema } from "@/lib/validations/game"
-import { GENRES } from "@/lib/validations/game"
+import { updateGameSchema } from "@/schemas/game-schema"
+import { GENRES } from "@/schemas/game-schema"
 
 const formSchema = updateGameSchema.extend({
   tags: z.string(),

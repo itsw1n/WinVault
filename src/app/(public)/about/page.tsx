@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/prisma"
-import { GENRES } from "@/lib/validations/game"
+import { GENRES } from "@/schemas/game-schema"
 import { getDeveloperCount } from "@/server/services/game-service"
 
 export const metadata: Metadata = {

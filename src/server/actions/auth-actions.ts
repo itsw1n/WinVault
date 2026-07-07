@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers"
 import { signIn, auth } from "@/lib/auth"
-import { signUpSchema, signInSchema, updateProfileSchema } from "@/lib/validations/auth"
+import { signUpSchema, signInSchema, updateProfileSchema } from "@/schemas/auth-schema"
 import { createUser, updateUser } from "@/server/services/user-service"
 import { wrap, fail } from "@/lib/action-result"
 import { rateLimit } from "@/lib/rate-limiter"
