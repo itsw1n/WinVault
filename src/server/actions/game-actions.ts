@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth"
 import { createGameSchema, updateGameSchema } from "@/lib/validations/game"
-import * as gameService from "@/services/game-service"
+import * as gameService from "@/server/services/game-service"
 import { wrap, fail } from "@/lib/action-result"
 import { revalidatePath } from "next/cache"
 

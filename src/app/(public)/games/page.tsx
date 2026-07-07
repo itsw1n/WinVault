@@ -3,9 +3,9 @@ import { GameGrid } from "@/components/games/game-grid"
 
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
-import { getFavoritedGameIds } from "@/services/favorite-service"
+import { getFavoritedGameIds } from "@/server/services/favorite-service"
 import { GENRES } from "@/lib/validations/game"
-import * as gameService from "@/services/game-service"
+import * as gameService from "@/server/services/game-service"
 import Link from "next/link"
 
 export const metadata: Metadata = {

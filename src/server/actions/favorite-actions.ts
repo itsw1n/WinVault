@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/lib/auth"
-import { toggleFavorite as toggleFav } from "@/services/favorite-service"
+import { toggleFavorite as toggleFav } from "@/server/services/favorite-service"
 import { wrap, fail } from "@/lib/action-result"
 import { revalidatePath } from "next/cache"
 

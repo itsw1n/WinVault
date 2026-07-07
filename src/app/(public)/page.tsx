@@ -2,8 +2,8 @@ import { GameGrid } from "@/components/games/game-grid"
 import { HeroBanner } from "@/components/games/hero-banner"
 import { SectionHeader } from "@/components/games/section-header"
 import { auth } from "@/lib/auth"
-import { getFavoritedGameIds } from "@/services/favorite-service"
-import * as gameService from "@/services/game-service"
+import { getFavoritedGameIds } from "@/server/services/favorite-service"
+import * as gameService from "@/server/services/game-service"
 
 async function safeFetch<T>(
   fn: () => Promise<T>,
