@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AuthAwareLink } from "@/components/ui/auth-aware-link";
 import { prisma } from "@/lib/prisma";
 import { GENRES } from "@/schemas/game-schema";
 import { getDeveloperCount } from "@/server/services/game-service";
@@ -257,8 +257,8 @@ export default async function AboutPage() {
             Create a free account and add your game in under 2 minutes.
           </p>
         </div>
-        <Button variant="inactive" className="text-xs">
-          <Link href="/sign-up">GET STARTED</Link>
+        <Button variant="inactive" className="text-xs" asChild>
+          <AuthAwareLink href="/sign-up">GET STARTED</AuthAwareLink>
         </Button>
       </div>
     </div>
