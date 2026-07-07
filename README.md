@@ -4,74 +4,61 @@ Community-driven indie game discovery platform. Next.js 14+, Prisma + Postgres, 
 <img width="1920" height="1080" alt="screenshot-2026-07-08_08-59-13" src="https://github.com/user-attachments/assets/1f384545-7f91-43ae-8ff5-18fa9fa0d3fc" />
 <img width="1920" height="1080" alt="screenshot-2026-07-08_08-58-36" src="https://github.com/user-attachments/assets/ca7129cc-b71a-4d1e-9456-ba2b94b38174" />
 
+Publish your game, find something new, favorite the ones you love. No store fees, no approval queues, no ads.
 
-## Local Development
+## Tech
 
-### Prerequisites
+**Next.js 16** (App Router) · **PostgreSQL** via Prisma · **Auth.js** v5 (credentials, JWT) · **Tailwind** + CSS custom properties
 
-- Node.js 18+
-- Docker + Docker Compose
-
-### First-time setup
+## Local dev
 
 ```bash
-# 1. Clone and install
 npm install
-
-# 2. Configure environment
 cp .env.example .env.local
-
-# 3. Start the database
-make up
-
-# 4. Run initial migration
-make migrate
-
-# 5. Start the dev server
-make dev
+make up        # start postgres
+make migrate   # run prisma migrations
+make dev       # start dev server at localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Or seed some sample data: `make seed`
 
-### Daily flow
+### Commands
 
-```bash
-make up        # Start the database (detached)
-make dev       # Start the Next.js dev server
+| `make up` | Start database |
+|-----------|----------------|
+| `make down` | Stop database |
+| `make dev` | Next.js dev server |
+| `make migrate` | Prisma migration |
+| `make studio` | Prisma Studio |
+| `make reset` | Wipe + recreate DB |
+| `make seed` | Seed sample data |
 
-# --- work ---
+## Layout
 
-make down      # Stop the database
+```
+src/
+├── app/               # Next.js App Router pages
+│   ├── (public)/      #   sign-in, sign-up, games, about, developers
+│   └── (dashboard)/   #   dashboard, account
+├── components/
+│   ├── ui/            # Button, Input, Modal, Card, Badge, Skeleton
+│   ├── layout/        # Navbar, Footer, MobileNav, ThemeToggle
+│   └── games/         # GameCard, FavoriteButton, SearchBar, forms
+├── server/
+│   ├── actions/       # Server actions (writes)
+│   ├── services/      # Data access (reads)
+│   └── errors/        # ActionError, wrap/ok/fail utilities
+├── lib/               # Auth config, Prisma client, rate limiter, env
+├── schemas/           # Zod validation schemas
+├── types/             # Shared TypeScript types + next-auth augmentation
+├── hooks/             # useModal
+└── styles/            # Global CSS + theme variables
 ```
 
-### Resetting the database
+Reads are server components. Writes are server actions. Services stay framework-agnostic. Zod schemas are shared between client forms and server validation.
 
-```bash
-make reset     # Wipes volume, recreates, runs migrations
-```
+## Deploy
 
-### Migrations
-
-```bash
-make migrate   # Create/apply a new migration (prisma migrate dev)
-make studio    # Open Prisma Studio to browse data
-```
-
-## Production (Supabase + Vercel)
-
-Steps to deploy (one-time config, no code changes needed):
-
-1. Create a Supabase project
-2. Copy the pooled connection string → `DATABASE_URL` (port 6543)
-3. Copy the direct connection string → `DIRECT_URL` (port 5432)
-4. Generate a random `AUTH_SECRET` with `openssl rand -base64 32`
-5. Set all env vars in Vercel's project dashboard
-6. Connect the repo to Vercel — every push auto-deploys
-7. The build script (`prisma migrate deploy && next build`) runs migrations on every deploy
-
-## Architecture
-
-- **Server components** handle all reads — no client-side data fetching.
-- **Server actions** handle all writes — no REST endpoints.
-- **Services** contain business logic, zero Next.js dependency, unit-testable.
-- **Zod schemas** live in `lib/validations/` and are shared by forms and actions.
+1. Supabase project → pooled URL as `DATABASE_URL`, direct as `DIRECT_URL`
+2. Generate `AUTH_SECRET` with `openssl rand -base64 32`
+3. Set env vars in Vercel, connect repo, push
