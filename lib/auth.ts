@@ -37,7 +37,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 7,
+  },
   pages: {
     signIn: "/sign-in",
   },
@@ -45,11 +48,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { tokenVersion: true },
+        })
+        token.tokenVersion = dbUser?.tokenVersion ?? 0
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { tokenVersion: true },
+        })
+        if (!dbUser || dbUser.tokenVersion !== (token.tokenVersion as number)) {
+          return {} as typeof session
+        }
         session.user.id = token.id as string
       }
       return session
