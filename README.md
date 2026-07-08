@@ -1,6 +1,9 @@
 # PlayVault
 
 Community-driven indie game discovery platform. Next.js 14+, Prisma + Postgres, Auth.js.
+<img width="1920" height="1080" alt="screenshot-2026-07-08_08-59-13" src="https://github.com/user-attachments/assets/1f384545-7f91-43ae-8ff5-18fa9fa0d3fc" />
+<img width="1920" height="1080" alt="screenshot-2026-07-08_08-58-36" src="https://github.com/user-attachments/assets/ca7129cc-b71a-4d1e-9456-ba2b94b38174" />
+
 
 ## Local Development
 
