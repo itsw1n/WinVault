@@ -1,10 +1,10 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { GamesList } from "@/components/dashboard/games-list"
-import { FavoritesGrid } from "@/components/dashboard/favorites-grid"
-import { deleteGame } from "@/server/actions/game-actions"
-import { toggleFavorite } from "@/server/actions/favorite-actions"
+import { GamesList } from "@/features/dashboard/components/games-list"
+import { FavoritesGrid } from "@/features/dashboard/components/favorites-grid"
+import { deleteGame } from "@/features/games/actions/crud"
+import { toggleFavorite } from "@/features/games/actions/crud"
 
 interface Game {
   id: string
