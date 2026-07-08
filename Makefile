@@ -11,11 +11,6 @@ restart: down up
 reset:
 	docker compose --env-file .env down -v
 	docker compose --env-file .env up -d
-	@echo "Waiting for Postgres..."
-	@for i in $$(seq 1 30); do \
-		docker compose --env-file .env ps db 2>/dev/null | grep -q "healthy" && break; \
-		sleep 1; \
-	done
 	$(MAKE) migrate
 
 rebuild:
