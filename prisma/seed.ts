@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 
 async function main() {
   const passwordHash = await bcrypt.hash("password123", 10)
+  const itsw1nHash = await bcrypt.hash("Qwerty123$$$", 10)
 
   const users = await Promise.all([
     prisma.user.upsert({
@@ -43,48 +44,90 @@ async function main() {
         passwordHash,
       },
     }),
+    prisma.user.upsert({
+      where: { username: "itsw1n" },
+      update: {},
+      create: {
+        username: "itsw1n",
+        email: "erwincurato@gmail.com",
+        passwordHash: itsw1nHash,
+      },
+    }),
   ])
+
+  await prisma.favorite.deleteMany()
+  await prisma.game.deleteMany()
 
   const games = [
     {
-      title: "Neon Drift",
+      title: "ZTYPE",
       thumbnailUrl: "",
-      shortDescription: "Drift through neon-lit highways in this arcade racer.",
-      externalUrl: "https://neondrift.example.com",
-      genre: "Racing",
-      tags: ["racing", "arcade", "neon"],
-      isFeatured: true,
-      ownerId: users[0].id,
+      shortDescription: "Sample game sourced from zty.pe. Used for demonstration purposes.",
+      externalUrl: "https://zty.pe/",
+      genre: "Arcade",
+      tags: ["typing", "arcade", "action"],
+      isFeatured: false,
+      ownerId: users[4].id,
     },
     {
-      title: "Glyphwood",
+      title: "2048",
       thumbnailUrl: "",
-      shortDescription: "Solve ancient rune puzzles in a hand-painted forest.",
-      externalUrl: "https://glyphwood.example.com",
+      shortDescription: "Sample game sourced from play2048.co. Used for demonstration purposes.",
+      externalUrl: "https://play2048.co/",
       genre: "Puzzle",
-      tags: ["puzzle", "forest", "hand-painted"],
+      tags: ["puzzle", "numbers", "casual"],
       isFeatured: true,
-      ownerId: users[1].id,
+      ownerId: users[4].id,
     },
     {
-      title: "Starforge Tactics",
+      title: "Tetris",
       thumbnailUrl: "",
-      shortDescription: "Command fleets in turn-based galactic warfare.",
-      externalUrl: "https://starforgetactics.example.com",
+      shortDescription: "Sample game sourced from play.tetris.com. Used for demonstration purposes.",
+      externalUrl: "https://play.tetris.com/",
+      genre: "Puzzle",
+      tags: ["puzzle", "blocks", "classic"],
+      isFeatured: true,
+      ownerId: users[4].id,
+    },
+    {
+      title: "Wordle",
+      thumbnailUrl: "",
+      shortDescription: "Sample game sourced from nytimes.com/games/wordle. Used for demonstration purposes.",
+      externalUrl: "https://www.nytimes.com/games/wordle/index.html",
+      genre: "Puzzle",
+      tags: ["puzzle", "word", "daily"],
+      isFeatured: false,
+      ownerId: users[4].id,
+    },
+    {
+      title: "Chess",
+      thumbnailUrl: "",
+      shortDescription: "Sample game sourced from chess.com. Used for demonstration purposes.",
+      externalUrl: "https://www.chess.com/play",
       genre: "Strategy",
-      tags: ["strategy", "space", "turn-based"],
-      isFeatured: true,
-      ownerId: users[2].id,
+      tags: ["strategy", "board", "multiplayer"],
+      isFeatured: false,
+      ownerId: users[4].id,
     },
     {
-      title: "Bloom Town",
+      title: "Snake",
       thumbnailUrl: "",
-      shortDescription: "Build a cozy town and trade with your neighbors.",
-      externalUrl: "https://bloomtown.example.com",
-      genre: "Casual",
-      tags: ["casual", "building", "cozy"],
+      shortDescription: "Sample game sourced from playsnake.org. Used for demonstration purposes.",
+      externalUrl: "https://playsnake.org/",
+      genre: "Arcade",
+      tags: ["arcade", "classic", "casual"],
       isFeatured: true,
-      ownerId: users[3].id,
+      ownerId: users[4].id,
+    },
+    {
+      title: "World Geography",
+      thumbnailUrl: "",
+      shortDescription: "Sample game sourced from world-geography-games.com. Used for demonstration purposes.",
+      externalUrl: "https://world-geography-games.com/",
+      genre: "Educational",
+      tags: ["geography", "quiz", "educational"],
+      isFeatured: false,
+      ownerId: users[4].id,
     },
   ]
 
@@ -92,7 +135,7 @@ async function main() {
     await prisma.game.create({ data: game })
   }
 
-  console.log("Seeded 4 users and 4 games")
+  console.log("Seeded 5 users and 7 games")
 }
 
 main()
