@@ -1,5 +1,5 @@
 import { HeroSkeleton, GameGridSkeleton } from "@/components/ui/skeleton"
-import { SectionHeader } from "@/components/games/section-header"
+import { SectionHeader } from "@/features/games/components/section-header"
 
 export default function HomeLoading() {
   return (

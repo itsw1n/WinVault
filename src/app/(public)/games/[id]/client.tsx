@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
-import { toggleFavorite } from "@/server/actions/favorite-actions"
+import { toggleFavorite } from "@/features/games/actions/crud"
 import { useState, useEffect } from "react"
 
 interface GameDetailClientProps {

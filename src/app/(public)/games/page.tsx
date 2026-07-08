@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import { GameGrid } from "@/components/games/game-grid"
+import { GameGrid } from "@/features/games/components/game-grid"
 
 import { Button } from "@/components/ui/button"
 import { auth } from "@/lib/auth"
-import { getFavoritedGameIds } from "@/server/services/favorite-service"
-import { GENRES } from "@/schemas/game-schema"
-import * as gameService from "@/server/services/game-service"
+import { getFavoritedGameIds } from "@/features/games/utils/queries"
+import { GENRES } from "@/features/games/validation/schemas"
+import * as gameService from "@/features/games/utils/queries"
 import Link from "next/link"
 
 export const metadata: Metadata = {

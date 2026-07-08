@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
-import { SearchBar } from "@/components/games/search-bar";
+import { SearchBar } from "@/features/games/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
 

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { AuthAwareLink } from "@/components/ui/auth-aware-link";
 import { prisma } from "@/lib/prisma";
-import { GENRES } from "@/schemas/game-schema";
-import { getDeveloperCount } from "@/server/services/game-service";
+import { GENRES } from "@/features/games/validation/schemas";
+import { getDeveloperCount } from "@/features/games/utils/queries";
 
 export const metadata: Metadata = {
   title: "About — PlayVault",

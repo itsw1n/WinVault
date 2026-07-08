@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
-import { Thumbnail } from "@/components/games/thumbnail"
+import { Thumbnail } from "@/features/games/components/thumbnail"
 import { auth } from "@/lib/auth"
-import { getFavoritedGameIds } from "@/server/services/favorite-service"
-import * as gameService from "@/server/services/game-service"
+import { getFavoritedGameIds } from "@/features/games/utils/queries"
+import * as gameService from "@/features/games/utils/queries"
 import { notFound } from "next/navigation"
 import { GameDetailClient } from "./client"
 
