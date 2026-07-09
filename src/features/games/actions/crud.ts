@@ -2,7 +2,8 @@
 
 import { auth } from "@/lib/auth"
 import { createGameSchema, updateGameSchema } from "@/features/games/schemas"
-import * as gameService from "@/features/games/utils/queries"
+import * as mutations from "@/features/games/mutations/games"
+import * as queries from "@/features/games/queries/games"
 import { checkUrlRemote } from "@/lib/security/url-safety"
 import { wrap, fail } from "@/lib/errors"
 import { revalidatePath } from "next/cache"
@@ -29,7 +30,7 @@ export async function createGame(_prev: unknown, formData: FormData) {
   if (sbReason) return fail("VALIDATION", sbReason)
 
   const result = await wrap(() =>
-    gameService.createGame({ ...parsed.data, ownerId: userId })
+    mutations.createGame({ ...parsed.data, ownerId: userId })
   )
 
   if (!result.success) return result
@@ -61,13 +62,13 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   const sbReasonUpdate = await checkUrlRemote(parsed.data.externalUrl)
   if (sbReasonUpdate) return fail("VALIDATION", sbReasonUpdate)
 
-  const game = await wrap(() => gameService.getGameById(parsed.data.id))
+  const game = await wrap(() => queries.getGameById(parsed.data.id))
   if (!game.success) return game
   if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
   const { id, ...data } = parsed.data
 
-  const result = await wrap(() => gameService.updateGame(id, data))
+  const result = await wrap(() => mutations.updateGame(id, data))
   if (!result.success) return result
 
   revalidatePath("/dashboard")
@@ -80,11 +81,11 @@ export async function deleteGame(id: string) {
   const userId = session?.user?.id
   if (!userId) return fail("UNAUTHORIZED")
 
-  const game = await wrap(() => gameService.getGameById(id))
+  const game = await wrap(() => queries.getGameById(id))
   if (!game.success) return game
   if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
-  const result = await wrap(() => gameService.deleteGame(id))
+  const result = await wrap(() => mutations.deleteGame(id))
   if (!result.success) return result
 
   revalidatePath("/dashboard")
@@ -96,7 +97,7 @@ export async function toggleFavorite(gameId: string) {
   const userId = session?.user?.id
   if (!userId) return fail("UNAUTHORIZED")
 
-  const result = await wrap(() => gameService.toggleFavorite(userId, gameId))
+  const result = await wrap(() => mutations.toggleFavorite(userId, gameId))
   if (!result.success) return result
 
   revalidatePath("/")

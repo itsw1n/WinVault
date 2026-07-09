@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { StatCard } from "@/features/dashboard/components/stat-card"
-import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/utils/queries"
+import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/queries/games"
 import { DashboardActions, DashboardFavorites } from "./dashboard-client"
 import { DashboardHeader } from "./header"
 
