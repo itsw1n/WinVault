@@ -3,7 +3,7 @@
 import { headers } from "next/headers"
 import { signIn, auth } from "@/lib/auth"
 import { signUpSchema, signInSchema, updateProfileSchema } from "@/features/auth/schemas"
-import { createUser, updateUser } from "@/features/auth/utils/queries"
+import { createUser, updateUser } from "@/features/auth/mutations/auth"
 import { wrap, fail } from "@/lib/errors"
 import { rateLimit } from "@/lib/auth/rate-limiter"
 import { compare, hash } from "bcryptjs"

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { hash } from "bcryptjs"
 import { ActionError } from "@/lib/errors"
+import { isUsernameTaken, isEmailTaken } from "@/features/auth/queries/auth"
 
 export async function createUser(
   username: string,
@@ -20,27 +21,6 @@ export async function createUser(
   return prisma.user.create({
     data: { username, email, passwordHash },
   })
-}
-
-export async function getUserByUsername(username: string) {
-  const user = await prisma.user.findUnique({
-    where: { username },
-    include: {
-      _count: { select: { games: true } },
-    },
-  })
-
-  if (!user) throw new ActionError("NOT_FOUND", "User not found")
-  return user
-}
-
-export async function getUserById(id: string) {
-  const user = await prisma.user.findUnique({
-    where: { id },
-    select: { id: true, username: true, email: true, avatarUrl: true, bio: true },
-  })
-  if (!user) throw new ActionError("NOT_FOUND", "User not found")
-  return user
 }
 
 export async function updateUser(
@@ -66,14 +46,4 @@ export async function updateUser(
   }
 
   return prisma.user.update({ where: { id }, data })
-}
-
-export async function isUsernameTaken(username: string, excludeId?: string) {
-  const user = await prisma.user.findUnique({ where: { username } })
-  return !!user && user.id !== excludeId
-}
-
-export async function isEmailTaken(email: string) {
-  const user = await prisma.user.findUnique({ where: { email } })
-  return !!user
 }

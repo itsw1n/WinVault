@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { GameGrid } from "@/features/games/components/game-grid"
 import * as gameService from "@/features/games/utils/queries"
-import { getUserByUsername } from "@/features/auth/utils/queries"
+import { getUserByUsername } from "@/features/auth/queries/auth"
 import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/features/games/utils/queries"
 
