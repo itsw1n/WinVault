@@ -4,8 +4,7 @@ import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 import { StatCard } from "@/features/dashboard/components/stat-card"
 import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/queries/games"
-import { DashboardActions, DashboardFavorites } from "./dashboard-client"
-import { DashboardHeader } from "./header"
+import { DashboardActions, DashboardFavorites, DashboardNewGameButton } from "./page-client"
 
 export const metadata: Metadata = {
   title: "Dashboard — PlayVault",
@@ -28,7 +27,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <DashboardHeader />
+      <div className="flex items-center justify-between">
+        <h1 className="font-display text-3xl font-bold text-pv-text">
+          Dashboard
+        </h1>
+        <DashboardNewGameButton />
+      </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
