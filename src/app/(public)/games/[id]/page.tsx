@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth"
 import { getFavoritedGameIds } from "@/features/games/queries/games"
 import * as gameService from "@/features/games/queries/games"
 import { notFound } from "next/navigation"
-import { GameDetailClient } from "./client"
+import { GameDetailClient } from "./page-client"
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>
