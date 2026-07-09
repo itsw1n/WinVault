@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { redirect, notFound } from "next/navigation"
 import { getUserById } from "@/features/auth/queries/auth"
 import { AccountForm } from "@/features/auth/components/account-form"

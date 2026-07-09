@@ -1,7 +1,7 @@
 import { GameGrid } from "@/features/games/components/game-grid"
 import { HeroBanner } from "@/features/games/components/hero-banner"
 import { SectionHeader } from "@/features/games/components/section-header"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { getFavoritedGameIds } from "@/features/games/queries/games"
 import * as gameService from "@/features/games/queries/games"
 

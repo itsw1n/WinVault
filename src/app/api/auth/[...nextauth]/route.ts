@@ -1,4 +1,4 @@
-import { handlers } from "@/lib/auth"
+import { handlers } from "@/lib/auth/auth"
 
 export const GET = handlers.GET as any
 export const POST = handlers.POST as any

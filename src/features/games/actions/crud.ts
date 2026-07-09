@@ -1,6 +1,6 @@
 "use server"
 
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { createGameSchema, updateGameSchema } from "@/features/games/schemas"
 import * as mutations from "@/features/games/mutations/games"
 import * as queries from "@/features/games/queries/games"

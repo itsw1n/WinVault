@@ -86,6 +86,7 @@ export async function getGamesByOwner(ownerId: string) {
   return prisma.game.findMany({
     where: { ownerId },
     include: {
+      owner: { select: { username: true } },
       _count: { select: { favorites: true } },
     },
     orderBy: { createdAt: "desc" },

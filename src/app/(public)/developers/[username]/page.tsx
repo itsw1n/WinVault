@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { GameGrid } from "@/features/games/components/game-grid"
 import * as gameService from "@/features/games/queries/games"
 import { getUserByUsername } from "@/features/auth/queries/auth"
-import { auth } from "@/lib/auth"
+import { auth } from "@/lib/auth/auth"
 import { getFavoritedGameIds } from "@/features/games/queries/games"
 
 export async function generateMetadata(props: {
