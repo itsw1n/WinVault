@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/lib/auth"
-import { createGameSchema, updateGameSchema } from "@/features/games/validation/schemas"
+import { createGameSchema, updateGameSchema } from "@/features/games/schemas"
 import * as gameService from "@/features/games/utils/queries"
 import { checkUrlRemote } from "@/lib/security/url-safety"
 import { wrap, fail } from "@/lib/errors"
