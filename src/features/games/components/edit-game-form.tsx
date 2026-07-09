@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import type { Game } from "@/types"
 import { updateGame } from "@/features/games/actions/crud"
 import { updateGameSchema } from "@/features/games/schemas"
 import { GENRES } from "@/features/games/schemas"
@@ -16,15 +17,7 @@ const formSchema = updateGameSchema.extend({
 type FormValues = z.infer<typeof formSchema>
 
 interface EditGameFormProps {
-  game: {
-    id: string
-    title: string
-    thumbnailUrl: string
-    shortDescription: string
-    externalUrl: string
-    genre: string
-    tags: string[]
-  }
+  game: Pick<Game, "id" | "title" | "thumbnailUrl" | "shortDescription" | "externalUrl" | "genre" | "tags">
   onSuccess: () => void
 }
 

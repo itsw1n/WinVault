@@ -1,14 +1,5 @@
 import { GameCard } from "./game-card"
-
-interface Game {
-  id: string
-  title: string
-  thumbnailUrl: string
-  shortDescription: string
-  genre: string
-  owner: { username: string }
-  _count: { favorites: number }
-}
+import type { Game } from "@/types"
 
 interface GameGridProps {
   games: Game[]

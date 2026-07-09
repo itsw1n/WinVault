@@ -6,15 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { updateProfile } from "@/features/auth/actions/auth"
+import type { User } from "@/types"
 import Link from "next/link"
 
-interface UserData {
-  id: string
-  username: string
-  email: string
-}
-
-export function AccountForm({ user }: { user: UserData }) {
+export function AccountForm({ user }: { user: Pick<User, "id" | "username" | "email"> }) {
   const router = useRouter()
   const [state, formAction, pending] = useActionState(updateProfile, undefined)
 

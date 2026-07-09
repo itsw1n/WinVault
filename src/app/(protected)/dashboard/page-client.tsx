@@ -6,32 +6,9 @@ import { Button } from "@/components/ui/button"
 import { GamesList } from "@/features/dashboard/components/games-list"
 import { FavoritesGrid } from "@/features/dashboard/components/favorites-grid"
 import { CreateGameForm } from "@/features/games/components/create-game-form"
+import type { Game, FavoriteGame } from "@/types"
 import { deleteGame } from "@/features/games/actions/crud"
 import { toggleFavorite } from "@/features/games/actions/crud"
-
-interface Game {
-  id: string
-  title: string
-  genre: string
-  thumbnailUrl: string
-  shortDescription: string
-  externalUrl: string
-  tags: string[]
-  _count: { favorites: number }
-}
-
-interface Favorite {
-  game: {
-    id: string
-    title: string
-    thumbnailUrl: string
-    genre: string
-    externalUrl: string
-    owner: { username: string }
-    _count: { favorites: number }
-  }
-  createdAt: Date
-}
 
 export function DashboardNewGameButton() {
   const { open, openModal, closeModal } = useModal()
@@ -67,7 +44,7 @@ export function DashboardActions({ games }: { games: Game[] }) {
   return <GamesList games={games} onDelete={handleDelete} />
 }
 
-export function DashboardFavorites({ favorites }: { favorites: Favorite[] }) {
+export function DashboardFavorites({ favorites }: { favorites: FavoriteGame[] }) {
   const router = useRouter()
 
   async function handleUnfavorite(gameId: string) {

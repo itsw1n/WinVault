@@ -1,16 +1,6 @@
 import { Card } from "@/components/ui/card"
 import { GameListRow } from "@/features/games/components/game-list-row"
-
-interface Game {
-  id: string
-  title: string
-  genre: string
-  thumbnailUrl: string
-  shortDescription: string
-  externalUrl: string
-  tags: string[]
-  _count: { favorites: number }
-}
+import type { Game } from "@/types"
 
 interface GamesListProps {
   games: Game[]

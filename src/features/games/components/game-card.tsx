@@ -3,6 +3,7 @@ import { FavoriteButton } from "./favorite-button"
 import { Thumbnail } from "./thumbnail"
 import { Button } from "@/components/ui/button"
 import { clsx } from "clsx"
+import type { Game } from "@/types"
 
 const GENRE_ICONS: Record<string, string> = {
   Action: "ti-sword",
@@ -26,14 +27,7 @@ function getGenreIcon(genre: string): string {
   return GENRE_ICONS[genre] ?? "ti-gamepad"
 }
 
-interface GameCardProps {
-  id: string
-  title: string
-  thumbnailUrl: string
-  shortDescription: string
-  genre: string
-  owner: { username: string }
-  _count: { favorites: number }
+interface GameCardProps extends Game {
   isFavorited?: boolean
   className?: string
 }

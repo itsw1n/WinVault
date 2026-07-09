@@ -2,22 +2,10 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
-interface FavoritedGame {
-  game: {
-    id: string
-    title: string
-    thumbnailUrl: string
-    genre: string
-    externalUrl: string
-    owner: { username: string }
-    _count: { favorites: number }
-  }
-  createdAt: Date
-}
+import type { FavoriteGame } from "@/types"
 
 interface FavoritesGridProps {
-  favorites: FavoritedGame[]
+  favorites: FavoriteGame[]
   onUnfavorite: (gameId: string) => void
 }
 

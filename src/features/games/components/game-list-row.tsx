@@ -4,20 +4,10 @@ import { Modal, useModal } from "@/components/ui/modal"
 import { Button } from "@/components/ui/button"
 import { Thumbnail } from "@/features/games/components/thumbnail"
 import { EditGameForm } from "./edit-game-form"
-
-interface GameListItem {
-  id: string
-  title: string
-  genre: string
-  thumbnailUrl: string
-  shortDescription: string
-  externalUrl: string
-  tags: string[]
-  _count: { favorites: number }
-}
+import type { Game } from "@/types"
 
 interface GameListRowProps {
-  game: GameListItem
+  game: Game
   onDelete: (id: string) => void
 }
 
