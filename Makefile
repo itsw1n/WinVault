@@ -40,10 +40,10 @@ seed: ## Seed the database with sample data (dev)
 ##=== Production (Vercel + Supabase) ===
 
 migrate-prod: ## Apply migrations to the production database (Supabase)
-	npx prisma migrate deploy
+	npx env-cmd -f .env.production npx prisma migrate deploy
 
 seed-prod: ## Seed the production database with sample data (Supabase)
-	npx prisma db seed
+	npx env-cmd -f .env.production npx prisma db seed
 
 build-prod: ## Build the Next.js application for production
 	npm run build
