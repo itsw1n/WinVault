@@ -4,16 +4,55 @@ import { headers } from "next/headers"
 import { signIn, auth } from "@/lib/auth/auth"
 import { signUpSchema, signInSchema, updateProfileSchema } from "@/features/auth/schemas"
 import { createUser, updateUser } from "@/features/auth/mutations/auth"
-import { wrap, fail } from "@/lib/errors"
+import { wrap, ok, fail } from "@/lib/errors"
 import { rateLimit } from "@/lib/auth/rate-limiter"
 import { compare, hash } from "bcryptjs"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
 
+function getClientIp(headersList: Headers): string {
+  return (
+    headersList.get("x-real-ip") ??
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown"
+  )
+}
+
+export async function signInAction(callbackUrl: string, _prev: unknown, formData: FormData) {
+  const ip = getClientIp(await headers())
+  if (!(await rateLimit(`signin:${ip}`, 5, 15 * 60 * 1000))) {
+    return fail("VALIDATION", "Too many attempts. Please try again later.")
+  }
+
+  const parsed = signInSchema.safeParse({
+    login: formData.get("login"),
+    password: formData.get("password"),
+  })
+
+  if (!parsed.success) {
+    return fail("VALIDATION", parsed.error.errors[0].message)
+  }
+
+  try {
+    await signIn("credentials", {
+      login: parsed.data.login,
+      password: parsed.data.password,
+      redirect: false,
+    })
+  } catch (e) {
+    if (e instanceof AuthError) {
+      return fail("UNAUTHORIZED", "Invalid username/email or password")
+    }
+    throw e
+  }
+
+  redirect(callbackUrl)
+}
+
 export async function signUp(_prev: unknown, formData: FormData) {
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
-  if (!rateLimit(`signup:${ip}`, 5, 15 * 60 * 1000)) {
+  const ip = getClientIp(await headers())
+  if (!(await rateLimit(`signup:${ip}`, 5, 15 * 60 * 1000))) {
     return fail("VALIDATION", "Too many attempts. Please try again later.")
   }
 
@@ -49,35 +88,6 @@ export async function signUp(_prev: unknown, formData: FormData) {
   redirect("/dashboard")
 }
 
-export async function signInAction(_prev: unknown, formData: FormData) {
-  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
-  if (!rateLimit(`signin:${ip}`, 5, 15 * 60 * 1000)) {
-    return fail("VALIDATION", "Too many attempts. Please try again later.")
-  }
-
-  const parsed = signInSchema.safeParse({
-    login: formData.get("login"),
-    password: formData.get("password"),
-  })
-
-  if (!parsed.success) {
-    return fail("VALIDATION", parsed.error.errors[0].message)
-  }
-
-  try {
-    await signIn("credentials", {
-      login: parsed.data.login,
-      password: parsed.data.password,
-      redirectTo: "/dashboard",
-    })
-  } catch (e) {
-    if (e instanceof AuthError) {
-      return fail("UNAUTHORIZED", "Invalid username/email or password")
-    }
-    throw e
-  }
-}
-
 export async function updateProfile(_prev: unknown, formData: FormData) {
   const session = await auth()
   const userId = session?.user?.id
@@ -110,27 +120,34 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
     passwordHash = await hash(newPassword, 12)
   }
 
+  if (passwordHash) {
+    const result = await wrap(() =>
+      prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: {
+            username: profile.username,
+            email: profile.email,
+            passwordHash,
+            tokenVersion: { increment: 1 },
+          },
+        }),
+      ])
+    )
+
+    if (!result.success) return result
+
+    return ok({ requiresReauth: true })
+  }
+
   const result = await wrap(() =>
     updateUser(userId, {
       username: profile.username,
       email: profile.email,
-      ...(passwordHash ? { passwordHash } : {}),
     })
   )
 
   if (!result.success) return result
-
-  if (passwordHash) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { tokenVersion: { increment: 1 } },
-    })
-    await signIn("credentials", {
-      login: profile.username,
-      password: newPassword,
-      redirect: false,
-    })
-  }
 
   return result
 }

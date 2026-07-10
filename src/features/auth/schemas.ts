@@ -10,6 +10,7 @@ export const signUpSchema = z.object({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
+    .max(72, "Password must be at most 72 characters")
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[0-9]/, "Password must contain at least one number"),
 })
@@ -29,6 +30,7 @@ export const updateProfileSchema = z.object({
   currentPassword: z.string().optional(),
   newPassword: z.string()
     .min(8, "New password must be at least 8 characters")
+    .max(72, "New password must be at most 72 characters")
     .regex(/[A-Z]/, "New password must contain at least one uppercase letter")
     .regex(/[0-9]/, "New password must contain at least one number")
     .optional(),

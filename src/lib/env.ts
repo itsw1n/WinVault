@@ -1,16 +1,18 @@
 import { z } from "zod"
 
+const isProduction = process.env.NODE_ENV === "production"
+
 const envSchema = z.object({
   DATABASE_URL: z.string().url("DATABASE_URL must be a valid connection string"),
   DIRECT_URL: z.string().url("DIRECT_URL must be a valid connection string"),
   AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   GOOGLE_SAFE_BROWSING_API_KEY: z.string().optional(),
-  STORAGE_ENDPOINT: z.string().optional(),
-  STORAGE_ACCESS_KEY: z.string().optional(),
-  STORAGE_SECRET_KEY: z.string().optional(),
-  STORAGE_BUCKET: z.string().optional(),
-  STORAGE_PUBLIC_URL: z.string().optional(),
+  STORAGE_ENDPOINT: isProduction ? z.string().min(1) : z.string().optional(),
+  STORAGE_ACCESS_KEY: isProduction ? z.string().min(1) : z.string().optional(),
+  STORAGE_SECRET_KEY: isProduction ? z.string().min(1) : z.string().optional(),
+  STORAGE_BUCKET: isProduction ? z.string().min(1) : z.string().optional(),
+  STORAGE_PUBLIC_URL: isProduction ? z.string().min(1) : z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)

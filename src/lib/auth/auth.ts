@@ -45,7 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/sign-in",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id
         const dbUser = await prisma.user.findUnique({
@@ -54,17 +54,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
         token.tokenVersion = dbUser?.tokenVersion ?? 0
       }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user) {
+
+      if (trigger === "update") {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { tokenVersion: true },
         })
         if (!dbUser || dbUser.tokenVersion !== (token.tokenVersion as number)) {
-          return {} as typeof session
+          return null
         }
+        token.tokenVersion = dbUser.tokenVersion
+      }
+
+      return token
+    },
+    async session({ session, token }) {
+      if (!token?.id) return {} as typeof session
+      if (session.user) {
         session.user.id = token.id as string
       }
       return session

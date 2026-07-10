@@ -1,13 +1,30 @@
-const store = new Map<string, { count: number; resetAt: number }>()
+import { prisma } from "@/lib/prisma"
 
-export function rateLimit(key: string, limit: number, windowMs: number): boolean {
-  const now = Date.now()
-  const entry = store.get(key)
-  if (!entry || now > entry.resetAt) {
-    store.set(key, { count: 1, resetAt: now + windowMs })
+export async function rateLimit(
+  key: string,
+  limit: number,
+  windowMs: number
+): Promise<boolean> {
+  const now = new Date()
+  const resetAt = new Date(now.getTime() + windowMs)
+
+  const record = await prisma.rateLimit.findUnique({ where: { key } })
+
+  if (!record || record.resetAt < now) {
+    await prisma.rateLimit.upsert({
+      where: { key },
+      update: { count: 1, resetAt },
+      create: { key, count: 1, resetAt },
+    })
     return true
   }
-  if (entry.count >= limit) return false
-  entry.count++
+
+  if (record.count >= limit) return false
+
+  await prisma.rateLimit.update({
+    where: { key },
+    data: { count: { increment: 1 } },
+  })
+
   return true
 }
