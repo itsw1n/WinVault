@@ -1,4 +1,4 @@
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 
 interface CardProps {
   children: React.ReactNode
@@ -8,7 +8,7 @@ interface CardProps {
 export function Card({ children, className }: CardProps) {
   return (
     <div
-      className={clsx(
+      className={cn(
         "bg-pv-card border-pv border-pv-border rounded-pv",
         className
       )}

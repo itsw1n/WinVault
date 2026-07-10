@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 
 const MAX_SIZE = 5 * 1024 * 1024
 const ACCEPTED = "image/png,image/jpeg,image/webp"
@@ -91,7 +91,7 @@ export function ThumbnailUpload({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={clsx(
+        className={cn(
           "relative flex flex-col items-center justify-center gap-2 p-6 rounded-pv-sm cursor-pointer transition-colors",
           dragOver && "border-pv-primary bg-pv-primary/10",
           !dragOver && hasFile && "border-solid border-pv-primary bg-pv-card",

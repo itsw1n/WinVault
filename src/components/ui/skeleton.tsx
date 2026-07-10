@@ -1,9 +1,9 @@
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 
 export function Skeleton({ className }: { className?: string }) {
   return (
     <div
-      className={clsx(
+      className={cn(
         "bg-pv-card border-pv border-pv-border rounded-pv animate-pulse",
         className
       )}

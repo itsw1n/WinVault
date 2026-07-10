@@ -2,7 +2,7 @@ import Link from "next/link"
 import { FavoriteButton } from "./favorite-button"
 import { Thumbnail } from "./thumbnail"
 import { Button } from "@/components/ui/button"
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 import type { Game } from "@/types"
 
 const GENRE_ICONS: Record<string, string> = {
@@ -44,7 +44,7 @@ export function GameCard({
 }: GameCardProps) {
   return (
     <div
-      className={clsx(
+      className={cn(
         "border-[2.5px] border-pv-border rounded-pv bg-pv-card overflow-hidden flex flex-col",
         className
       )}

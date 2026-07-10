@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { AuthAwareLink } from "@/components/ui/auth-aware-link";
+import { AuthAwareLink } from "@/components/ui";
 
 export function Footer() {
   return (

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
-import { AuthAwareLink } from "@/components/ui/auth-aware-link";
+import { AuthAwareLink } from "@/components/ui";
 import { prisma } from "@/lib/prisma";
 import { GENRES } from "@/features/games/schemas";
 import { getDeveloperCount } from "@/features/games/queries/games";

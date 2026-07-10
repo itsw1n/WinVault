@@ -1,4 +1,4 @@
-import { clsx } from "clsx"
+import { cn } from "@/lib/utils"
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -12,7 +12,7 @@ export function Input({ label, error, className, ...props }: InputProps) {
         <label className="text-sm font-medium text-pv-text">{label}</label>
       )}
       <input
-        className={clsx(
+        className={cn(
           "w-full px-3 py-2 text-sm bg-pv-card text-pv-text border-pv border-pv-border rounded-pv-sm",
           "focus:outline-none focus:border-pv-primary transition-colors",
           className
