@@ -1,10 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { Button, ThumbnailUpload } from "@/components/ui"
 import type { Game } from "@/types"
 import { updateGame } from "@/features/games/actions/crud"
 import { updateGameSchema } from "@/features/games/schemas"
@@ -23,6 +24,7 @@ interface EditGameFormProps {
 
 export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
   const router = useRouter()
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
 
   const {
     register,
@@ -60,6 +62,7 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
     formData.set("id", data.id)
     formData.set("title", data.title)
     formData.set("thumbnailUrl", data.thumbnailUrl)
+    if (thumbnailFile) formData.set("thumbnail", thumbnailFile)
     formData.set("shortDescription", data.shortDescription)
     formData.set("externalUrl", data.externalUrl)
     formData.set("genre", data.genre)
@@ -104,25 +107,15 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label
-          htmlFor="thumbnailUrl"
-          className="text-[12px] font-medium text-pv-text"
-        >
-          Thumbnail URL
-        </label>
-        <input
-          id="thumbnailUrl"
-          {...register("thumbnailUrl")}
-          placeholder="https://example.com/image.png"
-          className="w-full px-3 py-2 text-[13px] bg-pv-card text-pv-text border-[2px] border-pv-border rounded-pv-sm focus:outline-none focus:border-pv-primary transition-colors"
-        />
-        {errors.thumbnailUrl && (
-          <p className="text-[12px] text-pv-heart">
-            {errors.thumbnailUrl.message}
-          </p>
-        )}
-      </div>
+      <ThumbnailUpload
+        onFile={setThumbnailFile}
+        currentThumbnailUrl={game.thumbnailUrl}
+      />
+
+      <input
+        type="hidden"
+        {...register("thumbnailUrl")}
+      />
 
       <div className="flex flex-col gap-1">
         <label
