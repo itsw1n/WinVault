@@ -31,7 +31,7 @@ prisma-engines-*.tgz
 
 # Env fallbacks
 .env
-.env.development.local
+.env.development
 .env.test.local
 .env.production.local
 .env.production
