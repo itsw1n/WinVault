@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
-.PHONY: dev stop restart logs rebuild reset-db migrate studio \
-        prod stop-prod restart-prod logs-prod migrate-prod rebuild-prod help
+.PHONY: dev stop restart logs rebuild reset-db migrate studio seed \
+        prod stop-prod restart-prod logs-prod migrate-prod rebuild-prod seed-prod help
 
 COMPOSE_DEV   = -f compose.yml -f compose.dev.yml
 COMPOSE_PROD  = -f compose.yml -f compose.prod.yml
@@ -35,6 +35,9 @@ migrate: ## Create + apply a migration (usage: name=xyz)
 studio: ## Open Prisma Studio
 	docker compose $(COMPOSE_DEV) exec app npx prisma studio --browser none
 
+seed: ## Seed the database with sample data (dev)
+	docker compose $(COMPOSE_DEV) exec app npx prisma db seed
+
 ##=== Production ===
 
 prod: ## Start the production environment
@@ -55,6 +58,9 @@ rebuild-prod: ## Rebuild images and restart prod
 
 migrate-prod: ## Apply production migrations
 	docker compose $(COMPOSE_PROD) exec -T app npx prisma migrate deploy
+
+seed-prod: ## Seed the database with sample data (production)
+	docker compose $(COMPOSE_PROD) exec app npx prisma db seed
 
 ##=== Utility ===
 
