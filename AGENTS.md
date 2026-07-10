@@ -4,6 +4,9 @@
 
 PlayVault is a community-driven indie game discovery platform built with **Next.js 16** (App Router), **TypeScript** (strict), **NextAuth v5** (credentials + JWT), **Prisma** (PostgreSQL), **Tailwind CSS** (custom `pv-*` design tokens), **Zod** (validation), and **Docker Compose** (dev environment with Postgres + MinIO S3).
 
+- **Development:** Docker Compose (Postgres + MinIO + Next.js)
+- **Production:** Vercel (hosting) + Supabase (PostgreSQL + S3 Storage)
+
 The app lets users browse indie games, sign up, publish their own games (title, description, genre, tags, external link, thumbnail), and favorite others. No game files are hosted — just links. Auth is credentials-only (username/email + password) with JWT sessions and token-version invalidation.
 
 **Repo:** `https://github.com/itsw1n/WinVault`
@@ -75,7 +78,7 @@ Format: `type(scope):lowercase description`
 ```
 feat(backend):add S3 storage abstraction and thumbnail processor
 feat(ui):add NotifDialog component with single okay button
-chore(docker):add multi-stage Dockerfile and dev/prod compose structure
+chore(config):update Makefile and env files for Vercel + Supabase production
 fix(backend):correct content-type header on upload response
 refactor(backend):migrate url-safety to use imported env object
 ```
@@ -295,14 +298,13 @@ Development:
   reset-db              Wipe volumes, restart, auto-migrate
   migrate name=xyz      Create + apply a migration
   studio                Open Prisma Studio
+  seed                  Seed the database with sample data
 
-Production:
-  prod                  Start the production environment
-  stop-prod             Stop the production environment
-  restart-prod          Restart the production environment
-  logs-prod             Tail production logs
-  rebuild-prod          Rebuild images and restart prod
-  migrate-prod          Apply production migrations
+Production (Vercel + Supabase):
+  migrate-prod          Apply migrations to Supabase production DB
+  seed-prod             Seed the Supabase production DB
+  build-prod            Build the Next.js application for production
+  deploy                Deploy to Vercel
 
 Utility:
   help                  Show this help
