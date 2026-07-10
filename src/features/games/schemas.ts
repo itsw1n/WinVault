@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { checkUrlLocal } from "@/lib/security/url-safety"
+import { checkUrlLocal } from "@/lib/security/check-url"
 
 export const createGameSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
-  thumbnailUrl: z.string().url("Must be a valid URL"),
+  thumbnailUrl: z.string().url("Must be a valid URL").or(z.literal("")),
   shortDescription: z.string().min(1, "Description is required").max(500),
   externalUrl: z.string().url("Must be a valid URL").superRefine((val, ctx) => {
     const reason = checkUrlLocal(val)

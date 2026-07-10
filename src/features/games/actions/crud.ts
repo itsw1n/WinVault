@@ -5,6 +5,8 @@ import { createGameSchema, updateGameSchema } from "@/features/games/schemas"
 import * as mutations from "@/features/games/mutations/games"
 import * as queries from "@/features/games/queries/games"
 import { checkUrlRemote } from "@/lib/security/url-safety"
+import { processThumbnail } from "@/lib/process-thumbnail"
+import { uploadThumbnail } from "@/lib/storage"
 import { wrap, fail } from "@/lib/errors"
 import { revalidatePath } from "next/cache"
 
@@ -13,9 +15,26 @@ export async function createGame(_prev: unknown, formData: FormData) {
   const userId = session?.user?.id
   if (!userId) return fail("UNAUTHORIZED")
 
+  let thumbnailUrl = formData.get("thumbnailUrl") as string
+  const thumbnailFile = formData.get("thumbnail") as File | null
+
+  if (thumbnailFile && thumbnailFile.size > 0) {
+    const processed = await processThumbnail(thumbnailFile)
+    const url = await uploadThumbnail(
+      processed.buffer,
+      processed.mimeType,
+      processed.fileName
+    )
+    if (url) thumbnailUrl = url
+  }
+
+  if (!thumbnailUrl) {
+    return fail("VALIDATION", "Please provide a thumbnail image or URL")
+  }
+
   const parsed = createGameSchema.safeParse({
     title: formData.get("title"),
-    thumbnailUrl: formData.get("thumbnailUrl"),
+    thumbnailUrl,
     shortDescription: formData.get("shortDescription"),
     externalUrl: formData.get("externalUrl"),
     genre: formData.get("genre"),
@@ -45,10 +64,27 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   const userId = session?.user?.id
   if (!userId) return fail("UNAUTHORIZED")
 
+  let thumbnailUrl = formData.get("thumbnailUrl") as string
+  const thumbnailFile = formData.get("thumbnail") as File | null
+
+  if (thumbnailFile && thumbnailFile.size > 0) {
+    const processed = await processThumbnail(thumbnailFile)
+    const url = await uploadThumbnail(
+      processed.buffer,
+      processed.mimeType,
+      processed.fileName
+    )
+    if (url) thumbnailUrl = url
+  }
+
+  if (!thumbnailUrl) {
+    return fail("VALIDATION", "Please provide a thumbnail image or URL")
+  }
+
   const parsed = updateGameSchema.safeParse({
     id: formData.get("id"),
     title: formData.get("title"),
-    thumbnailUrl: formData.get("thumbnailUrl"),
+    thumbnailUrl,
     shortDescription: formData.get("shortDescription"),
     externalUrl: formData.get("externalUrl"),
     genre: formData.get("genre"),
