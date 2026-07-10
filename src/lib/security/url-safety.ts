@@ -1,4 +1,5 @@
 import { BLOCKED_DOMAINS } from "./blocklist"
+import { env } from "@/lib/env"
 
 const SAFE_BROWSING_URL =
   "https://safebrowsing.googleapis.com/v4/threatMatches:find"
@@ -21,7 +22,7 @@ export function checkUrlLocal(url: string): string | null {
 }
 
 export async function checkUrlRemote(url: string): Promise<string | null> {
-  const apiKey = process.env.GOOGLE_SAFE_BROWSING_API_KEY
+  const apiKey = env.GOOGLE_SAFE_BROWSING_API_KEY
   if (!apiKey) return null
 
   try {
