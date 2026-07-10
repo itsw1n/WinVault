@@ -54,3 +54,9 @@ model Favorite {
 
   @@unique([userId, gameId])
 }
+
+model RateLimit {
+  key     String   @id
+  count   Int      @default(1)
+  resetAt DateTime
+}
