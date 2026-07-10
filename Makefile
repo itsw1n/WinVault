@@ -1,10 +1,9 @@
 .DEFAULT_GOAL := help
 
 .PHONY: dev stop restart logs rebuild reset-db migrate studio seed \
-        prod stop-prod restart-prod logs-prod migrate-prod rebuild-prod seed-prod help
+        migrate-prod seed-prod build-prod deploy help
 
 COMPOSE_DEV   = -f compose.yml -f compose.dev.yml
-COMPOSE_PROD  = -f compose.yml -f compose.prod.yml
 
 ##=== Development ===
 
@@ -38,29 +37,19 @@ studio: ## Open Prisma Studio
 seed: ## Seed the database with sample data (dev)
 	docker compose $(COMPOSE_DEV) exec app npx prisma db seed
 
-##=== Production ===
+##=== Production (Vercel + Supabase) ===
 
-prod: ## Start the production environment
-	docker compose $(COMPOSE_PROD) up -d
+migrate-prod: ## Apply migrations to the production database (Supabase)
+	npx prisma migrate deploy
 
-stop-prod: ## Stop the production environment
-	docker compose $(COMPOSE_PROD) down
+seed-prod: ## Seed the production database with sample data (Supabase)
+	npx prisma db seed
 
-restart-prod: stop-prod prod ## Restart the production environment
+build-prod: ## Build the Next.js application for production
+	npm run build
 
-logs-prod: ## Tail production logs
-	docker compose $(COMPOSE_PROD) logs -f
-
-rebuild-prod: ## Rebuild images and restart prod
-	docker compose $(COMPOSE_PROD) down
-	docker compose $(COMPOSE_PROD) build --no-cache
-	docker compose $(COMPOSE_PROD) up -d
-
-migrate-prod: ## Apply production migrations
-	docker compose $(COMPOSE_PROD) exec -T app npx prisma migrate deploy
-
-seed-prod: ## Seed the database with sample data (production)
-	docker compose $(COMPOSE_PROD) exec app npx prisma db seed
+deploy: ## Deploy to Vercel (run migrate-prod + seed-prod first if needed)
+	npx vercel --prod
 
 ##=== Utility ===
 

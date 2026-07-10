@@ -26,6 +26,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Prisma engine build artifacts
+prisma-engines-*.tgz
+
 # Env fallbacks
 .env
 .env.development.local
