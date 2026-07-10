@@ -25,9 +25,8 @@ export async function generateMetadata(props: {
 
 export default async function GameDetailPage(props: {
   params: Promise<{ id: string }>
-  searchParams: Promise<{ action?: string }>
 }) {
-  const [params, sp] = await Promise.all([props.params, props.searchParams])
+  const params = await props.params
   const session = await auth()
 
   let game
@@ -92,7 +91,6 @@ export default async function GameDetailPage(props: {
               gameId={game.id}
               externalUrl={game.externalUrl}
               isFavorited={isFavorited}
-              action={sp.action}
             />
           </div>
         </div>
