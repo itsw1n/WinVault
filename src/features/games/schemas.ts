@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { checkUrlLocal } from "@/lib/security/check-url"
+import { checkUrlLocal } from "@/lib/security/url-safety"
 
 export const createGameSchema = z.object({
   title: z.string().min(1, "Title is required").max(100),
