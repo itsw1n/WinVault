@@ -6,6 +6,11 @@ const envSchema = z.object({
   AUTH_SECRET: z.string().min(1, "AUTH_SECRET is required"),
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
   GOOGLE_SAFE_BROWSING_API_KEY: z.string().optional(),
+  STORAGE_ENDPOINT: z.string().optional(),
+  STORAGE_ACCESS_KEY: z.string().optional(),
+  STORAGE_SECRET_KEY: z.string().optional(),
+  STORAGE_BUCKET: z.string().optional(),
+  STORAGE_PUBLIC_URL: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)
@@ -17,4 +22,4 @@ if (!parsed.success) {
   )
 }
 
-parsed.data
+export const env = parsed.data
