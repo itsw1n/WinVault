@@ -18,10 +18,10 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env)
 
 if (!parsed.success) {
-  throw new Error(
-    "Invalid environment variables: " +
-      JSON.stringify(parsed.error.flatten().fieldErrors)
+  console.error(
+    "Invalid environment variables:",
+    parsed.error.flatten().fieldErrors
   )
 }
 
-export const env = parsed.data
+export const env = parsed.success ? parsed.data : ({} as ReturnType<typeof envSchema.parse>)
