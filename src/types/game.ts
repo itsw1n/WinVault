@@ -6,7 +6,9 @@ export interface Game {
   externalUrl: string
   genre: string
   tags: string[]
-  owner: { username: string }
+  ownerId: string
+  isFeatured: boolean
+  owner: { username: string; avatarUrl: string | null }
   _count: { favorites: number }
   createdAt?: Date
   updatedAt?: Date

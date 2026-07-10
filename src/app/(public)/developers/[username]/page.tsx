@@ -77,10 +77,7 @@ export default async function DeveloperProfilePage(props: {
             Published Games
           </h2>
           <GameGrid
-            games={games.map((g) => ({
-              ...g,
-              owner: { username: user.username },
-            }))}
+            games={games}
             favoritedIds={favoritedIds}
           />
         </section>

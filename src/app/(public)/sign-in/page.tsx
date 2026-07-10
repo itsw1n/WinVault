@@ -1,43 +1,21 @@
 "use client"
 
-import { Suspense, useState } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useActionState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
+import { signInAction } from "@/features/auth/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 
 function SignInForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const raw = searchParams.get("callbackUrl") || "/dashboard"
   const callbackUrl = raw.startsWith("/") ? raw : "/dashboard"
-  const [error, setError] = useState("")
-  const [pending, setPending] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setPending(true)
-    setError("")
-
-    const form = new FormData(e.currentTarget)
-
-    const result = await signIn("credentials", {
-      login: form.get("login") as string,
-      password: form.get("password") as string,
-      redirect: false,
-    })
-
-    if (result?.error) {
-      setError("Invalid username/email or password")
-      setPending(false)
-      return
-    }
-
-    router.push(callbackUrl)
-    router.refresh()
-  }
+  const [state, formAction, pending] = useActionState(
+    signInAction.bind(null, callbackUrl),
+    undefined
+  )
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-pv-bg px-4">
@@ -54,7 +32,7 @@ function SignInForm() {
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form action={formAction} className="space-y-3">
           <Input
             name="login"
             label="Username or Email"
@@ -66,7 +44,9 @@ function SignInForm() {
             type="password"
             placeholder="Enter your password"
           />
-          {error && <p className="text-xs text-pv-heart">{error}</p>}
+          {state && !state.success && (
+            <p className="text-xs text-pv-heart">{state.message}</p>
+          )}
           <Button type="submit" className="w-full" disabled={pending}>
             {pending ? "Signing in..." : "Sign In"}
           </Button>

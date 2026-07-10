@@ -4,6 +4,10 @@ export interface User {
   email: string
   avatarUrl?: string | null
   bio?: string | null
-  tokenVersion: number
   createdAt: Date
+}
+
+export interface UserWithAuth extends User {
+  tokenVersion: number
+  passwordHash: string
 }

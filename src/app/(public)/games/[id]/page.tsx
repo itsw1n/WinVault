@@ -82,6 +82,12 @@ export default async function GameDetailPage(props: {
               {game.shortDescription}
             </p>
 
+            {game.owner.bio && (
+              <p className="text-xs text-pv-muted border-t border-pv-border pt-3">
+                About the developer: {game.owner.bio}
+              </p>
+            )}
+
             <GameDetailClient
               gameId={game.id}
               externalUrl={game.externalUrl}
