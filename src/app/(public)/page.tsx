@@ -38,17 +38,17 @@ export default async function HomePage() {
 
       <section className="mb-12">
         <SectionHeader title="Featured Games" href="/games" />
-        <GameGrid games={featured} favoritedIds={favoritedIds} />
+        <GameGrid games={featured} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
 
       <section className="mb-12">
         <SectionHeader title="Trending Now" href="/games" />
-        <GameGrid games={trending} favoritedIds={favoritedIds} />
+        <GameGrid games={trending} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
 
       <section className="mb-12">
         <SectionHeader title="New Releases" href="/games" />
-        <GameGrid games={newReleases} favoritedIds={favoritedIds} />
+        <GameGrid games={newReleases} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
     </div>
   )

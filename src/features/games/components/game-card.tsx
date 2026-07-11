@@ -29,6 +29,7 @@ function getGenreIcon(genre: string): string {
 
 interface GameCardProps extends Game {
   isFavorited?: boolean;
+  loggedIn?: boolean;
   className?: string;
 }
 
@@ -40,6 +41,7 @@ export function GameCard({
   genre,
   owner,
   isFavorited,
+  loggedIn,
   className,
 }: GameCardProps) {
   return (
@@ -79,7 +81,7 @@ export function GameCard({
         </div>
       </Link>
       <div className="px-3 pb-3 flex gap-2 shrink-0">
-        <FavoriteButton gameId={id} isFavorited={!!isFavorited} />
+        <FavoriteButton gameId={id} isFavorited={!!isFavorited} loggedIn={loggedIn} />
         <Button variant="default" size="sm" className="flex-1 gap-1.5" asChild>
           <Link href={`/games/${id}`}>
             <i className="ti ti-player-play text-[14px]" aria-hidden="true" />

@@ -4,9 +4,10 @@ import type { Game } from "@/types"
 interface GameGridProps {
   games: Game[]
   favoritedIds?: string[]
+  loggedIn?: boolean
 }
 
-export function GameGrid({ games, favoritedIds }: GameGridProps) {
+export function GameGrid({ games, favoritedIds, loggedIn }: GameGridProps) {
   if (games.length === 0) {
     return (
       <p className="text-sm text-pv-muted py-8 text-center">
@@ -22,6 +23,7 @@ export function GameGrid({ games, favoritedIds }: GameGridProps) {
           key={game.id}
           {...game}
           isFavorited={favoritedIds?.includes(game.id)}
+          loggedIn={loggedIn}
         />
       ))}
     </div>

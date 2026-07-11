@@ -79,6 +79,7 @@ export default async function DeveloperProfilePage(props: {
           <GameGrid
             games={games}
             favoritedIds={favoritedIds}
+            loggedIn={!!session?.user}
           />
         </section>
       </div>

@@ -53,7 +53,7 @@ export default async function BrowsePage(props: {
           </p>
         )}
 
-        <GameGrid games={games} favoritedIds={favoritedIds} />
+        <GameGrid games={games} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </div>
   )
 }

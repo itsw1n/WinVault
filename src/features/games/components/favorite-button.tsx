@@ -24,15 +24,20 @@ function HeartIcon({ filled }: { filled: boolean }) {
 export function FavoriteButton({
   gameId,
   isFavorited,
+  loggedIn = false,
 }: {
   gameId: string
   isFavorited: boolean
+  loggedIn?: boolean
 }) {
   const router = useRouter()
   const [optimisticFav, setOptimisticFav] = useOptimistic(isFavorited)
 
   async function handleToggle() {
-    setOptimisticFav(!optimisticFav)
+    if (loggedIn) {
+      setOptimisticFav(!optimisticFav)
+    }
+
     const result = await toggleFavorite(gameId)
     if (!result.success && result.code === "UNAUTHORIZED") {
       router.push(`/sign-in?callbackUrl=/games`)
