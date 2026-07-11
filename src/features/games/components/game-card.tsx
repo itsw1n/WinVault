@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { FavoriteButton } from "./favorite-button"
-import { Thumbnail } from "./thumbnail"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import type { Game } from "@/types"
+import Link from "next/link";
+import { FavoriteButton } from "./favorite-button";
+import { Thumbnail } from "@/components/ui/thumbnail";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Game } from "@/types";
 
 const GENRE_ICONS: Record<string, string> = {
   Action: "ti-sword",
@@ -21,15 +21,15 @@ const GENRE_ICONS: Record<string, string> = {
   Rhythm: "ti-music",
   "Visual Novel": "ti-book",
   Other: "ti-gamepad",
-}
+};
 
 function getGenreIcon(genre: string): string {
-  return GENRE_ICONS[genre] ?? "ti-gamepad"
+  return GENRE_ICONS[genre] ?? "ti-gamepad";
 }
 
 interface GameCardProps extends Game {
-  isFavorited?: boolean
-  className?: string
+  isFavorited?: boolean;
+  className?: string;
 }
 
 export function GameCard({
@@ -46,12 +46,16 @@ export function GameCard({
     <div
       className={cn(
         "border-[2.5px] border-pv-border rounded-pv bg-pv-card overflow-hidden flex flex-col",
-        className
+        className,
       )}
     >
       <Link href={`/games/${id}`} className="flex flex-col flex-1">
-        <div className="bg-pv-border h-[100px] relative p-2 overflow-hidden shrink-0">
-          <Thumbnail src={thumbnailUrl} alt={title} className="w-full h-full object-cover" />
+        <div className="bg-pv-border h-[200px] relative overflow-hidden shrink-0">
+          <Thumbnail
+            src={thumbnailUrl}
+            alt={title}
+            className="w-full h-full object-cover"
+          />
           <span className="bg-pv-primary text-[#111111] text-[10px] font-bold tracking-[0.03em] px-2 py-0.5 rounded-[4px] uppercase absolute top-2 left-2">
             {genre}
           </span>
@@ -64,7 +68,9 @@ export function GameCard({
           <h3 className="font-display font-bold text-[15px] text-pv-text mt-0 mb-0.5 truncate">
             {title}
           </h3>
-          <p className="text-[12px] text-pv-muted mb-1.5">by {owner.username}</p>
+          <p className="text-[12px] text-pv-muted mb-1.5">
+            by {owner.username}
+          </p>
           {shortDescription && (
             <p className="text-[12px] text-pv-muted leading-[1.4] line-clamp-2 break-words">
               {shortDescription}
@@ -82,5 +88,5 @@ export function GameCard({
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -83,21 +83,21 @@ hr {
 }
 
 :root {
-  --pv-primary: #FF6B00;
-  --pv-heart: #FF4D6D;
-  --pv-bg: #F8F8F8;
-  --pv-card: #FFFFFF;
+  --pv-primary: #ff6b00;
+  --pv-heart: #ff4d6d;
+  --pv-bg: #f8f8f8;
+  --pv-card: #ffffff;
   --pv-text: #111111;
   --pv-border: #111111;
-  --pv-muted: #5A5A5A;
+  --pv-muted: #5a5a5a;
 }
 
 [data-theme="dark"] {
   --pv-bg: #111111;
-  --pv-card: #1A1A1A;
-  --pv-text: #F8F8F8;
-  --pv-border: #FFFFFF;
-  --pv-muted: #B0B0B0;
+  --pv-card: #1a1a1a;
+  --pv-text: #f8f8f8;
+  --pv-border: #ffffff;
+  --pv-muted: #b0b0b0;
 }
 
 html {
@@ -107,7 +107,11 @@ html {
 
 body {
   min-height: 100vh;
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-weight: 400;
   line-height: 1.5;
   color: var(--pv-text);
