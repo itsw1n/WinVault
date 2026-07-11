@@ -67,22 +67,26 @@ export function Modal({
   )
 
   useEffect(() => {
-    if (open) {
-      previousActiveElement.current = document.activeElement as HTMLElement
-      document.addEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = "hidden"
+    if (!open) return
+    previousActiveElement.current = document.activeElement as HTMLElement
+    document.addEventListener("keydown", handleKeyDown)
 
-      requestAnimationFrame(() => {
-        const firstFocusable = dialogRef.current?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-        firstFocusable?.focus()
-      })
-    }
+    const prev = Number(document.body.dataset.scrollLock) || 0
+    document.body.dataset.scrollLock = String(prev + 1)
+    document.body.style.overflow = "hidden"
+
+    requestAnimationFrame(() => {
+      const firstFocusable = dialogRef.current?.querySelector<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      firstFocusable?.focus()
+    })
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = ""
+      const count = Math.max(0, (Number(document.body.dataset.scrollLock) || 0) - 1)
+      document.body.dataset.scrollLock = String(count)
+      if (count === 0) document.body.style.overflow = ""
       previousActiveElement.current?.focus()
     }
   }, [open, handleKeyDown])

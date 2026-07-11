@@ -10,12 +10,14 @@ interface ThumbnailUploadProps {
   onFile: (file: File | null) => void
   currentThumbnailUrl?: string
   error?: string
+  onRemoveCurrent?: () => void
 }
 
 export function ThumbnailUpload({
   onFile,
   currentThumbnailUrl,
   error: externalError,
+  onRemoveCurrent,
 }: ThumbnailUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragOver, setDragOver] = useState(false)
@@ -168,6 +170,21 @@ export function ThumbnailUpload({
                 alt="Current thumbnail"
                 className="w-full h-32 object-cover"
               />
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onFile(null)
+                  onRemoveCurrent?.()
+                }}
+                className="absolute top-1.5 right-1.5 w-7 h-7 flex items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
+                title="Remove thumbnail"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
             </div>
             <span className="text-[11px] text-pv-muted">
               Click or drag to replace

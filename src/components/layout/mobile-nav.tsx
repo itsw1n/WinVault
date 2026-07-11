@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./theme-toggle";
-import { SearchBar } from "@/features/games/components/search-bar";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
 
@@ -18,12 +17,15 @@ export function MobileNav({
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
+    if (!open) return;
+    const prev = Number(document.body.dataset.scrollLock) || 0;
+    document.body.dataset.scrollLock = String(prev + 1);
+    document.body.style.overflow = "hidden";
+    return () => {
+      const count = Math.max(0, (Number(document.body.dataset.scrollLock) || 0) - 1);
+      document.body.dataset.scrollLock = String(count);
+      if (count === 0) document.body.style.overflow = "";
+    };
   }, [open]);
 
   function NavLink({
