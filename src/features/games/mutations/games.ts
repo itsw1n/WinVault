@@ -38,17 +38,10 @@ export async function deleteGame(id: string) {
 }
 
 export async function toggleFavorite(userId: string, gameId: string) {
-  const game = await prisma.game.findUnique({ where: { id: gameId } })
-  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
-
-  const existing = await prisma.favorite.findUnique({
-    where: { userId_gameId: { userId, gameId } },
+  const { count } = await prisma.favorite.deleteMany({
+    where: { userId, gameId },
   })
-
-  if (existing) {
-    await prisma.favorite.delete({ where: { id: existing.id } })
-    return { favorited: false }
-  }
+  if (count > 0) return { favorited: false }
 
   await prisma.favorite.create({ data: { userId, gameId } })
   return { favorited: true }
