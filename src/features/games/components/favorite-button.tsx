@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useOptimistic } from "react"
 import { toggleFavorite } from "@/features/games/actions/crud"
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -28,8 +29,10 @@ export function FavoriteButton({
   isFavorited: boolean
 }) {
   const router = useRouter()
+  const [optimisticFav, setOptimisticFav] = useOptimistic(isFavorited)
 
   async function handleToggle() {
+    setOptimisticFav(!optimisticFav)
     const result = await toggleFavorite(gameId)
     if (!result.success && result.code === "UNAUTHORIZED") {
       router.push(`/sign-in?callbackUrl=/games`)
@@ -40,10 +43,10 @@ export function FavoriteButton({
     <form action={handleToggle} className="shrink-0">
       <button
         type="submit"
-        aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+        aria-label={optimisticFav ? "Remove from favorites" : "Add to favorites"}
         className="w-[34px] h-[34px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-heart hover:bg-pv-bg transition-colors"
       >
-        <HeartIcon filled={isFavorited} />
+        <HeartIcon filled={optimisticFav} />
       </button>
     </form>
   )
