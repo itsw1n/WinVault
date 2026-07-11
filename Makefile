@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: dev stop restart logs rebuild reset-db migrate studio seed \
+.PHONY: dev stop restart logs rebuild reset-db migrate studio seed lint \
         migrate-prod seed-prod build-prod deploy help
 
 COMPOSE_DEV   = -f compose.yml -f compose.dev.yml
@@ -36,6 +36,9 @@ studio: ## Open Prisma Studio
 
 seed: ## Seed the database with sample data (dev)
 	docker compose $(COMPOSE_DEV) exec app npx prisma db seed
+
+lint: ## Run ESLint
+	npm run lint
 
 ##=== Production (Vercel + Supabase) ===
 
