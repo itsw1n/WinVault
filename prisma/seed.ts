@@ -124,7 +124,7 @@ async function main() {
       thumbnailUrl: "",
       shortDescription: "Sample game sourced from world-geography-games.com. Used for demonstration purposes.",
       externalUrl: "https://world-geography-games.com/",
-      genre: "Educational",
+      genre: "Puzzle",
       tags: ["geography", "quiz", "educational"],
       isFeatured: false,
       ownerId: users[4].id,
