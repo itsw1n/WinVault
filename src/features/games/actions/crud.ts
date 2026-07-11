@@ -8,7 +8,7 @@ import { checkUrlRemote } from "@/lib/security/url-safety"
 import { processThumbnail } from "@/lib/process-thumbnail"
 import { uploadThumbnail, deleteThumbnail } from "@/lib/storage"
 import { wrap, fail } from "@/lib/errors"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 export async function createGame(_prev: unknown, formData: FormData) {
   const session = await auth()
@@ -56,6 +56,7 @@ export async function createGame(_prev: unknown, formData: FormData) {
 
   revalidatePath("/dashboard")
   revalidatePath("/")
+  revalidateTag("games", "max")
   return result
 }
 
@@ -112,6 +113,7 @@ export async function updateGame(_prev: unknown, formData: FormData) {
 
   revalidatePath("/dashboard")
   revalidatePath(`/games/${id}`)
+  revalidateTag("games", "max")
   return result
 }
 
@@ -130,6 +132,7 @@ export async function deleteGame(id: string) {
   if (!result.success) return result
 
   revalidatePath("/dashboard")
+  revalidateTag("games", "max")
   return result
 }
 
@@ -144,5 +147,7 @@ export async function toggleFavorite(gameId: string) {
   revalidatePath("/")
   revalidatePath("/dashboard")
   revalidatePath(`/games/${gameId}`)
+  revalidateTag("games", "max")
+  revalidateTag("favorites", "max")
   return result
 }
