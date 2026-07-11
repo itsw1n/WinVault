@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3"
 import { env } from "@/lib/env"
 
 function createClient(): S3Client | null {
@@ -34,4 +34,24 @@ export async function uploadThumbnail(
   )
 
   return `${env.STORAGE_PUBLIC_URL}/${fileName}`
+}
+
+export async function deleteThumbnail(url: string) {
+  if (!client || !env.STORAGE_PUBLIC_URL) return
+
+  const prefix = env.STORAGE_PUBLIC_URL.endsWith("/")
+    ? env.STORAGE_PUBLIC_URL
+    : env.STORAGE_PUBLIC_URL + "/"
+
+  if (!url.startsWith(prefix)) return
+
+  const key = url.slice(prefix.length)
+  if (!key) return
+
+  await client.send(
+    new DeleteObjectCommand({
+      Bucket: env.STORAGE_BUCKET,
+      Key: key,
+    })
+  )
 }

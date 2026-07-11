@@ -6,7 +6,7 @@ import * as mutations from "@/features/games/mutations/games"
 import * as queries from "@/features/games/queries/games"
 import { checkUrlRemote } from "@/lib/security/url-safety"
 import { processThumbnail } from "@/lib/process-thumbnail"
-import { uploadThumbnail } from "@/lib/storage"
+import { uploadThumbnail, deleteThumbnail } from "@/lib/storage"
 import { wrap, fail } from "@/lib/errors"
 import { revalidatePath } from "next/cache"
 
@@ -66,6 +66,11 @@ export async function updateGame(_prev: unknown, formData: FormData) {
 
   let thumbnailUrl = formData.get("thumbnailUrl") as string
   const thumbnailFile = formData.get("thumbnail") as File | null
+  const removeThumbnail = formData.get("removeThumbnail") === "true"
+
+  const game = await wrap(() => queries.getGameById(formData.get("id") as string))
+  if (!game.success) return game
+  if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
   if (thumbnailFile && thumbnailFile.size > 0) {
     const processed = await processThumbnail(thumbnailFile)
@@ -74,15 +79,17 @@ export async function updateGame(_prev: unknown, formData: FormData) {
       processed.mimeType,
       processed.fileName
     )
-    if (url) thumbnailUrl = url
-  }
-
-  if (!thumbnailUrl) {
-    return fail("VALIDATION", "Please provide a thumbnail image or URL")
+    if (url) {
+      await deleteThumbnail(game.data.thumbnailUrl)
+      thumbnailUrl = url
+    }
+  } else if (removeThumbnail) {
+    await deleteThumbnail(game.data.thumbnailUrl)
+    thumbnailUrl = ""
   }
 
   const parsed = updateGameSchema.safeParse({
-    id: formData.get("id"),
+    id: game.data.id,
     title: formData.get("title"),
     thumbnailUrl,
     shortDescription: formData.get("shortDescription"),
@@ -97,10 +104,6 @@ export async function updateGame(_prev: unknown, formData: FormData) {
 
   const sbReasonUpdate = await checkUrlRemote(parsed.data.externalUrl)
   if (sbReasonUpdate) return fail("VALIDATION", sbReasonUpdate)
-
-  const game = await wrap(() => queries.getGameById(parsed.data.id))
-  if (!game.success) return game
-  if (game.data.ownerId !== userId) return fail("FORBIDDEN")
 
   const { id, ...data } = parsed.data
 
@@ -120,6 +123,8 @@ export async function deleteGame(id: string) {
   const game = await wrap(() => queries.getGameById(id))
   if (!game.success) return game
   if (game.data.ownerId !== userId) return fail("FORBIDDEN")
+
+  await deleteThumbnail(game.data.thumbnailUrl)
 
   const result = await wrap(() => mutations.deleteGame(id))
   if (!result.success) return result
