@@ -25,6 +25,7 @@ interface EditGameFormProps {
 export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
   const router = useRouter()
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+  const [thumbnailRemoved, setThumbnailRemoved] = useState(false)
 
   const {
     register,
@@ -61,8 +62,9 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
     const formData = new FormData()
     formData.set("id", data.id)
     formData.set("title", data.title)
-    formData.set("thumbnailUrl", data.thumbnailUrl)
+    formData.set("thumbnailUrl", thumbnailRemoved ? "" : data.thumbnailUrl)
     if (thumbnailFile) formData.set("thumbnail", thumbnailFile)
+    if (thumbnailRemoved) formData.set("removeThumbnail", "true")
     formData.set("shortDescription", data.shortDescription)
     formData.set("externalUrl", data.externalUrl)
     formData.set("genre", data.genre)
@@ -110,6 +112,7 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
       <ThumbnailUpload
         onFile={setThumbnailFile}
         currentThumbnailUrl={game.thumbnailUrl}
+        onRemoveCurrent={() => setThumbnailRemoved(true)}
       />
 
       <input

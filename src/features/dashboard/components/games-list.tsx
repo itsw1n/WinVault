@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card"
-import { GameListRow } from "@/features/games/components/game-list-row"
+import { GameListRow } from "@/features/dashboard/components/game-list-row"
 import type { Game } from "@/types"
 
 interface GamesListProps {

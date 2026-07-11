@@ -5,7 +5,7 @@ import { Modal, useModal } from "@/components/ui/modal"
 import { Button } from "@/components/ui/button"
 import { GamesList } from "@/features/dashboard/components/games-list"
 import { FavoritesGrid } from "@/features/dashboard/components/favorites-grid"
-import { CreateGameForm } from "@/features/games/components/create-game-form"
+import { CreateGameForm } from "@/features/dashboard/components/create-game-form"
 import type { Game, FavoriteGame } from "@/types"
 import { deleteGame } from "@/features/games/actions/crud"
 import { toggleFavorite } from "@/features/games/actions/crud"
@@ -35,10 +35,8 @@ export function DashboardActions({ games }: { games: Game[] }) {
   const router = useRouter()
 
   async function handleDelete(id: string) {
-    if (confirm("Delete this game? This cannot be undone.")) {
-      await deleteGame(id)
-      router.refresh()
-    }
+    await deleteGame(id)
+    router.refresh()
   }
 
   return <GamesList games={games} onDelete={handleDelete} />

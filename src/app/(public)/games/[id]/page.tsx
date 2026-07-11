@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
-import { Thumbnail } from "@/features/games/components/thumbnail"
+import { Thumbnail } from "@/components/ui/thumbnail"
 import { auth } from "@/lib/auth/auth"
 import { getFavoritedGameIds } from "@/features/games/queries/games"
 import * as gameService from "@/features/games/queries/games"

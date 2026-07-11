@@ -1,8 +1,9 @@
 "use client"
 
 import { Modal, useModal } from "@/components/ui/modal"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import { Button } from "@/components/ui/button"
-import { Thumbnail } from "@/features/games/components/thumbnail"
+import { Thumbnail } from "@/components/ui/thumbnail"
 import { EditGameForm } from "./edit-game-form"
 import type { Game } from "@/types"
 
@@ -12,7 +13,8 @@ interface GameListRowProps {
 }
 
 export function GameListRow({ game, onDelete }: GameListRowProps) {
-  const { open, openModal, closeModal } = useModal()
+  const { open: editOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal()
+  const { open: deleteOpen, openModal: openDeleteModal, closeModal: closeDeleteModal } = useModal()
 
   return (
     <>
@@ -29,23 +31,32 @@ export function GameListRow({ game, onDelete }: GameListRowProps) {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="inactive" size="sm" onClick={openModal}>
+          <Button variant="inactive" size="sm" onClick={openEditModal}>
             Edit
           </Button>
-          <Button variant="destructive" size="sm" onClick={() => onDelete(game.id)}>
+          <Button variant="destructive" size="sm" onClick={openDeleteModal}>
             Delete
           </Button>
         </div>
       </div>
       <Modal
-        open={open}
-        onClose={closeModal}
+        open={editOpen}
+        onClose={closeEditModal}
         title="Edit game"
         description="Update the details below. Changes go live immediately."
         size="md"
       >
-        <EditGameForm game={game} onSuccess={closeModal} />
+        <EditGameForm game={game} onSuccess={closeEditModal} />
       </Modal>
+      <ConfirmDialog
+        open={deleteOpen}
+        onClose={closeDeleteModal}
+        onConfirm={() => { onDelete(game.id); closeDeleteModal() }}
+        title="Delete game"
+        message={`Are you sure you want to delete "${game.title}"? This cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+      />
     </>
   )
 }

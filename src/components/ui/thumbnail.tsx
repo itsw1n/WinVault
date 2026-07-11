@@ -15,6 +15,7 @@ export function Thumbnail({ src, alt, className = "" }: ThumbnailProps) {
     return (
       <div
         className={`flex items-center justify-center text-pv-muted text-xs font-bold uppercase ${className}`}
+        aria-label={alt}
       >
         No image
       </div>

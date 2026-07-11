@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
 import { MobileNav } from "./mobile-nav";
-import { SearchBar } from "@/features/games/components/search-bar";
+import { SearchBar } from "./search-bar";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
 
