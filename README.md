@@ -39,6 +39,7 @@ Open [http://localhost:3000](http://localhost:3000)
 | `make migrate name=xyz` | Create + apply a migration |
 | `make studio` | Open Prisma Studio |
 | `make seed` | Seed sample data |
+| `make lint` | Run ESLint |
 
 ## Deploy (Vercel + Supabase)
 
@@ -85,22 +86,20 @@ These steps are **intentionally separate** — if a migration fails, you fix it 
 
 ```
 src/
-├── app/               # Next.js App Router pages
-│   ├── (public)/      #   sign-in, sign-up, games, about, developers
-│   └── (dashboard)/   #   dashboard, account
+├── app/                   # Next.js App Router pages
+│   ├── (public)/          #   sign-in, sign-up, games, about, developers
+│   └── (protected)/       #   dashboard, account
 ├── components/
-│   ├── ui/            # Button, Input, Modal, Card, Badge, Skeleton
-│   ├── layout/        # Navbar, Footer, MobileNav, ThemeToggle
-│   └── games/         # GameCard, FavoriteButton, SearchBar, forms
-├── server/
-│   ├── actions/       # Server actions (writes)
-│   ├── services/      # Data access (reads)
-│   └── errors/        # ActionError, wrap/ok/fail utilities
-├── lib/               # Auth config, Prisma client, rate limiter, env
-├── schemas/           # Zod validation schemas
-├── types/             # Shared TypeScript types + next-auth augmentation
-├── hooks/             # useModal
-└── styles/            # Global CSS + theme variables
+│   ├── layout/            # Navbar, Footer, MobileNav, HeroBanner, SearchBar
+│   └── ui/                # Button, Input, Modal, Card, Badge, Thumbnail, etc.
+├── features/              # Feature-based modules
+│   ├── auth/              #   actions, mutations, queries, schemas, components
+│   ├── games/             #   actions, mutations, queries, schemas, components
+│   └── dashboard/         #   components (game forms, stats, list)
+├── hooks/                 # useModal
+├── lib/                   # Auth config, Prisma, env, errors, storage, utils
+├── styles/                # Global CSS + theme variables
+└── types/                 # Shared TypeScript types + next-auth augmentation
 ```
 
-Reads are server components. Writes are server actions. Services stay framework-agnostic. Zod schemas are shared between client forms and server validation.
+Reads are server components. Writes are server actions. Zod schemas are shared between client forms and server validation.

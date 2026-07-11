@@ -131,36 +131,36 @@ src/
 │   └── not-found.tsx           # Custom 404
 │
 ├── components/
-│   ├── layout/                 # Layout components (navbar, footer, etc.)
+│   ├── layout/                 # Layout components (navbar, footer, hero-banner, search-bar)
 │   └── ui/                     # Reusable UI primitives (index.ts barrel export)
 │
 ├── features/                   # Feature-based modules
 │   ├── auth/                   # Auth feature
-│   │   ├── actions/auth.ts     # Server actions (signUp, signIn, updateProfile, revokeAllSessions)
+│   │   ├── actions/auth.ts     # Server actions (signUp, signInAction, updateProfile)
 │   │   ├── components/         # Auth-related client components
 │   │   ├── mutations/auth.ts   # Pure Prisma writes
 │   │   ├── queries/auth.ts     # Pure Prisma reads
 │   │   └── schemas.ts          # Zod schemas (signUpSchema, signInSchema, updateProfileSchema)
 │   ├── games/                  # Games feature
 │   │   ├── actions/crud.ts     # Server actions (createGame, updateGame, deleteGame, toggleFavorite)
-│   │   ├── components/         # Game-related components (game-card, thumbnail, etc.)
+│   │   ├── components/         # Game-related components (game-card, game-grid, favorite-button)
 │   │   ├── mutations/games.ts  # Pure Prisma writes
 │   │   ├── queries/games.ts    # Pure Prisma reads
 │   │   └── schemas.ts          # Zod schemas + GENRES constant
 │   └── dashboard/              # Dashboard feature
-│       └── components/         # Dashboard-specific components (stat-card, etc.)
+│       └── components/         # Dashboard-specific components (stat-card, games-list, game-list-row, forms)
 │
 ├── hooks/                      # Shared React hooks (use-modal)
 ├── lib/                        # Shared utilities
 │   ├── auth/auth.ts            # NextAuth config (handlers, signIn, signOut, auth)
-│   ├── auth/rate-limiter.ts    # In-memory rate limiter
+│   ├── auth/rate-limiter.ts    # DB-backed rate limiter (Prisma RateLimit model)
 │   ├── security/blocklist.ts   # Adult domain blocklist
 │   ├── security/url-safety.ts  # URL safety check (blocklist + Google Safe Browsing)
 │   ├── env.ts                  # Env var validation + export
 │   ├── errors.ts               # ActionError class + ok/fail/wrap helpers
 │   ├── prisma.ts               # Prisma client singleton
 │   ├── process-thumbnail.ts    # Sharp thumbnail processor
-│   ├── storage.ts              # S3 upload wrapper
+│   ├── storage.ts              # S3 upload/delete wrapper
 │   └── utils.ts                # cn() helper
 │
 ├── styles/
@@ -169,7 +169,8 @@ src/
 └── types/                       # Shared TypeScript types (index.ts barrel export)
     ├── action-result.ts         # ErrorCode, ActionResult<T>
     ├── game.ts                  # Game, FavoriteGame
-    ├── user.ts                  # User
+    ├── user.ts                  # User, UserWithAuth
+    ├── next-auth.d.ts           # next-auth type augmentation
     └── index.ts                 # Barrel export of all types
 ```
 
@@ -210,8 +211,8 @@ if (!result.success) return result
 Mutations throw `ActionError`, `wrap()` catches it and returns `fail(code, message)`.
 
 ### What to avoid
-- No `tailwind-merge` usage in the current codebase — use `clsx` from `clsx` or `cn()` from `@/lib/utils`
-- No `zsa` usage — imported in deps but unused
+- No `tailwind-merge` usage in the current codebase — use `clsx` or `cn()` from `@/lib/utils`
+- No `zsa` usage — removed from deps, don't re-add
 - No inline `process.env` access — import `env` from `@/lib/env` instead
 - No `console.log` in production code — use `console.error` for server-side error logging only
 - No `"use client"` on components that don't need it (server components by default)
@@ -299,6 +300,7 @@ Development:
   migrate name=xyz      Create + apply a migration
   studio                Open Prisma Studio
   seed                  Seed the database with sample data
+  lint                  Run ESLint
 
 Production (Vercel + Supabase):
   migrate-prod          Apply migrations to Supabase production DB
@@ -339,7 +341,7 @@ Utility:
 - Trailing commas on multiline (ES5 standard).
 
 ### Linting
-- ESLint is configured via `.eslintrc.json` with `{ "extends": "next/core-web-vitals" }`.
+- ESLint is configured via `.eslintrc.json` with `{ "extends": "next/core-web-vitals" }` (ESLint 9).
 - Run `make lint` after every change (maps to `npm run lint` which runs `next lint`).
 - Never present code as complete if it contains ESLint violations.
 
