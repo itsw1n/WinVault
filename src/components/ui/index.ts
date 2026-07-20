@@ -10,3 +10,4 @@ export { Skeleton, GameCardSkeleton, GameGridSkeleton, HeroSkeleton, StatCardSke
 export { Thumbnail } from "./thumbnail"
 export { SectionHeader } from "./section-header"
 export { ThumbnailUpload } from "./thumbnail-upload"
+export { PasswordInput } from "./password-input"
