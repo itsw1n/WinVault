@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { auth } from "@/lib/auth/auth"
+import { auth } from "@/lib/nextauth/auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
-import { StatCard } from "@/features/dashboard/components/stat-card"
-import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/queries/games"
-import { DashboardActions, DashboardFavorites, DashboardNewGameButton } from "./page-client"
+import { StatCard } from "@/components/ui/stat-card"
+import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/server/queries"
+import { DashboardActions, DashboardFavorites, DashboardNewGameButton } from "@/features/dashboard/components/dashboard-actions"
 
 export const metadata: Metadata = {
   title: "Dashboard — PlayVault",

@@ -2,7 +2,7 @@
 
 import { useActionState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { signInAction } from "@/features/auth/actions/auth"
+import { signInAction } from "@/features/auth/server/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"

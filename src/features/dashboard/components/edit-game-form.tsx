@@ -7,7 +7,7 @@ import { z } from "zod"
 import { useRouter } from "next/navigation"
 import { Button, ThumbnailUpload } from "@/components/ui"
 import type { Game } from "@/types"
-import { updateGame } from "@/features/games/actions/crud"
+import { updateGame } from "@/features/games/server/actions"
 import { updateGameSchema } from "@/features/games/schemas"
 import { GENRES } from "@/features/games/schemas"
 

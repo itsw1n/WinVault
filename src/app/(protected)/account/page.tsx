@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
-import { auth } from "@/lib/auth/auth"
+import { auth } from "@/lib/nextauth/auth"
 import { redirect, notFound } from "next/navigation"
-import { getUserById } from "@/features/auth/queries/auth"
+import { getUserById } from "@/features/auth/server/queries"
 import { AccountForm } from "@/features/auth/components/account-form"
 
 export const metadata: Metadata = {

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useOptimistic } from "react"
-import { toggleFavorite } from "@/features/games/actions/crud"
+import { toggleFavorite } from "@/features/games/server/actions"
 
 function HeartIcon({ filled }: { filled: boolean }) {
   if (filled) {

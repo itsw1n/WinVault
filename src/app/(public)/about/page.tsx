@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { AuthAwareLink } from "@/components/ui";
 import { prisma } from "@/lib/prisma";
 import { GENRES } from "@/features/games/schemas";
-import { getDeveloperCount } from "@/features/games/queries/games";
+import { getDeveloperCount } from "@/features/games/server/queries";
 
 export const metadata: Metadata = {
   title: "About — PlayVault",

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Card } from "@/components/ui/card"
-import { updateProfile } from "@/features/auth/actions/auth"
+import { updateProfile } from "@/features/auth/server/actions"
 import type { User } from "@/types"
 import Link from "next/link"
 

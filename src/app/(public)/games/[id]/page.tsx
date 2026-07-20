@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Thumbnail } from "@/components/ui/thumbnail"
-import { auth } from "@/lib/auth/auth"
-import { getFavoritedGameIds } from "@/features/games/queries/games"
-import * as gameService from "@/features/games/queries/games"
+import { auth } from "@/lib/nextauth/auth"
+import { getFavoritedGameIds } from "@/features/games/server/queries"
+import * as gameService from "@/features/games/server/queries"
 import { notFound } from "next/navigation"
-import { GameDetailClient } from "./page-client"
+import { GameDetailActions } from "@/features/games/components/game-detail-actions"
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>
@@ -87,7 +87,7 @@ export default async function GameDetailPage(props: {
               </p>
             )}
 
-            <GameDetailClient
+            <GameDetailActions
               gameId={game.id}
               externalUrl={game.externalUrl}
               isFavorited={isFavorited}

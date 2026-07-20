@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { GameGrid } from "@/features/games/components/game-grid"
-import * as gameService from "@/features/games/queries/games"
-import { getUserByUsername } from "@/features/auth/queries/auth"
-import { auth } from "@/lib/auth/auth"
-import { getFavoritedGameIds } from "@/features/games/queries/games"
+import * as gameService from "@/features/games/server/queries"
+import { getUserByUsername } from "@/features/auth/server/queries"
+import { auth } from "@/lib/nextauth/auth"
+import { getFavoritedGameIds } from "@/features/games/server/queries"
 
 export async function generateMetadata(props: {
   params: Promise<{ username: string }>
