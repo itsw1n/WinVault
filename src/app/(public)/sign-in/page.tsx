@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { signInAction } from "@/features/auth/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 
@@ -38,10 +39,9 @@ function SignInForm() {
             label="Username or Email"
             placeholder="Enter your username or email"
           />
-          <Input
+          <PasswordInput
             name="password"
             label="Password"
-            type="password"
             placeholder="Enter your password"
           />
           {state && !state.success && (

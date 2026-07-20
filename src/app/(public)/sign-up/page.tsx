@@ -4,6 +4,7 @@ import { useActionState } from "react"
 import { signUp } from "@/features/auth/actions/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 
@@ -37,10 +38,9 @@ export default function SignUpPage() {
             type="email"
             placeholder="Enter your email"
           />
-          <Input
+          <PasswordInput
             name="password"
             label="Password"
-            type="password"
             placeholder="At least 6 characters"
           />
           {state && !state.success && (

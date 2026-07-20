@@ -4,6 +4,7 @@ import { useActionState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Card } from "@/components/ui/card"
 import { updateProfile } from "@/features/auth/actions/auth"
 import type { User } from "@/types"
@@ -47,24 +48,16 @@ export function AccountForm({ user }: { user: Pick<User, "id" | "username" | "em
           <hr className="border-t-[2.5px] border-pv-border" />
           <p className="text-[11px] font-bold tracking-[0.08em] text-pv-muted uppercase">Change Password</p>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-pv-text">Current Password</label>
-            <input
-              name="currentPassword"
-              type="password"
-              placeholder="Leave blank to keep current"
-              className="w-full px-3 py-2 text-sm bg-pv-card text-pv-text border-[2px] border-pv-border rounded-pv-sm focus:outline-none focus:border-pv-primary transition-colors"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-pv-text">New Password</label>
-            <input
-              name="newPassword"
-              type="password"
-              placeholder="Leave blank to keep current"
-              className="w-full px-3 py-2 text-sm bg-pv-card text-pv-text border-[2px] border-pv-border rounded-pv-sm focus:outline-none focus:border-pv-primary transition-colors"
-            />
-          </div>
+          <PasswordInput
+            name="currentPassword"
+            label="Current Password"
+            placeholder="Leave blank to keep current"
+          />
+          <PasswordInput
+            name="newPassword"
+            label="New Password"
+            placeholder="Leave blank to keep current"
+          />
           {state && !state.success && (
             <p className="text-xs text-pv-heart">{state.message}</p>
           )}
