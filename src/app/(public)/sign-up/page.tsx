@@ -1,15 +1,50 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
 import { signUp } from "@/features/auth/server/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
+
+const rules = [
+  { label: "At least 8 characters", test: (v: string) => v.length >= 8 },
+  { label: "At least one uppercase letter", test: (v: string) => /[A-Z]/.test(v) },
+  { label: "At least one number", test: (v: string) => /[0-9]/.test(v) },
+]
+
+function PasswordHints({ password }: { password: string }) {
+  if (!password) return null
+
+  return (
+    <ul className="space-y-0.5">
+      {rules.map((rule) => {
+        const ok = rule.test(password)
+        return (
+          <li
+            key={rule.label}
+            className={cn(
+              "text-xs transition-colors",
+              ok ? "text-pv-primary" : "text-pv-muted"
+            )}
+          >
+            {ok ? "✓" : "○"} {rule.label}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
 
 export default function SignUpPage() {
   const [state, formAction, pending] = useActionState(signUp, undefined)
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+
+  const confirmError =
+    confirmPassword.length > 0 && password !== confirmPassword
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-pv-bg px-4">
@@ -38,11 +73,28 @@ export default function SignUpPage() {
             type="email"
             placeholder="Enter your email"
           />
-          <PasswordInput
-            name="password"
-            label="Password"
-            placeholder="At least 6 characters"
-          />
+          <div className="space-y-1">
+            <PasswordInput
+              name="password"
+              label="Password"
+              placeholder="At least 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <PasswordHints password={password} />
+          </div>
+          <div className="space-y-1">
+            <PasswordInput
+              name="confirmPassword"
+              label="Confirm Password"
+              placeholder="Re-enter your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            {confirmError && (
+              <p className="text-xs text-pv-heart">Passwords do not match</p>
+            )}
+          </div>
           {state && !state.success && (
             <p className="text-xs text-pv-heart">{state.message}</p>
           )}

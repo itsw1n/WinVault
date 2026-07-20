@@ -60,6 +60,7 @@ export async function signUp(_prev: unknown, formData: FormData) {
     username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
   })
 
   if (!parsed.success) {
