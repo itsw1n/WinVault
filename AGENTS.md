@@ -119,12 +119,15 @@ src/
 │   │   ├── sign-up/page.tsx    # Sign-up page
 │   │   ├── games/page.tsx      # Browse games
 │   │   ├── games/[id]/page.tsx # Game detail
-│   │   ├── games/[id]/page-client.tsx  # Game detail client interactivity
+│   │   ├── games/[id]/loading.tsx  # Game detail loading state
+│   │   ├── games/[id]/not-found.tsx # Game detail 404
 │   │   └── developers/[username]/page.tsx  # Developer profile
 │   ├── (protected)/            # Protected routes (auth required)
 │   │   ├── layout.tsx          # Dashboard layout (Navbar + Footer)
 │   │   ├── dashboard/page.tsx  # Dashboard page
-│   │   ├── dashboard/page-client.tsx    # Dashboard client interactivity
+│   │   ├── dashboard/loading.tsx    # Dashboard loading state
+│   │   ├── dashboard/error.tsx      # Dashboard error boundary
+│   │   ├── dashboard/page.tsx  # Dashboard page
 │   │   └── account/page.tsx    # Account settings
 │   ├── api/auth/[...nextauth]/ # NextAuth route handler ONLY
 │   ├── layout.tsx              # Root layout (fonts, providers, metadata)
@@ -140,8 +143,6 @@ src/
 │   │   ├── server/
 │   │   │   ├── actions.ts      # Server actions (signUp, signInAction, updateProfile)
 │   │   ├── components/         # Auth-related client components
-│   │   │   ├── mutations.ts    # Pure Prisma writes
-│   │   │   └── queries.ts      # Pure Prisma reads
 │   │   └── schemas.ts          # Zod schemas (signUpSchema, signInSchema, updateProfileSchema)
 │   ├── games/                  # Games feature
 │   │   ├── server/
@@ -159,6 +160,7 @@ src/
 │   ├── nextauth/rate-limiter.ts# DB-backed rate limiter (Prisma RateLimit model)
 │   ├── security/blocklist.ts   # Adult domain blocklist
 │   ├── security/url-safety.ts  # URL safety check (blocklist + Google Safe Browsing)
+│   ├── password.ts             # Password hashing utility (hashPassword, verifyPassword)
 │   ├── env.ts                  # Env var validation + export
 │   ├── errors.ts               # ActionError class + ok/fail/wrap helpers
 │   ├── prisma.ts               # Prisma client singleton
@@ -332,7 +334,7 @@ Utility:
 - **Do not put feature logic in `lib/`** — use `features/<name>/`
 - **Do not use relative imports** for cross-module imports — use `@/` alias
 - **Do not write components without reading existing similar components first** — match the codebase style
-- **Do not create a file without first checking .prettierrc and .editorconfig** (formatting rules)
+- **Do not create a file without first checking .prettierrc** (formatting rules — currently enforces no semicolons, single quotes, 2-space indent)
 
 ---
 
