@@ -107,6 +107,7 @@ This project uses **Server Actions** for all data mutations. API Routes (`app/ap
 
 ```
 src/
+├── middleware.ts                # NextAuth middleware (route protection)
 ├── app/                        # Next.js App Router pages
 │   ├── (public)/               # Public routes (no auth required)
 │   │   ├── page.tsx            # Homepage
@@ -136,24 +137,26 @@ src/
 │
 ├── features/                   # Feature-based modules
 │   ├── auth/                   # Auth feature
-│   │   ├── actions/auth.ts     # Server actions (signUp, signInAction, updateProfile)
+│   │   ├── server/
+│   │   │   ├── actions.ts      # Server actions (signUp, signInAction, updateProfile)
 │   │   ├── components/         # Auth-related client components
-│   │   ├── mutations/auth.ts   # Pure Prisma writes
-│   │   ├── queries/auth.ts     # Pure Prisma reads
+│   │   │   ├── mutations.ts    # Pure Prisma writes
+│   │   │   └── queries.ts      # Pure Prisma reads
 │   │   └── schemas.ts          # Zod schemas (signUpSchema, signInSchema, updateProfileSchema)
 │   ├── games/                  # Games feature
-│   │   ├── actions/crud.ts     # Server actions (createGame, updateGame, deleteGame, toggleFavorite)
+│   │   ├── server/
+│   │   │   ├── actions.ts      # Server actions (createGame, updateGame, deleteGame, toggleFavorite)
 │   │   ├── components/         # Game-related components (game-card, game-grid, favorite-button)
-│   │   ├── mutations/games.ts  # Pure Prisma writes
-│   │   ├── queries/games.ts    # Pure Prisma reads
+│   │   │   ├── mutations.ts    # Pure Prisma writes
+│   │   │   └── queries.ts      # Pure Prisma reads
 │   │   └── schemas.ts          # Zod schemas + GENRES constant
 │   └── dashboard/              # Dashboard feature
 │       └── components/         # Dashboard-specific components (stat-card, games-list, game-list-row, forms)
 │
 ├── hooks/                      # Shared React hooks (use-modal)
 ├── lib/                        # Shared utilities
-│   ├── auth/auth.ts            # NextAuth config (handlers, signIn, signOut, auth)
-│   ├── auth/rate-limiter.ts    # DB-backed rate limiter (Prisma RateLimit model)
+│   ├── nextauth/auth.ts        # NextAuth config (handlers, signIn, signOut, auth)
+│   ├── nextauth/rate-limiter.ts# DB-backed rate limiter (Prisma RateLimit model)
 │   ├── security/blocklist.ts   # Adult domain blocklist
 │   ├── security/url-safety.ts  # URL safety check (blocklist + Google Safe Browsing)
 │   ├── env.ts                  # Env var validation + export
@@ -179,7 +182,7 @@ src/
 - Reusable UI goes in `components/ui/` with barrel export.
 - Layout-specific components go in `components/layout/`.
 - Shared types go in `types/` with barrel export.
-- No file should import from `prisma` directly outside of `features/*/mutations/`, `features/*/queries/`, and `lib/auth/auth.ts`.
+- No file should import from `prisma` directly outside of `features/*/server/mutations.ts`, `features/*/server/queries.ts`, and `lib/nextauth/auth.ts`.
 
 ---
 
@@ -257,8 +260,8 @@ Import: `import type { ActionResult, ErrorCode } from "@/types"`
 - Never create a new `PrismaClient()` — always import `prisma` from `@/lib/prisma`
 
 ### Read/write separation
-- **Queries** (`features/*/queries/`) — pure reads via `prisma.game.findMany()`, etc. Throw `ActionError` if not found.
-- **Mutations** (`features/*/mutations/`) — pure writes via `prisma.game.create()`, etc. Throw `ActionError` on missing records.
+- **Queries** (`features/*/server/queries.ts`) — pure reads via `prisma.game.findMany()`, etc. Throw `ActionError` if not found.
+- **Mutations** (`features/*/server/mutations.ts`) — pure writes via `prisma.game.create()`, etc. Throw `ActionError` on missing records.
 
 ### Migrations
 - Never edit existing migration files in `prisma/migrations/`
@@ -276,9 +279,9 @@ Follow this checklist in order:
 
 1. **Define the schema** in `features/<name>/schemas.ts` (Zod)
 2. **Define types** in `types/<name>.ts` if new shapes are needed
-3. **Write mutations** in `features/<name>/mutations/` (Prisma writes, throw `ActionError`)
-4. **Write queries** in `features/<name>/queries/` (Prisma reads)
-5. **Write server actions** in `features/<name>/actions/` (auth + validation + call mutations/queries + revalidate)
+3. **Write mutations** in `features/<name>/server/mutations.ts` (Prisma writes, throw `ActionError`)
+4. **Write queries** in `features/<name>/server/queries.ts` (Prisma reads)
+5. **Write server actions** in `features/<name>/server/actions.ts` (auth + validation + call mutations/queries + revalidate)
 6. **Build UI components** in `features/<name>/components/`
 7. **Create route file** in `app/(group)/path/page.tsx`
 8. **Verify** — `make help` to check commands, `npx tsc --noEmit` for type errors
