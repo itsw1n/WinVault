@@ -2,6 +2,7 @@
 
 import { Card, Badge, Button } from '@/components/ui'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { FavoriteGame } from '@/types'
 
 interface FavoritesGridProps {
@@ -22,12 +23,14 @@ export function FavoritesGrid({ favorites, onUnfavorite }: FavoritesGridProps) {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {favorites.map((fav) => (
         <Card key={fav.game.id} className="overflow-hidden">
-          <div className="aspect-[16/9] overflow-hidden bg-pv-bg">
+          <div className="relative aspect-[16/9] overflow-hidden bg-pv-bg">
             {fav.game.thumbnailUrl ? (
-              <img
+              <Image
                 src={fav.game.thumbnailUrl}
                 alt={fav.game.title}
-                className="h-full w-full object-cover"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-sm font-bold uppercase text-pv-muted">

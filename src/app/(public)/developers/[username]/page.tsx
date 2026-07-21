@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { GameGrid } from '@/features/games/components/game-grid'
 import * as gameService from '@/features/games/server/queries'
@@ -44,9 +45,15 @@ export default async function DeveloperProfilePage(props: {
     <div className="mx-auto max-w-[1400px] space-y-8 px-4 py-8 lg:px-8">
       {/* Profile header */}
       <section className="flex items-center gap-4 rounded-pv border-pv border-pv-border bg-pv-card p-6">
-        <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-pv border-pv border-pv-border bg-pv-bg">
+        <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-pv border-pv border-pv-border bg-pv-bg">
           {user.avatarUrl ? (
-            <img src={user.avatarUrl} alt={user.username} className="h-full w-full object-cover" />
+            <Image
+              src={user.avatarUrl}
+              alt={user.username}
+              fill
+              className="object-cover"
+              sizes="64px"
+            />
           ) : (
             <span className="text-lg font-bold text-pv-muted">
               {user.username[0].toUpperCase()}

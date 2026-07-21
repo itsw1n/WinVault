@@ -110,6 +110,7 @@ export function ThumbnailUpload({
         {hasFile && preview ? (
           <div className="flex w-full flex-col items-center gap-3">
             <div className="relative w-full max-w-[240px] overflow-hidden rounded-pv-sm border-[2px] border-pv-border">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={preview} alt="Thumbnail preview" className="h-32 w-full object-cover" />
             </div>
             <div className="flex items-center gap-2 text-[13px]">
@@ -157,6 +158,7 @@ export function ThumbnailUpload({
         ) : currentThumbnailUrl ? (
           <div className="flex w-full flex-col items-center gap-2">
             <div className="relative w-full max-w-[240px] overflow-hidden rounded-pv-sm border-[2px] border-pv-border">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={currentThumbnailUrl}
                 alt="Current thumbnail"
