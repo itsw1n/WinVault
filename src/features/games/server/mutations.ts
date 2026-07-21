@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma"
-import { ActionError } from "@/lib/errors"
+import { prisma } from '@/lib/prisma'
+import { ActionError } from '@/lib/errors'
 
 export async function createGame(data: {
   title: string
@@ -25,14 +25,14 @@ export async function updateGame(
   }
 ) {
   const game = await prisma.game.findUnique({ where: { id } })
-  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError('NOT_FOUND', 'Game not found')
 
   return prisma.game.update({ where: { id }, data })
 }
 
 export async function deleteGame(id: string) {
   const game = await prisma.game.findUnique({ where: { id } })
-  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError('NOT_FOUND', 'Game not found')
 
   return prisma.game.delete({ where: { id } })
 }

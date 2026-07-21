@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma"
-import { ActionError } from "@/lib/errors"
-import { gameInclude, gameDetailInclude } from "@/types"
+import { prisma } from '@/lib/prisma'
+import { ActionError } from '@/lib/errors'
+import { gameInclude, gameDetailInclude } from '@/types'
 
 export async function getFeaturedGames() {
   return prisma.game.findMany({
     where: { isFeatured: true },
     include: gameInclude,
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
     take: 6,
   })
 }
@@ -23,28 +23,22 @@ export async function getTrendingGames() {
     include: gameInclude,
   })
 
-  return games
-    .sort((a, b) => b._count.favorites - a._count.favorites)
-    .slice(0, 6)
+  return games.sort((a, b) => b._count.favorites - a._count.favorites).slice(0, 6)
 }
 
 export async function getNewReleases() {
   return prisma.game.findMany({
     include: gameInclude,
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
     take: 6,
   })
 }
 
-export async function getGames(params: {
-  search?: string
-  genre?: string
-  take?: number
-}) {
+export async function getGames(params: { search?: string; genre?: string; take?: number }) {
   const where: Record<string, unknown> = {}
 
   if (params.search) {
-    where.title = { contains: params.search, mode: "insensitive" }
+    where.title = { contains: params.search, mode: 'insensitive' }
   }
   if (params.genre) {
     where.genre = params.genre
@@ -53,7 +47,7 @@ export async function getGames(params: {
   return prisma.game.findMany({
     where,
     include: gameInclude,
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
     take: params.take ?? 50,
   })
 }
@@ -64,7 +58,7 @@ export async function getGameById(id: string) {
     include: gameDetailInclude,
   })
 
-  if (!game) throw new ActionError("NOT_FOUND", "Game not found")
+  if (!game) throw new ActionError('NOT_FOUND', 'Game not found')
   return game
 }
 
@@ -72,7 +66,7 @@ export async function getGamesByOwner(ownerId: string) {
   return prisma.game.findMany({
     where: { ownerId },
     include: gameInclude,
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
   })
 }
 
@@ -102,7 +96,7 @@ export async function getGamesFavoritedByUser(userId: string) {
         include: gameInclude,
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
   })
 }
 

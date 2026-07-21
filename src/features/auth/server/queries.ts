@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma"
-import { ActionError } from "@/lib/errors"
-import { userProfileSelect, userWithGamesInclude } from "@/types"
+import { prisma } from '@/lib/prisma'
+import { ActionError } from '@/lib/errors'
+import { userProfileSelect, userWithGamesInclude } from '@/types'
 
 export async function getUserByUsername(username: string) {
   const user = await prisma.user.findUnique({
@@ -8,7 +8,7 @@ export async function getUserByUsername(username: string) {
     include: userWithGamesInclude,
   })
 
-  if (!user) throw new ActionError("NOT_FOUND", "User not found")
+  if (!user) throw new ActionError('NOT_FOUND', 'User not found')
   return user
 }
 
@@ -17,7 +17,7 @@ export async function getUserById(id: string) {
     where: { id },
     select: userProfileSelect,
   })
-  if (!user) throw new ActionError("NOT_FOUND", "User not found")
+  if (!user) throw new ActionError('NOT_FOUND', 'User not found')
   return user
 }
 
@@ -36,6 +36,6 @@ export async function getUserPasswordHash(id: string) {
     where: { id },
     select: { passwordHash: true },
   })
-  if (!user) throw new ActionError("NOT_FOUND", "User not found")
+  if (!user) throw new ActionError('NOT_FOUND', 'User not found')
   return user.passwordHash
 }
