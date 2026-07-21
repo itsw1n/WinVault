@@ -46,19 +46,6 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
   })
 
   async function onSubmit(data: FormValues) {
-    const tags = data.tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean)
-      .slice(0, 10)
-
-    if (tags.some((t) => t.length > 30)) {
-      setError("tags", {
-        message: "Each tag must be at most 30 characters",
-      })
-      return
-    }
-
     const formData = new FormData()
     formData.set("id", data.id)
     formData.set("title", data.title)
@@ -68,7 +55,7 @@ export function EditGameForm({ game, onSuccess }: EditGameFormProps) {
     formData.set("shortDescription", data.shortDescription)
     formData.set("externalUrl", data.externalUrl)
     formData.set("genre", data.genre)
-    formData.set("tags", tags.join(","))
+    formData.set("tags", data.tags)
 
     const result = await updateGame(undefined, formData)
 

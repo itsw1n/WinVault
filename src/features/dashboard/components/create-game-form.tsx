@@ -42,19 +42,6 @@ export function CreateGameForm({ onSuccess }: CreateGameFormProps) {
   })
 
   async function onSubmit(data: FormValues) {
-    const tags = data.tags
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean)
-      .slice(0, 10)
-
-    if (tags.some((t) => t.length > 30)) {
-      setError("tags", {
-        message: "Each tag must be at most 30 characters",
-      })
-      return
-    }
-
     const formData = new FormData()
     formData.set("title", data.title)
     formData.set("thumbnailUrl", data.thumbnailUrl)
@@ -62,7 +49,7 @@ export function CreateGameForm({ onSuccess }: CreateGameFormProps) {
     formData.set("shortDescription", data.shortDescription)
     formData.set("externalUrl", data.externalUrl)
     formData.set("genre", data.genre)
-    formData.set("tags", tags.join(","))
+    formData.set("tags", data.tags)
 
     const result = await createGame(undefined, formData)
 
