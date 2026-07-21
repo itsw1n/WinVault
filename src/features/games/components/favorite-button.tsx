@@ -34,14 +34,21 @@ export function FavoriteButton({
   const [optimisticFav, setOptimisticFav] = useOptimistic(isFavorited)
 
   async function handleToggle() {
+    const next = !optimisticFav
     if (loggedIn) {
-      setOptimisticFav(!optimisticFav)
+      setOptimisticFav(next)
     }
 
     const result = await toggleFavorite(gameId)
-    if (!result.success && result.code === "UNAUTHORIZED") {
-      router.push(`/sign-in?callbackUrl=/games`)
+    if (!result.success) {
+      router.refresh()
+      if (result.code === "UNAUTHORIZED") {
+        router.push(`/sign-in?callbackUrl=/games`)
+      }
+      return
     }
+
+    router.refresh()
   }
 
   return (
