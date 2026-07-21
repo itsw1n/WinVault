@@ -1,12 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import { ActionError } from "@/lib/errors"
+import { userProfileSelect, userWithGamesInclude } from "@/types"
 
 export async function getUserByUsername(username: string) {
   const user = await prisma.user.findUnique({
     where: { username },
-    include: {
-      _count: { select: { games: true } },
-    },
+    include: userWithGamesInclude,
   })
 
   if (!user) throw new ActionError("NOT_FOUND", "User not found")
@@ -16,7 +15,7 @@ export async function getUserByUsername(username: string) {
 export async function getUserById(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
-    select: { id: true, username: true, email: true, avatarUrl: true, bio: true },
+    select: userProfileSelect,
   })
   if (!user) throw new ActionError("NOT_FOUND", "User not found")
   return user

@@ -1,13 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import { ActionError } from "@/lib/errors"
+import { gameInclude, gameDetailInclude } from "@/types"
 
 export async function getFeaturedGames() {
   return prisma.game.findMany({
     where: { isFeatured: true },
-    include: {
-      owner: { select: { username: true, avatarUrl: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameInclude,
     orderBy: { createdAt: "desc" },
     take: 6,
   })
@@ -22,10 +20,7 @@ export async function getTrendingGames() {
         some: { createdAt: { gte: sevenDaysAgo } },
       },
     },
-    include: {
-      owner: { select: { username: true, avatarUrl: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameInclude,
   })
 
   return games
@@ -35,10 +30,7 @@ export async function getTrendingGames() {
 
 export async function getNewReleases() {
   return prisma.game.findMany({
-    include: {
-      owner: { select: { username: true, avatarUrl: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameInclude,
     orderBy: { createdAt: "desc" },
     take: 6,
   })
@@ -60,10 +52,7 @@ export async function getGames(params: {
 
   return prisma.game.findMany({
     where,
-    include: {
-      owner: { select: { username: true, avatarUrl: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameInclude,
     orderBy: { createdAt: "desc" },
     take: params.take ?? 50,
   })
@@ -72,10 +61,7 @@ export async function getGames(params: {
 export async function getGameById(id: string) {
   const game = await prisma.game.findUnique({
     where: { id },
-    include: {
-      owner: { select: { username: true, avatarUrl: true, bio: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameDetailInclude,
   })
 
   if (!game) throw new ActionError("NOT_FOUND", "Game not found")
@@ -85,10 +71,7 @@ export async function getGameById(id: string) {
 export async function getGamesByOwner(ownerId: string) {
   return prisma.game.findMany({
     where: { ownerId },
-    include: {
-      owner: { select: { username: true, avatarUrl: true } },
-      _count: { select: { favorites: true } },
-    },
+    include: gameInclude,
     orderBy: { createdAt: "desc" },
   })
 }
@@ -103,15 +86,20 @@ export async function getTotalFavoritesReceived(userId: string) {
   return result._count.id
 }
 
+export async function getPublishedGameCount(ownerId: string) {
+  return prisma.game.count({ where: { ownerId } })
+}
+
+export async function getFavoritedGameCount(userId: string) {
+  return prisma.favorite.count({ where: { userId } })
+}
+
 export async function getGamesFavoritedByUser(userId: string) {
   return prisma.favorite.findMany({
     where: { userId },
     include: {
       game: {
-        include: {
-          owner: { select: { username: true, avatarUrl: true } },
-          _count: { select: { favorites: true } },
-        },
+        include: gameInclude,
       },
     },
     orderBy: { createdAt: "desc" },
