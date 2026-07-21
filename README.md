@@ -1,9 +1,10 @@
 # PlayVault
 
 Community-driven indie game discovery platform. Next.js 16, Prisma + Postgres, Auth.js.
-<img width="1920" height="1080" alt="screenshot-2026-07-08_08-59-13" src="https://github.com/user-attachments/assets/1f384545-7f91-43ae-8ff5-18fa9fa0d3fc" />
-<img width="1920" height="1080" alt="screenshot-2026-07-08_08-58-36" src="https://github.com/user-attachments/assets/ca7129cc-b71a-4d1e-9456-ba2b94b38174" />
-<img width="1853" height="855" alt="screenshot-2026-07-11_21-28-52" src="https://github.com/user-attachments/assets/5b59dcb1-3dcf-4898-a043-a9fe4edc970e" />
+<img width="1446" height="1080" alt="screenshot-2026-07-21_23-53-31" src="https://github.com/user-attachments/assets/328d732d-4022-47f0-bcd3-7cd24802587b" />
+<img width="1447" height="1080" alt="screenshot-2026-07-21_23-56-03" src="https://github.com/user-attachments/assets/722b1eb7-342f-4ffb-9351-ead314abc9f2" />
+<img width="1380" height="1080" alt="screenshot-2026-07-21_23-56-32" src="https://github.com/user-attachments/assets/6586eb91-459b-42c3-9568-ecb497f0a7e4" />
+
 
 Publish your game, find something new, favorite the ones you love. No store fees, no approval queues, no ads.
 

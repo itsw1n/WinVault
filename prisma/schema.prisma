@@ -55,6 +55,7 @@ model Favorite {
   createdAt DateTime @default(now())
 
   @@unique([userId, gameId])
+  @@index([gameId])
 }
 
 model Comment {
@@ -71,8 +72,7 @@ model Comment {
   parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   replies Comment[] @relation("CommentReplies")
 
-  @@index([gameId])
-  @@index([parentId])
+  @@index([gameId, parentId])
 }
 
 model RateLimit {

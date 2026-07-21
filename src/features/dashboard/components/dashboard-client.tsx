@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { Modal, useModal, Button } from '@/components/ui'
 import { GamesList } from '@/features/dashboard/components/games-list'
 import { FavoritesGrid } from '@/features/games/components/favorites-grid'
@@ -30,22 +29,16 @@ export function DashboardNewGameButton() {
 }
 
 export function DashboardActions({ games }: { games: Game[] }) {
-  const router = useRouter()
-
   async function handleDelete(id: string) {
     await deleteGame(id)
-    router.refresh()
   }
 
   return <GamesList games={games} onDelete={handleDelete} />
 }
 
 export function DashboardFavorites({ favorites }: { favorites: FavoriteGame[] }) {
-  const router = useRouter()
-
   async function handleUnfavorite(gameId: string) {
     await toggleFavorite(gameId)
-    router.refresh()
   }
 
   return <FavoritesGrid favorites={favorites} onUnfavorite={handleUnfavorite} />

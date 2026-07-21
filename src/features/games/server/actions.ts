@@ -120,6 +120,7 @@ export async function deleteGame(id: string) {
   if (!result.success) return result
 
   revalidatePath('/dashboard')
+  revalidatePath('/')
   return result
 }
 

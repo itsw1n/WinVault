@@ -14,16 +14,23 @@ export async function getFeaturedGames() {
 export async function getTrendingGames() {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
 
+  const topIds = await prisma.favorite.groupBy({
+    by: ['gameId'],
+    where: { createdAt: { gte: sevenDaysAgo } },
+    _count: { id: true },
+    orderBy: { _count: { id: 'desc' } },
+    take: 6,
+  })
+
+  if (topIds.length === 0) return []
+
   const games = await prisma.game.findMany({
-    where: {
-      favorites: {
-        some: { createdAt: { gte: sevenDaysAgo } },
-      },
-    },
+    where: { id: { in: topIds.map((g) => g.gameId) } },
     include: gameInclude,
   })
 
-  return games.sort((a, b) => b._count.favorites - a._count.favorites).slice(0, 6)
+  const order = new Map(topIds.map((g, i) => [g.gameId, i]))
+  return games.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))
 }
 
 export async function getNewReleases() {

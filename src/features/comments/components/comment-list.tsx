@@ -1,5 +1,3 @@
-'use client'
-
 import { CommentThread } from './comment-thread'
 import type { CommentWithReplies } from '@/types'
 
