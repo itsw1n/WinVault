@@ -23,6 +23,7 @@ model User {
   createdAt    DateTime   @default(now())
   games        Game[]
   favorites    Favorite[]
+  comments     Comment[]
 }
 
 model Game {
@@ -35,8 +36,9 @@ model Game {
   tags             String[]
   isFeatured       Boolean    @default(false)
   ownerId          String
-  owner            User       @relation(fields: [ownerId], references: [id])
-  favorites        Favorite[]
+  owner          User       @relation(fields: [ownerId], references: [id])
+  favorites      Favorite[]
+  comments       Comment[]
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
@@ -53,6 +55,24 @@ model Favorite {
   createdAt DateTime @default(now())
 
   @@unique([userId, gameId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String
+  userId    String
+  gameId    String
+  parentId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  user    User      @relation(fields: [userId], references: [id])
+  game    Game      @relation(fields: [gameId], references: [id])
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies Comment[] @relation("CommentReplies")
+
+  @@index([gameId])
+  @@index([parentId])
 }
 
 model RateLimit {
