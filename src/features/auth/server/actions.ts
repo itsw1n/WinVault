@@ -6,7 +6,7 @@ import { signUpSchema, signInSchema, updateProfileSchema } from "@/features/auth
 import { createUser, updateUser } from "@/features/auth/server/mutations"
 import { wrap, ok, fail } from "@/lib/errors"
 import { rateLimit } from "@/lib/nextauth/rate-limiter"
-import { compare, hash } from "bcryptjs"
+import { hashPassword, verifyPassword } from "@/lib/password"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
 import { prisma } from "@/lib/prisma"
@@ -114,11 +114,11 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId }, select: { passwordHash: true } })
-    if (!user || !(await compare(currentPassword, user.passwordHash))) {
+    if (!user || !(await verifyPassword(currentPassword, user.passwordHash))) {
       return fail("VALIDATION", "Current password is incorrect")
     }
 
-    passwordHash = await hash(newPassword, 12)
+    passwordHash = await hashPassword(newPassword)
   }
 
   if (passwordHash) {

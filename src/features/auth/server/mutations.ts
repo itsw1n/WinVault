@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { hash } from "bcryptjs"
+import { hashPassword } from "@/lib/password"
 import { ActionError } from "@/lib/errors"
 import { isUsernameTaken, isEmailTaken } from "@/features/auth/server/queries"
 
@@ -16,7 +16,7 @@ export async function createUser(
   if (usernameTaken) throw new ActionError("CONFLICT", "Username is already taken")
   if (emailTaken) throw new ActionError("CONFLICT", "Email is already registered")
 
-  const passwordHash = await hash(password, 12)
+  const passwordHash = await hashPassword(password)
 
   return prisma.user.create({
     data: { username, email, passwordHash },
