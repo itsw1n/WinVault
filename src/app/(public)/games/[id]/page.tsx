@@ -5,6 +5,7 @@ import { getFavoritedGameIds } from '@/features/games/server/queries'
 import * as gameService from '@/features/games/server/queries'
 import { notFound } from 'next/navigation'
 import { GameDetailActions } from '@/features/games/components/game-detail-actions'
+import { CommentSection } from '@/features/comments/components/comment-section'
 
 export async function generateMetadata(props: {
   params: Promise<{ id: string }>
@@ -87,6 +88,10 @@ export default async function GameDetailPage(props: { params: Promise<{ id: stri
             isFavorited={isFavorited}
           />
         </div>
+      </div>
+
+      <div className="mt-12">
+        <CommentSection gameId={game.id} gameOwnerId={game.ownerId} />
       </div>
     </div>
   )
