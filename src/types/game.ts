@@ -1,20 +1,25 @@
-export interface Game {
-  id: string
-  title: string
-  thumbnailUrl: string
-  shortDescription: string
-  externalUrl: string
-  genre: string
-  tags: string[]
-  ownerId: string
-  isFeatured: boolean
-  owner: { username: string; avatarUrl: string | null }
-  _count: { favorites: number }
-  createdAt?: Date
-  updatedAt?: Date
-}
+import type { Prisma } from "@prisma/client"
 
-export interface FavoriteGame {
-  game: Game
-  createdAt: Date
-}
+export const gameInclude = {
+  owner: { select: { username: true, avatarUrl: true } },
+  _count: { select: { favorites: true } },
+} as const satisfies Prisma.GameInclude
+
+export const gameDetailInclude = {
+  owner: { select: { username: true, avatarUrl: true, bio: true } },
+  _count: { select: { favorites: true } },
+} as const satisfies Prisma.GameInclude
+
+export const favoriteWithGameInclude = {
+  game: {
+    include: gameInclude,
+  },
+} as const satisfies Prisma.FavoriteInclude
+
+export type Game = Prisma.GameGetPayload<{ include: typeof gameInclude }>
+
+export type GameDetail = Prisma.GameGetPayload<{ include: typeof gameDetailInclude }>
+
+export type FavoriteGame = Prisma.FavoriteGetPayload<{
+  include: typeof favoriteWithGameInclude
+}>

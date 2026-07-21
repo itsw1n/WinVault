@@ -1,13 +1,19 @@
-export interface User {
-  id: string
-  username: string
-  email: string
-  avatarUrl?: string | null
-  bio?: string | null
-  createdAt: Date
-}
+import type { Prisma } from "@prisma/client"
 
-export interface UserWithAuth extends User {
-  tokenVersion: number
-  passwordHash: string
-}
+export const userProfileSelect = {
+  id: true,
+  username: true,
+  email: true,
+  avatarUrl: true,
+  bio: true,
+} as const satisfies Prisma.UserSelect
+
+export const userWithGamesInclude = {
+  _count: { select: { games: true } },
+} as const satisfies Prisma.UserInclude
+
+export type User = Prisma.UserGetPayload<{ select: typeof userProfileSelect }>
+
+export type UserWithGames = Prisma.UserGetPayload<{
+  include: typeof userWithGamesInclude
+}>
