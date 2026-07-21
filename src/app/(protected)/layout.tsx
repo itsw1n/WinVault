@@ -1,17 +1,11 @@
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
+import { Navbar } from '@/components/layout/navbar'
+import { Footer } from '@/components/layout/footer'
 
-export default function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="flex-1 max-w-[1400px] mx-auto px-4 lg:px-8 py-8 w-full">
-        {children}
-      </main>
+      <main className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-8 lg:px-8">{children}</main>
       <Footer />
     </div>
   )

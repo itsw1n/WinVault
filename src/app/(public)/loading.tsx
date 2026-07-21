@@ -1,10 +1,9 @@
-import { HeroSkeleton, GameGridSkeleton } from "@/components/ui/skeleton"
-import { SectionHeader } from "@/components/ui/section-header"
+import { HeroSkeleton, GameGridSkeleton, SectionHeader } from '@/components/ui'
 
 export default function HomeLoading() {
   return (
-    <div className="min-h-screen flex flex-col bg-pv-bg">
-      <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-12">
+    <div className="flex min-h-screen flex-col bg-pv-bg">
+      <div className="mx-auto max-w-[1400px] space-y-12 px-4 py-8 lg:px-8">
         <HeroSkeleton />
         <section>
           <SectionHeader title="Featured Games" href="/games" />

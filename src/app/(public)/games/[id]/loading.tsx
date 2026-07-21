@@ -1,9 +1,9 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui'
 
 export default function GameDetailLoading() {
   return (
-    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="mx-auto max-w-[1400px] px-4 py-8 lg:px-8">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <Skeleton className="aspect-[16/10]" />
         <div className="space-y-4">
           <Skeleton className="h-10 w-3/4" />

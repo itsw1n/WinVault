@@ -1,56 +1,51 @@
-import type { Metadata } from "next";
-import { Button } from "@/components/ui/button";
-import { AuthAwareLink } from "@/components/ui";
-import { prisma } from "@/lib/prisma";
-import { GENRES } from "@/features/games/schemas";
-import { getDeveloperCount } from "@/features/games/server/queries";
+import type { Metadata } from 'next'
+import { Button, AuthAwareLink } from '@/components/ui'
+import { prisma } from '@/lib/prisma'
+import { GENRES } from '@/features/games/schemas'
+import { getDeveloperCount } from '@/features/games/server/queries'
 
 export const metadata: Metadata = {
-  title: "About — PlayVault",
-  description:
-    "PlayVault is a community-driven game discovery platform built by itsw1n.",
-};
+  title: 'About — PlayVault',
+  description: 'PlayVault is a community-driven game discovery platform built by itsw1n.',
+}
 
 export default async function AboutPage() {
   const [gamesCount, devCount, playerCount] = await Promise.all([
     prisma.game.count(),
     getDeveloperCount(),
     prisma.user.count(),
-  ]);
+  ])
   return (
-    <div className="max-w-[1400px] mx-auto px-4 py-8 space-y-6">
+    <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-8">
       {/* Hero */}
-      <div className="bg-pv-primary border-[2.5px] border-pv-border rounded-pv p-6">
-        <p className="text-[11px] font-bold tracking-[0.08em] text-[#111111] uppercase">
+      <div className="rounded-pv border-[2.5px] border-pv-border bg-pv-primary p-6">
+        <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#111111]">
           About PlayVault
         </p>
-        <h1 className="font-display font-extrabold text-[26px] leading-[1.15] text-[#111111] mt-1.5 mb-2.5">
+        <h1 className="mb-2.5 mt-1.5 font-display text-[26px] font-extrabold leading-[1.15] text-[#111111]">
           A hub for games built by real people.
         </h1>
-        <p className="text-[13px] text-[#111111] leading-[1.6] max-w-[480px]">
-          PlayVault is a community-driven discovery platform. Developers publish
-          their games here. Players find, favorite, and launch them. No
-          gatekeepers. No fees. Just games.
+        <p className="max-w-[480px] text-[13px] leading-[1.6] text-[#111111]">
+          PlayVault is a community-driven discovery platform. Developers publish their games here.
+          Players find, favorite, and launch them. No gatekeepers. No fees. Just games.
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-2.5">
         {[
-          { num: gamesCount.toLocaleString(), label: "GAMES LIVE" },
-          { num: devCount.toLocaleString(), label: "DEVELOPERS" },
-          { num: playerCount.toLocaleString(), label: "PLAYERS" },
+          { num: gamesCount.toLocaleString(), label: 'GAMES LIVE' },
+          { num: devCount.toLocaleString(), label: 'DEVELOPERS' },
+          { num: playerCount.toLocaleString(), label: 'PLAYERS' },
         ].map((s) => (
           <div
             key={s.label}
-            className="border-[2.5px] border-pv-border rounded-pv p-3.5 text-center bg-pv-card"
+            className="rounded-pv border-[2.5px] border-pv-border bg-pv-card p-3.5 text-center"
           >
-            <span className="font-display font-extrabold text-[26px] text-pv-primary block mb-0.5">
+            <span className="mb-0.5 block font-display text-[26px] font-extrabold text-pv-primary">
               {s.num}
             </span>
-            <span className="text-[11px] font-bold tracking-[0.05em] text-pv-muted">
-              {s.label}
-            </span>
+            <span className="text-[11px] font-bold tracking-[0.05em] text-pv-muted">{s.label}</span>
           </div>
         ))}
       </div>
@@ -59,26 +54,23 @@ export default async function AboutPage() {
 
       {/* The person behind this */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-2.5">
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           The person behind this
         </p>
-        <div className="border-[2.5px] border-pv-border rounded-pv p-4 bg-pv-card flex gap-3.5 items-start">
-          <div className="w-[52px] h-[52px] bg-pv-primary border-[2.5px] border-pv-border rounded-pv flex items-center justify-center font-display font-extrabold text-[18px] text-[#111111] shrink-0">
+        <div className="flex items-start gap-3.5 rounded-pv border-[2.5px] border-pv-border bg-pv-card p-4">
+          <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-pv border-[2.5px] border-pv-border bg-pv-primary font-display text-[18px] font-extrabold text-[#111111]">
             W
           </div>
           <div>
-            <h2 className="font-display font-bold text-[15px] text-pv-text mb-1">
-              itsw1n
-            </h2>
-            <p className="text-[12px] text-pv-muted leading-[1.6] mb-2">
-              IT student and self-taught developer building projects to learn,
-              one at a time. PlayVault started as a way to put games somewhere
-              permanent — not buried in social feeds or stuck behind store
-              approvals.
+            <h2 className="mb-1 font-display text-[15px] font-bold text-pv-text">itsw1n</h2>
+            <p className="mb-2 text-[12px] leading-[1.6] text-pv-muted">
+              IT student and self-taught developer building projects to learn, one at a time.
+              PlayVault started as a way to put games somewhere permanent — not buried in social
+              feeds or stuck behind store approvals.
             </p>
-            <p className="text-[12px] text-pv-muted leading-[1.6]">
-              I build by learning. Every project teaches me something the last
-              one didn&apos;t. PlayVault is one of those projects.
+            <p className="text-[12px] leading-[1.6] text-pv-muted">
+              I build by learning. Every project teaches me something the last one didn&apos;t.
+              PlayVault is one of those projects.
             </p>
           </div>
         </div>
@@ -88,16 +80,15 @@ export default async function AboutPage() {
 
       {/* Why I built this */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-2.5">
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           Why I built this
         </p>
-        <div className="border-[2.5px] border-pv-border rounded-pv p-4 bg-pv-card">
-          <p className="text-[13px] text-pv-muted leading-[1.6]">
-            Independent game developers build incredible things and have nowhere
-            obvious to show them. Big stores charge fees and have approval
-            queues. Social media buries links. I wanted a permanent, browsable
-            home for games that don&apos;t need a publisher — and building it
-            was a good way to learn too.
+        <div className="rounded-pv border-[2.5px] border-pv-border bg-pv-card p-4">
+          <p className="text-[13px] leading-[1.6] text-pv-muted">
+            Independent game developers build incredible things and have nowhere obvious to show
+            them. Big stores charge fees and have approval queues. Social media buries links. I
+            wanted a permanent, browsable home for games that don&apos;t need a publisher — and
+            building it was a good way to learn too.
           </p>
         </div>
       </section>
@@ -106,38 +97,36 @@ export default async function AboutPage() {
 
       {/* How it works */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-2.5">
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           How it works
         </p>
         <div className="flex flex-col gap-3">
           {[
             {
-              num: "1",
-              title: "Developers publish",
-              body: "Any registered user can submit a game — title, thumbnail, description, genre, and a link to where the game lives. PlayVault never hosts game files.",
+              num: '1',
+              title: 'Developers publish',
+              body: 'Any registered user can submit a game — title, thumbnail, description, genre, and a link to where the game lives. PlayVault never hosts game files.',
             },
             {
-              num: "2",
-              title: "Players discover",
-              body: "Browse by genre, search by title, or explore Featured and Trending. No account needed to look around.",
+              num: '2',
+              title: 'Players discover',
+              body: 'Browse by genre, search by title, or explore Featured and Trending. No account needed to look around.',
             },
             {
-              num: "3",
-              title: "Launch and favorite",
+              num: '3',
+              title: 'Launch and favorite',
               body: "Sign in to play or save a game. Play opens the developer's site in a new tab — PlayVault stays open in the original.",
             },
           ].map((step) => (
-            <div key={step.num} className="flex gap-3 items-start">
-              <div className="w-7 h-7 bg-[#111111] dark:bg-white text-white dark:text-[#111111] rounded-pv-sm flex items-center justify-center text-[12px] font-bold shrink-0 mt-0.5">
+            <div key={step.num} className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-pv-sm bg-[#111111] text-[12px] font-bold text-white dark:bg-white dark:text-[#111111]">
                 {step.num}
               </div>
               <div>
-                <h3 className="font-display font-bold text-[14px] text-pv-text mb-0.5">
+                <h3 className="mb-0.5 font-display text-[14px] font-bold text-pv-text">
                   {step.title}
                 </h3>
-                <p className="text-[12px] text-pv-muted leading-[1.6]">
-                  {step.body}
-                </p>
+                <p className="text-[12px] leading-[1.6] text-pv-muted">{step.body}</p>
               </div>
             </div>
           ))}
@@ -148,46 +137,42 @@ export default async function AboutPage() {
 
       {/* What I'm not building */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-2.5">
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           What I&apos;m not building
         </p>
         <div className="grid grid-cols-2 gap-2.5">
           {[
             {
-              icon: "ti-device-gamepad-2",
-              title: "Not a game engine",
+              icon: 'ti-device-gamepad-2',
+              title: 'Not a game engine',
               body: "I don't build or host your game. I just give it a home in the catalog.",
             },
             {
-              icon: "ti-building-store",
-              title: "Not a store",
-              body: "No payments, no purchases, no revenue share. All games are free to discover.",
+              icon: 'ti-building-store',
+              title: 'Not a store',
+              body: 'No payments, no purchases, no revenue share. All games are free to discover.',
             },
             {
-              icon: "ti-shield",
-              title: "Not a gatekeeper",
-              body: "No approval queue. If you have a game and a link, you can publish it today.",
+              icon: 'ti-shield',
+              title: 'Not a gatekeeper',
+              body: 'No approval queue. If you have a game and a link, you can publish it today.',
             },
             {
-              icon: "ti-ad",
-              title: "Not ad-supported",
-              body: "No tracking pixels, no ad networks, no promoted listings.",
+              icon: 'ti-ad',
+              title: 'Not ad-supported',
+              body: 'No tracking pixels, no ad networks, no promoted listings.',
             },
           ].map((item) => (
             <div
               key={item.title}
-              className="border-[2.5px] border-pv-border rounded-pv p-4 bg-pv-card"
+              className="rounded-pv border-[2.5px] border-pv-border bg-pv-card p-4"
             >
               <i
-                className={`ti ${item.icon} text-[20px] text-pv-primary mb-1.5 block`}
+                className={`ti ${item.icon} mb-1.5 block text-[20px] text-pv-primary`}
                 aria-hidden="true"
               />
-              <h3 className="font-display font-bold text-[13px] text-pv-text mb-1">
-                {item.title}
-              </h3>
-              <p className="text-[12px] text-pv-muted leading-[1.6]">
-                {item.body}
-              </p>
+              <h3 className="mb-1 font-display text-[13px] font-bold text-pv-text">{item.title}</h3>
+              <p className="text-[12px] leading-[1.6] text-pv-muted">{item.body}</p>
             </div>
           ))}
         </div>
@@ -197,20 +182,19 @@ export default async function AboutPage() {
 
       {/* Note for itsw1n */}
       <section>
-        <div className="border-[2.5px] border-pv-primary rounded-pv p-4 bg-pv-card flex gap-2.5 items-start">
+        <div className="flex items-start gap-2.5 rounded-pv border-[2.5px] border-pv-primary bg-pv-card p-4">
           <i
-            className="ti ti-plant-2 text-[22px] text-pv-primary shrink-0 mt-0.5"
+            className="ti ti-plant-2 mt-0.5 shrink-0 text-[22px] text-pv-primary"
             aria-hidden="true"
           />
           <div>
-            <h2 className="font-display font-bold text-[14px] text-pv-text mb-1.5">
+            <h2 className="mb-1.5 font-display text-[14px] font-bold text-pv-text">
               Keep going, brudaA.
             </h2>
-            <p className="text-[12px] text-pv-muted leading-[1.6]">
-              You&apos;re still early in the learning curve and that&apos;s
-              exactly where the most important growth happens. Every concept
-              that feels confusing right now is one you&apos;ll understand
-              deeply later — because you worked through it, not around it.
+            <p className="text-[12px] leading-[1.6] text-pv-muted">
+              You&apos;re still early in the learning curve and that&apos;s exactly where the most
+              important growth happens. Every concept that feels confusing right now is one
+              you&apos;ll understand deeply later — because you worked through it, not around it.
             </p>
           </div>
         </div>
@@ -220,14 +204,14 @@ export default async function AboutPage() {
 
       {/* Genres */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-2.5">
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           Genres on the platform
         </p>
         <div className="flex flex-wrap gap-1.5">
           {GENRES.map((g) => (
             <span
               key={g}
-              className="inline-block border-[2px] border-pv-border rounded-pv-sm px-2 py-0.5 text-[11px] font-bold tracking-[0.04em] text-pv-text"
+              className="inline-block rounded-pv-sm border-[2px] border-pv-border px-2 py-0.5 text-[11px] font-bold tracking-[0.04em] text-pv-text"
             >
               {g}
             </span>
@@ -239,21 +223,21 @@ export default async function AboutPage() {
 
       {/* Find me */}
       <section>
-        <p className="text-[11px] font-bold tracking-[0.08em] text-pv-primary uppercase mb-1.5">
+        <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.08em] text-pv-primary">
           Find me
         </p>
-        <p className="text-[12px] text-pv-muted leading-[1.6] mb-4">
+        <p className="mb-4 text-[12px] leading-[1.6] text-pv-muted">
           GitHub, LinkedIn, and Facebook links are in the footer below.
         </p>
       </section>
 
       {/* CTA */}
-      <div className="border-[2.5px] border-pv-border rounded-pv p-4 bg-pv-primary flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-3 rounded-pv border-[2.5px] border-pv-border bg-pv-primary p-4">
         <div>
-          <p className="font-display font-extrabold text-[16px] text-[#111111]">
+          <p className="font-display text-[16px] font-extrabold text-[#111111]">
             Ready to publish your game?
           </p>
-          <p className="text-[12px] text-[#111111] mt-1">
+          <p className="mt-1 text-[12px] text-[#111111]">
             Create a free account and add your game in under 2 minutes.
           </p>
         </div>
@@ -262,5 +246,5 @@ export default async function AboutPage() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

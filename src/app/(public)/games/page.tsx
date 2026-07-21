@@ -1,15 +1,15 @@
-import type { Metadata } from "next"
-import { GameGrid } from "@/features/games/components/game-grid"
-import { GENRES } from "@/features/games/schemas"
-import { Button } from "@/components/ui/button"
-import { auth } from "@/lib/nextauth/auth"
-import { getFavoritedGameIds } from "@/features/games/server/queries"
-import * as gameService from "@/features/games/server/queries"
-import Link from "next/link"
+import type { Metadata } from 'next'
+import { GameGrid } from '@/features/games/components/game-grid'
+import { GENRES } from '@/features/games/schemas'
+import { Button } from '@/components/ui'
+import { auth } from '@/lib/nextauth/auth'
+import { getFavoritedGameIds } from '@/features/games/server/queries'
+import * as gameService from '@/features/games/server/queries'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: "Browse Games — PlayVault",
-  description: "Browse and search indie games on PlayVault.",
+  title: 'Browse Games — PlayVault',
+  description: 'Browse and search indie games on PlayVault.',
 }
 
 export default async function BrowsePage(props: {
@@ -29,30 +29,31 @@ export default async function BrowsePage(props: {
   }
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8 space-y-6">
-        <h1 className="font-display text-3xl font-bold text-pv-text">
-          Browse Games
-        </h1>
+    <div className="mx-auto max-w-[1400px] space-y-6 px-4 py-8 lg:px-8">
+      <h1 className="font-display text-3xl font-bold text-pv-text">Browse Games</h1>
 
-        {/* Genre filter */}
-        <div className="flex flex-wrap gap-2">
-          <Button variant={!searchParams.genre ? "active" : "inactive"} size="sm" asChild>
-            <Link href="/games">All</Link>
+      {/* Genre filter */}
+      <div className="flex flex-wrap gap-2">
+        <Button variant={!searchParams.genre ? 'active' : 'inactive'} size="sm" asChild>
+          <Link href="/games">All</Link>
+        </Button>
+        {GENRES.map((g) => (
+          <Button
+            key={g}
+            variant={searchParams.genre === g ? 'active' : 'inactive'}
+            size="sm"
+            asChild
+          >
+            <Link href={`/games?genre=${encodeURIComponent(g)}`}>{g}</Link>
           </Button>
-          {GENRES.map((g) => (
-            <Button key={g} variant={searchParams.genre === g ? "active" : "inactive"} size="sm" asChild>
-              <Link href={`/games?genre=${encodeURIComponent(g)}`}>{g}</Link>
-            </Button>
-          ))}
-        </div>
-
-        {searchParams.search && (
-          <p className="text-sm text-pv-muted">
-            Results for &quot;{searchParams.search}&quot;
-          </p>
-        )}
-
-        <GameGrid games={games} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
+        ))}
       </div>
+
+      {searchParams.search && (
+        <p className="text-sm text-pv-muted">Results for &quot;{searchParams.search}&quot;</p>
+      )}
+
+      <GameGrid games={games} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
+    </div>
   )
 }

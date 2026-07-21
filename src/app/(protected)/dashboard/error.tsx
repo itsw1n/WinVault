@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { Button } from "@/components/ui/button"
-import { useEffect } from "react"
+import { Button } from '@/components/ui'
+import { useEffect } from 'react'
 
 export default function DashboardError({
   error,
@@ -16,10 +16,8 @@ export default function DashboardError({
 
   return (
     <div className="flex items-center justify-center py-16">
-      <div className="bg-pv-card border-pv border-pv-border rounded-pv p-8 max-w-md text-center space-y-4">
-        <h1 className="font-display text-2xl font-bold text-pv-text">
-          Dashboard Error
-        </h1>
+      <div className="max-w-md space-y-4 rounded-pv border-pv border-pv-border bg-pv-card p-8 text-center">
+        <h1 className="font-display text-2xl font-bold text-pv-text">Dashboard Error</h1>
         <p className="text-sm text-pv-muted">
           Something went wrong loading your dashboard. Try again.
         </p>

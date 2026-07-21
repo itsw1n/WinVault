@@ -1,18 +1,15 @@
-"use client"
+'use client'
 
-import { useActionState, useState } from "react"
-import { signUp } from "@/features/auth/server/actions"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { PasswordInput } from "@/components/ui/password-input"
-import { Card } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
+import { useActionState, useState } from 'react'
+import { signUp } from '@/features/auth/server/actions'
+import { Button, Input, PasswordInput, Card } from '@/components/ui'
+import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 const rules = [
-  { label: "At least 8 characters", test: (v: string) => v.length >= 8 },
-  { label: "At least one uppercase letter", test: (v: string) => /[A-Z]/.test(v) },
-  { label: "At least one number", test: (v: string) => /[0-9]/.test(v) },
+  { label: 'At least 8 characters', test: (v: string) => v.length >= 8 },
+  { label: 'At least one uppercase letter', test: (v: string) => /[A-Z]/.test(v) },
+  { label: 'At least one number', test: (v: string) => /[0-9]/.test(v) },
 ]
 
 function PasswordHints({ password }: { password: string }) {
@@ -25,12 +22,9 @@ function PasswordHints({ password }: { password: string }) {
         return (
           <li
             key={rule.label}
-            className={cn(
-              "text-xs transition-colors",
-              ok ? "text-pv-primary" : "text-pv-muted"
-            )}
+            className={cn('text-xs transition-colors', ok ? 'text-pv-primary' : 'text-pv-muted')}
           >
-            {ok ? "✓" : "○"} {rule.label}
+            {ok ? '✓' : '○'} {rule.label}
           </li>
         )
       })}
@@ -40,39 +34,24 @@ function PasswordHints({ password }: { password: string }) {
 
 export default function SignUpPage() {
   const [state, formAction, pending] = useActionState(signUp, undefined)
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
-  const confirmError =
-    confirmPassword.length > 0 && password !== confirmPassword
+  const confirmError = confirmPassword.length > 0 && password !== confirmPassword
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-pv-bg px-4">
-      <Card className="w-full max-w-sm p-6 space-y-4">
+    <div className="flex min-h-screen items-center justify-center bg-pv-bg px-4">
+      <Card className="w-full max-w-sm space-y-4 p-6">
         <div className="text-center">
-          <Link
-            href="/"
-            className="font-display text-2xl font-extrabold text-pv-primary"
-          >
+          <Link href="/" className="font-display text-2xl font-extrabold text-pv-primary">
             PlayVault
           </Link>
-          <h1 className="font-display text-xl font-bold text-pv-text mt-2">
-            Sign Up
-          </h1>
+          <h1 className="mt-2 font-display text-xl font-bold text-pv-text">Sign Up</h1>
         </div>
 
         <form action={formAction} className="space-y-3">
-          <Input
-            name="username"
-            label="Username"
-            placeholder="Choose a username"
-          />
-          <Input
-            name="email"
-            label="Email"
-            type="email"
-            placeholder="Enter your email"
-          />
+          <Input name="username" label="Username" placeholder="Choose a username" />
+          <Input name="email" label="Email" type="email" placeholder="Enter your email" />
           <div className="space-y-1">
             <PasswordInput
               name="password"
@@ -91,21 +70,17 @@ export default function SignUpPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            {confirmError && (
-              <p className="text-xs text-pv-heart">Passwords do not match</p>
-            )}
+            {confirmError && <p className="text-xs text-pv-heart">Passwords do not match</p>}
           </div>
-          {state && !state.success && (
-            <p className="text-xs text-pv-heart">{state.message}</p>
-          )}
+          {state && !state.success && <p className="text-xs text-pv-heart">{state.message}</p>}
           <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? "Creating account..." : "Sign Up"}
+            {pending ? 'Creating account...' : 'Sign Up'}
           </Button>
         </form>
 
-        <p className="text-xs text-center text-pv-muted">
-          Already have an account?{" "}
-          <Link href="/sign-in" className="text-pv-primary font-medium">
+        <p className="text-center text-xs text-pv-muted">
+          Already have an account?{' '}
+          <Link href="/sign-in" className="font-medium text-pv-primary">
             Sign in
           </Link>
         </p>
