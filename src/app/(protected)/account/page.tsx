@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { auth } from "@/lib/nextauth/auth"
-import { redirect, notFound } from "next/navigation"
+import { notFound } from "next/navigation"
 import { getUserById } from "@/features/auth/server/queries"
 import { AccountForm } from "@/features/auth/components/account-form"
 
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 export default async function AccountPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect("/sign-in")
+  const userId = session!.user!.id
 
   let user
   try {
-    user = await getUserById(session.user.id)
+    user = await getUserById(userId)
   } catch {
     notFound()
   }
