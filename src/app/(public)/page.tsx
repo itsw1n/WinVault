@@ -4,32 +4,21 @@ import { SectionHeader } from "@/components/ui/section-header"
 import { auth } from "@/lib/nextauth/auth"
 import { getFavoritedGameIds } from "@/features/games/server/queries"
 import * as gameService from "@/features/games/server/queries"
-
-async function safeFetch<T>(
-  fn: () => Promise<T>,
-  fallback: T
-): Promise<T> {
-  try {
-    return await fn()
-  } catch {
-    return fallback
-  }
-}
+import { wrap } from "@/lib/errors"
 
 export default async function HomePage() {
   const session = await auth()
 
   const [featured, trending, newReleases] = await Promise.all([
-    safeFetch(() => gameService.getFeaturedGames(), []),
-    safeFetch(() => gameService.getTrendingGames(), []),
-    safeFetch(() => gameService.getNewReleases(), []),
+    wrap(() => gameService.getFeaturedGames()),
+    wrap(() => gameService.getTrendingGames()),
+    wrap(() => gameService.getNewReleases()),
   ])
 
   let favoritedIds: string[] = []
   if (session?.user?.id) {
-    try {
-      favoritedIds = await getFavoritedGameIds(session.user.id)
-    } catch {}
+    const favResult = await wrap(() => getFavoritedGameIds(session.user.id))
+    if (favResult.success) favoritedIds = favResult.data
   }
 
   return (
@@ -38,17 +27,17 @@ export default async function HomePage() {
 
       <section className="mb-12">
         <SectionHeader title="Featured Games" href="/games" />
-        <GameGrid games={featured} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
+        <GameGrid games={featured.success ? featured.data : []} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
 
       <section className="mb-12">
         <SectionHeader title="Trending Now" href="/games" />
-        <GameGrid games={trending} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
+        <GameGrid games={trending.success ? trending.data : []} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
 
       <section className="mb-12">
         <SectionHeader title="New Releases" href="/games" />
-        <GameGrid games={newReleases} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
+        <GameGrid games={newReleases.success ? newReleases.data : []} favoritedIds={favoritedIds} loggedIn={!!session?.user} />
       </section>
     </div>
   )
