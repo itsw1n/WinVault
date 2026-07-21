@@ -8,6 +8,32 @@ import { ThemeToggle } from './theme-toggle'
 import { Button } from '@/components/ui'
 import { SignOutButton } from './sign-out-button'
 
+function NavLink({
+  href,
+  children,
+  onClick,
+}: {
+  href: string
+  children: React.ReactNode
+  onClick?: () => void
+}) {
+  const pathname = usePathname()
+  const active = pathname === href
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={`block border-b-[2px] border-pv-border px-4 py-3 text-sm font-medium transition-colors ${
+        active
+          ? 'bg-pv-bg text-pv-primary'
+          : 'hover:bg-pv-bg/50 text-pv-text hover:text-pv-primary'
+      }`}
+    >
+      {children}
+    </Link>
+  )
+}
+
 export function MobileNav({
   session,
 }: {
@@ -27,24 +53,6 @@ export function MobileNav({
       if (count === 0) document.body.style.overflow = ''
     }
   }, [open])
-
-  function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
-    const pathname = usePathname()
-    const active = pathname === href
-    return (
-      <Link
-        href={href}
-        onClick={close}
-        className={`block border-b-[2px] border-pv-border px-4 py-3 text-sm font-medium transition-colors ${
-          active
-            ? 'bg-pv-bg text-pv-primary'
-            : 'hover:bg-pv-bg/50 text-pv-text hover:text-pv-primary'
-        }`}
-      >
-        {children}
-      </Link>
-    )
-  }
 
   return (
     <>
