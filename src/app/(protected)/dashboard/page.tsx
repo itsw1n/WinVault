@@ -1,9 +1,7 @@
 import type { Metadata } from "next"
 import { auth } from "@/lib/nextauth/auth"
-import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
 import { StatCard } from "@/components/ui/stat-card"
-import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived } from "@/features/games/server/queries"
+import { getGamesByOwner, getGamesFavoritedByUser, getTotalFavoritesReceived, getPublishedGameCount, getFavoritedGameCount } from "@/features/games/server/queries"
 import { DashboardActions, DashboardFavorites, DashboardNewGameButton } from "@/features/dashboard/components/dashboard-actions"
 
 export const metadata: Metadata = {
@@ -12,15 +10,13 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect("/sign-in")
-
-  const userId = session.user.id
+  const userId = session!.user!.id
 
   const [publishedCount, totalFavsReceived, yourFavsCount, games, favorites] =
     await Promise.all([
-      prisma.game.count({ where: { ownerId: userId } }),
+      getPublishedGameCount(userId),
       getTotalFavoritesReceived(userId),
-      prisma.favorite.count({ where: { userId } }),
+      getFavoritedGameCount(userId),
       getGamesByOwner(userId),
       getGamesFavoritedByUser(userId),
     ])
