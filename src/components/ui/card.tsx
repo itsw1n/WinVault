@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 interface CardProps {
   children: React.ReactNode
@@ -7,12 +7,7 @@ interface CardProps {
 
 export function Card({ children, className }: CardProps) {
   return (
-    <div
-      className={cn(
-        "bg-pv-card border-pv border-pv-border rounded-pv",
-        className
-      )}
-    >
+    <div className={cn('rounded-pv border-pv border-pv-border bg-pv-card', className)}>
       {children}
     </div>
   )

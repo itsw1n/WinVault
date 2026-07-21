@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { Modal } from "./modal"
-import { Button } from "./button"
+import { Modal } from './modal'
+import { Button } from './button'
 
 interface ConfirmDialogProps {
   open: boolean
@@ -19,13 +19,13 @@ export function ConfirmDialog({
   onConfirm,
   title,
   message,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
 }: ConfirmDialogProps) {
   return (
     <Modal open={open} onClose={onClose} title={title} size="sm" hideCloseButton>
-      <p className="text-sm text-pv-text leading-relaxed mb-6">{message}</p>
-      <div className="flex items-center gap-3 justify-end">
+      <p className="mb-6 text-sm leading-relaxed text-pv-text">{message}</p>
+      <div className="flex items-center justify-end gap-3">
         <Button variant="inactive" size="sm" onClick={onClose}>
           {cancelLabel}
         </Button>

@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
@@ -9,16 +9,16 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), [])
 
-  if (!mounted) return <div className="w-[34px] h-[34px]" />
+  if (!mounted) return <div className="h-[34px] w-[34px]" />
 
   return (
     <button
-      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="w-[34px] h-[34px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      className="flex h-[34px] w-[34px] items-center justify-center rounded-pv-sm border-[2px] border-pv-border bg-pv-card text-pv-text transition-colors hover:bg-pv-bg"
       aria-label="Toggle theme"
     >
       <i
-        className={`ti ${resolvedTheme === "dark" ? "ti-sun" : "ti-moon"} text-[16px]`}
+        className={`ti ${resolvedTheme === 'dark' ? 'ti-sun' : 'ti-moon'} text-[16px]`}
         aria-hidden="true"
       />
     </button>

@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useEffect, useRef, useCallback } from "react"
-import { createPortal } from "react-dom"
-import { useModal } from "@/hooks/use-modal"
+import { useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
+import { useModal } from '@/hooks/use-modal'
 
 interface ModalProps {
   open: boolean
@@ -10,14 +10,14 @@ interface ModalProps {
   title: string
   description?: string
   children: React.ReactNode
-  size?: "sm" | "md" | "lg"
+  size?: 'sm' | 'md' | 'lg'
   hideCloseButton?: boolean
 }
 
 const sizeClasses: Record<string, string> = {
-  sm: "max-w-[400px]",
-  md: "max-w-[560px]",
-  lg: "max-w-[720px]",
+  sm: 'max-w-[400px]',
+  md: 'max-w-[560px]',
+  lg: 'max-w-[720px]',
 }
 
 export { useModal }
@@ -28,7 +28,7 @@ export function Modal({
   title,
   description,
   children,
-  size = "md",
+  size = 'md',
   hideCloseButton = false,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -36,12 +36,12 @@ export function Modal({
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose()
         return
       }
 
-      if (e.key === "Tab" && dialogRef.current) {
+      if (e.key === 'Tab' && dialogRef.current) {
         const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         )
@@ -69,11 +69,11 @@ export function Modal({
   useEffect(() => {
     if (!open) return
     previousActiveElement.current = document.activeElement as HTMLElement
-    document.addEventListener("keydown", handleKeyDown)
+    document.addEventListener('keydown', handleKeyDown)
 
     const prev = Number(document.body.dataset.scrollLock) || 0
     document.body.dataset.scrollLock = String(prev + 1)
-    document.body.style.overflow = "hidden"
+    document.body.style.overflow = 'hidden'
 
     requestAnimationFrame(() => {
       const firstFocusable = dialogRef.current?.querySelector<HTMLElement>(
@@ -83,10 +83,10 @@ export function Modal({
     })
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown)
+      document.removeEventListener('keydown', handleKeyDown)
       const count = Math.max(0, (Number(document.body.dataset.scrollLock) || 0) - 1)
       document.body.dataset.scrollLock = String(count)
-      if (count === 0) document.body.style.overflow = ""
+      if (count === 0) document.body.style.overflow = ''
       previousActiveElement.current?.focus()
     }
   }, [open, handleKeyDown])
@@ -106,31 +106,27 @@ export function Modal({
       />
       <div
         ref={dialogRef}
-        className={`relative bg-pv-card border-[2.5px] border-pv-border rounded-pv w-full ${sizeClasses[size]} max-h-[80vh] flex flex-col transition-all duration-200 translate-y-0 opacity-100`}
+        className={`relative w-full rounded-pv border-[2.5px] border-pv-border bg-pv-card ${sizeClasses[size]} flex max-h-[80vh] translate-y-0 flex-col opacity-100 transition-all duration-200`}
         style={{
-          animation: "modal-in 200ms ease-out",
+          animation: 'modal-in 200ms ease-out',
         }}
       >
-        <div className="flex items-start justify-between p-4 border-b-[2px] border-pv-border shrink-0">
+        <div className="flex shrink-0 items-start justify-between border-b-[2px] border-pv-border p-4">
           <div className="min-w-0">
-            <h2 className="font-display font-bold text-[16px] text-pv-text truncate">
-              {title}
-            </h2>
-            {description && (
-              <p className="text-[12px] text-pv-muted mt-1">{description}</p>
-            )}
+            <h2 className="truncate font-display text-[16px] font-bold text-pv-text">{title}</h2>
+            {description && <p className="mt-1 text-[12px] text-pv-muted">{description}</p>}
           </div>
           {!hideCloseButton && (
             <button
               onClick={onClose}
               aria-label="Close"
-              className="w-[32px] h-[32px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-text hover:bg-pv-bg transition-colors shrink-0 ml-3"
+              className="ml-3 flex h-[32px] w-[32px] shrink-0 items-center justify-center rounded-pv-sm border-[2px] border-pv-border bg-pv-card text-pv-text transition-colors hover:bg-pv-bg"
             >
               <i className="ti ti-x text-[16px]" aria-hidden="true" />
             </button>
           )}
         </div>
-        <div className="p-4 overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto p-4">{children}</div>
       </div>
       <style jsx>{`
         @keyframes modal-in {

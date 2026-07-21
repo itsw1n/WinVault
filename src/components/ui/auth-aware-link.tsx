@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { useSession } from "next-auth/react"
-import Link from "next/link"
-import { useState, type ReactNode } from "react"
-import { NotifDialog } from "./notif-dialog"
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { useState, type ReactNode } from 'react'
+import { NotifDialog } from './notif-dialog'
 
 interface AuthAwareLinkProps {
   href: string
@@ -16,7 +16,7 @@ export function AuthAwareLink({ href, children, className }: AuthAwareLinkProps)
   const [open, setOpen] = useState(false)
 
   function handleClick(e: React.MouseEvent) {
-    if (status === "authenticated") {
+    if (status === 'authenticated') {
       e.preventDefault()
       setOpen(true)
     }

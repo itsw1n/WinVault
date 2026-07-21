@@ -1,10 +1,8 @@
-"use client"
+'use client'
 
-import { Card } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import type { FavoriteGame } from "@/types"
+import { Card, Badge, Button } from '@/components/ui'
+import Link from 'next/link'
+import type { FavoriteGame } from '@/types'
 
 interface FavoritesGridProps {
   favorites: FavoriteGame[]
@@ -15,41 +13,37 @@ export function FavoritesGrid({ favorites, onUnfavorite }: FavoritesGridProps) {
   if (favorites.length === 0) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-sm text-pv-muted">
-          You haven&apos;t favorited any games yet.
-        </p>
+        <p className="text-sm text-pv-muted">You haven&apos;t favorited any games yet.</p>
       </Card>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {favorites.map((fav) => (
         <Card key={fav.game.id} className="overflow-hidden">
-          <div className="aspect-[16/9] bg-pv-bg overflow-hidden">
+          <div className="aspect-[16/9] overflow-hidden bg-pv-bg">
             {fav.game.thumbnailUrl ? (
               <img
                 src={fav.game.thumbnailUrl}
                 alt={fav.game.title}
-                className="w-full h-full object-cover"
+                className="h-full w-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-pv-muted text-sm font-bold uppercase">
+              <div className="flex h-full w-full items-center justify-center text-sm font-bold uppercase text-pv-muted">
                 No image
               </div>
             )}
           </div>
-          <div className="p-3 space-y-2">
+          <div className="space-y-2 p-3">
             <Link href={`/games/${fav.game.id}`}>
-              <h3 className="font-display font-bold text-sm text-pv-text hover:text-pv-primary transition-colors">
+              <h3 className="font-display text-sm font-bold text-pv-text transition-colors hover:text-pv-primary">
                 {fav.game.title}
               </h3>
             </Link>
             <div className="flex items-center justify-between">
               <Badge>{fav.game.genre}</Badge>
-              <span className="text-xs text-pv-muted">
-                by {fav.game.owner.username}
-              </span>
+              <span className="text-xs text-pv-muted">by {fav.game.owner.username}</span>
             </div>
             <div className="flex gap-2">
               <a

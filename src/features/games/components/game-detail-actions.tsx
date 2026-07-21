@@ -1,10 +1,10 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
-import { useSession } from "next-auth/react"
-import { Button } from "@/components/ui/button"
-import { toggleFavorite } from "@/features/games/server/actions"
-import { useState } from "react"
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { Button } from '@/components/ui'
+import { toggleFavorite } from '@/features/games/server/actions'
+import { useState } from 'react'
 
 interface GameDetailActionsProps {
   gameId: string
@@ -22,12 +22,12 @@ export function GameDetailActions({
   const [isFavorited, setIsFavorited] = useState(initialFav)
 
   function handlePlay() {
-    window.open(externalUrl, "_blank")
+    window.open(externalUrl, '_blank')
   }
 
   async function handleFavorite() {
-    if (status === "loading") return
-    if (status !== "authenticated") {
+    if (status === 'loading') return
+    if (status !== 'authenticated') {
       router.push(`/sign-in?callbackUrl=/games/${gameId}`)
       return
     }
@@ -42,11 +42,8 @@ export function GameDetailActions({
       <Button variant="default" onClick={handlePlay}>
         Play
       </Button>
-      <Button
-        variant="inactive"
-        onClick={handleFavorite}
-      >
-        {isFavorited ? "♥ Favorited" : "♡ Favorite"}
+      <Button variant="inactive" onClick={handleFavorite}>
+        {isFavorited ? '♥ Favorited' : '♡ Favorite'}
       </Button>
     </div>
   )

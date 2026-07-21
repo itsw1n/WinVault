@@ -1,6 +1,6 @@
-import { Card } from "@/components/ui/card"
-import { GameListRow } from "@/features/dashboard/components/game-list-row"
-import type { Game } from "@/types"
+import { Card } from '@/components/ui'
+import { GameListRow } from '@/features/dashboard/components/game-list-row'
+import type { Game } from '@/types'
 
 interface GamesListProps {
   games: Game[]
@@ -20,11 +20,7 @@ export function GamesList({ games, onDelete }: GamesListProps) {
     <Card>
       <div className="divide-y divide-pv-border">
         {games.map((game) => (
-          <GameListRow
-            key={game.id}
-            game={game}
-            onDelete={onDelete}
-          />
+          <GameListRow key={game.id} game={game} onDelete={onDelete} />
         ))}
       </div>
     </Card>

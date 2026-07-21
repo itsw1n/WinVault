@@ -1,28 +1,25 @@
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 export function Skeleton({ className }: { className?: string }) {
   return (
     <div
-      className={cn(
-        "bg-pv-card border-pv border-pv-border rounded-pv animate-pulse",
-        className
-      )}
+      className={cn('animate-pulse rounded-pv border-pv border-pv-border bg-pv-card', className)}
     />
   )
 }
 
 export function GameCardSkeleton() {
   return (
-    <div className="bg-pv-card border-pv border-pv-border rounded-pv overflow-hidden">
+    <div className="overflow-hidden rounded-pv border-pv border-pv-border bg-pv-card">
       <Skeleton className="h-[100px] rounded-none border-0" />
-      <div className="p-3 space-y-2">
+      <div className="space-y-2 p-3">
         <Skeleton className="h-4 w-3/4" />
         <Skeleton className="h-3 w-1/3" />
         <Skeleton className="h-3 w-full" />
       </div>
-      <div className="px-3 pb-3 flex gap-2">
-        <Skeleton className="w-[34px] h-[34px] rounded-pv-sm" />
-        <Skeleton className="flex-1 h-[34px] rounded-pv-sm" />
+      <div className="flex gap-2 px-3 pb-3">
+        <Skeleton className="h-[34px] w-[34px] rounded-pv-sm" />
+        <Skeleton className="h-[34px] flex-1 rounded-pv-sm" />
       </div>
     </div>
   )
@@ -30,7 +27,7 @@ export function GameCardSkeleton() {
 
 export function GameGridSkeleton({ count = 4 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {Array.from({ length: count }).map((_, i) => (
         <GameCardSkeleton key={i} />
       ))}
@@ -40,7 +37,7 @@ export function GameGridSkeleton({ count = 4 }: { count?: number }) {
 
 export function HeroSkeleton() {
   return (
-    <div className="bg-pv-primary border-[3px] border-pv-border rounded-[10px] p-5 space-y-4">
+    <div className="space-y-4 rounded-[10px] border-[3px] border-pv-border bg-pv-primary p-5">
       <Skeleton className="h-4 w-40" />
       <Skeleton className="h-8 w-96" />
       <Skeleton className="h-5 w-80" />
@@ -51,7 +48,7 @@ export function HeroSkeleton() {
 
 export function StatCardSkeleton() {
   return (
-    <div className="bg-pv-card border-pv border-pv-border rounded-pv p-4 space-y-2">
+    <div className="space-y-2 rounded-pv border-pv border-pv-border bg-pv-card p-4">
       <Skeleton className="h-3 w-24" />
       <Skeleton className="h-8 w-12" />
     </div>

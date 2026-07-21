@@ -1,11 +1,8 @@
-"use client"
+'use client'
 
-import { Modal, useModal } from "@/components/ui/modal"
-import { ConfirmDialog } from "@/components/ui/confirm-dialog"
-import { Button } from "@/components/ui/button"
-import { Thumbnail } from "@/components/ui/thumbnail"
-import { EditGameForm } from "./edit-game-form"
-import type { Game } from "@/types"
+import { Modal, useModal, ConfirmDialog, Button, Thumbnail } from '@/components/ui'
+import { EditGameForm } from './edit-game-form'
+import type { Game } from '@/types'
 
 interface GameListRowProps {
   game: Game
@@ -18,13 +15,13 @@ export function GameListRow({ game, onDelete }: GameListRowProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between py-3 px-4 border-b border-pv-border last:border-b-0">
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-10 h-10 rounded-pv-sm overflow-hidden bg-pv-border shrink-0">
-            <Thumbnail src={game.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+      <div className="flex items-center justify-between border-b border-pv-border px-4 py-3 last:border-b-0">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="h-10 w-10 shrink-0 overflow-hidden rounded-pv-sm bg-pv-border">
+            <Thumbnail src={game.thumbnailUrl} alt="" className="h-full w-full object-cover" />
           </div>
-          <div className="flex flex-col gap-0.5 min-w-0">
-            <span className="text-sm font-medium text-pv-text truncate">{game.title}</span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="truncate text-sm font-medium text-pv-text">{game.title}</span>
             <span className="text-xs text-pv-muted">
               {game.genre} · {game._count.favorites} favorites
             </span>
@@ -51,7 +48,10 @@ export function GameListRow({ game, onDelete }: GameListRowProps) {
       <ConfirmDialog
         open={deleteOpen}
         onClose={closeDeleteModal}
-        onConfirm={() => { onDelete(game.id); closeDeleteModal() }}
+        onConfirm={() => {
+          onDelete(game.id)
+          closeDeleteModal()
+        }}
         title="Delete game"
         message={`Are you sure you want to delete "${game.title}"? This cannot be undone.`}
         confirmLabel="Delete"

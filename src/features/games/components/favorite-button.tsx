@@ -1,8 +1,8 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
-import { useOptimistic } from "react"
-import { toggleFavorite } from "@/features/games/server/actions"
+import { useRouter } from 'next/navigation'
+import { useOptimistic } from 'react'
+import { toggleFavorite } from '@/features/games/server/actions'
 
 function HeartIcon({ filled }: { filled: boolean }) {
   if (filled) {
@@ -14,7 +14,17 @@ function HeartIcon({ filled }: { filled: boolean }) {
   }
 
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
       <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
       <path d="M12 6l-2 4l4 3l-2 4v3" />
     </svg>
@@ -42,7 +52,7 @@ export function FavoriteButton({
     const result = await toggleFavorite(gameId)
     if (!result.success) {
       router.refresh()
-      if (result.code === "UNAUTHORIZED") {
+      if (result.code === 'UNAUTHORIZED') {
         router.push(`/sign-in?callbackUrl=/games`)
       }
       return
@@ -55,8 +65,8 @@ export function FavoriteButton({
     <form action={handleToggle} className="shrink-0">
       <button
         type="submit"
-        aria-label={optimisticFav ? "Remove from favorites" : "Add to favorites"}
-        className="w-[34px] h-[34px] flex items-center justify-center border-[2px] border-pv-border rounded-pv-sm bg-pv-card text-pv-heart hover:bg-pv-bg transition-colors"
+        aria-label={optimisticFav ? 'Remove from favorites' : 'Add to favorites'}
+        className="flex h-[34px] w-[34px] items-center justify-center rounded-pv-sm border-[2px] border-pv-border bg-pv-card text-pv-heart transition-colors hover:bg-pv-bg"
       >
         <HeartIcon filled={optimisticFav} />
       </button>

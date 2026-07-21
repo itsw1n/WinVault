@@ -1,13 +1,12 @@
-"use client"
+'use client'
 
-import { useRouter } from "next/navigation"
-import { Modal, useModal } from "@/components/ui/modal"
-import { Button } from "@/components/ui/button"
-import { GamesList } from "@/features/dashboard/components/games-list"
-import { FavoritesGrid } from "@/features/games/components/favorites-grid"
-import { CreateGameForm } from "@/features/dashboard/components/create-game-form"
-import type { Game, FavoriteGame } from "@/types"
-import { deleteGame, toggleFavorite } from "@/features/games/server/actions"
+import { useRouter } from 'next/navigation'
+import { Modal, useModal, Button } from '@/components/ui'
+import { GamesList } from '@/features/dashboard/components/games-list'
+import { FavoritesGrid } from '@/features/games/components/favorites-grid'
+import { CreateGameForm } from '@/features/dashboard/components/create-game-form'
+import type { Game, FavoriteGame } from '@/types'
+import { deleteGame, toggleFavorite } from '@/features/games/server/actions'
 
 export function DashboardNewGameButton() {
   const { open, openModal, closeModal } = useModal()

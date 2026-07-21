@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card"
+import { Card } from '@/components/ui'
 
 interface StatCardProps {
   label: string
@@ -7,13 +7,9 @@ interface StatCardProps {
 
 export function StatCard({ label, value }: StatCardProps) {
   return (
-    <Card className="p-4 flex flex-col gap-1">
-      <span className="text-xs font-bold uppercase tracking-wide text-pv-muted">
-        {label}
-      </span>
-      <span className="font-display text-3xl font-bold text-pv-text">
-        {value}
-      </span>
+    <Card className="flex flex-col gap-1 p-4">
+      <span className="text-xs font-bold uppercase tracking-wide text-pv-muted">{label}</span>
+      <span className="font-display text-3xl font-bold text-pv-text">{value}</span>
     </Card>
   )
 }
