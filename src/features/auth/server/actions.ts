@@ -3,13 +3,13 @@
 import { headers } from "next/headers"
 import { signIn, auth } from "@/lib/nextauth/auth"
 import { signUpSchema, signInSchema, updateProfileSchema } from "@/features/auth/schemas"
-import { createUser, updateUser } from "@/features/auth/server/mutations"
+import { createUser, updateUser, revokeSessions } from "@/features/auth/server/mutations"
+import { getUserPasswordHash } from "@/features/auth/server/queries"
 import { wrap, ok, fail } from "@/lib/errors"
 import { rateLimit } from "@/lib/nextauth/rate-limiter"
 import { hashPassword, verifyPassword } from "@/lib/password"
 import { AuthError } from "next-auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
 
 function getClientIp(headersList: Headers): string {
   return (
@@ -113,42 +113,28 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
       return fail("VALIDATION", "Both current and new password are required to change password")
     }
 
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { passwordHash: true } })
-    if (!user || !(await verifyPassword(currentPassword, user.passwordHash))) {
+    const pwResult = await wrap(() => getUserPasswordHash(userId))
+    if (!pwResult.success) return pwResult
+    if (!(await verifyPassword(currentPassword, pwResult.data))) {
       return fail("VALIDATION", "Current password is incorrect")
     }
 
     passwordHash = await hashPassword(newPassword)
   }
 
-  if (passwordHash) {
-    const result = await wrap(() =>
-      prisma.$transaction([
-        prisma.user.update({
-          where: { id: userId },
-          data: {
-            username: profile.username,
-            email: profile.email,
-            passwordHash,
-            tokenVersion: { increment: 1 },
-          },
-        }),
-      ])
-    )
-
-    if (!result.success) return result
-
-    return ok({ requiresReauth: true })
-  }
-
   const result = await wrap(() =>
     updateUser(userId, {
       username: profile.username,
       email: profile.email,
+      passwordHash,
     })
   )
 
   if (!result.success) return result
+
+  if (passwordHash) {
+    return ok({ requiresReauth: true })
+  }
 
   return result
 }
@@ -158,10 +144,8 @@ export async function revokeAllSessions() {
   const userId = session?.user?.id
   if (!userId) return fail("UNAUTHORIZED")
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: { tokenVersion: { increment: 1 } },
-  })
+  const result = await wrap(() => revokeSessions(userId))
+  if (!result.success) return result
 
   redirect("/sign-in")
 }

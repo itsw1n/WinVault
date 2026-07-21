@@ -45,5 +45,22 @@ export async function updateUser(
     if (taken) throw new ActionError("CONFLICT", "Email is already registered")
   }
 
+  if (data.passwordHash) {
+    return prisma.user.update({
+      where: { id },
+      data: { ...data, tokenVersion: { increment: 1 } },
+    })
+  }
+
   return prisma.user.update({ where: { id }, data })
+}
+
+export async function revokeSessions(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } })
+  if (!user) throw new ActionError("NOT_FOUND", "User not found")
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { tokenVersion: { increment: 1 } },
+  })
 }
