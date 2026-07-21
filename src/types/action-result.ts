@@ -1,10 +1,5 @@
 export type ErrorCode =
-  | "UNAUTHORIZED"
-  | "NOT_FOUND"
-  | "VALIDATION"
-  | "CONFLICT"
-  | "FORBIDDEN"
-  | "INTERNAL"
+  'UNAUTHORIZED' | 'NOT_FOUND' | 'VALIDATION' | 'CONFLICT' | 'FORBIDDEN' | 'INTERNAL'
 
 export type ActionResult<T = void> =
   | { success: true; data: T }

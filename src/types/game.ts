@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from '@prisma/client'
 
 export const gameInclude = {
   owner: { select: { username: true, avatarUrl: true } },
@@ -17,8 +17,6 @@ export const favoriteWithGameInclude = {
 } as const satisfies Prisma.FavoriteInclude
 
 export type Game = Prisma.GameGetPayload<{ include: typeof gameInclude }>
-
-export type GameDetail = Prisma.GameGetPayload<{ include: typeof gameDetailInclude }>
 
 export type FavoriteGame = Prisma.FavoriteGetPayload<{
   include: typeof favoriteWithGameInclude

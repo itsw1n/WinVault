@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from '@prisma/client'
 
 export const userProfileSelect = {
   id: true,
@@ -13,7 +13,3 @@ export const userWithGamesInclude = {
 } as const satisfies Prisma.UserInclude
 
 export type User = Prisma.UserGetPayload<{ select: typeof userProfileSelect }>
-
-export type UserWithGames = Prisma.UserGetPayload<{
-  include: typeof userWithGamesInclude
-}>

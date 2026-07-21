@@ -1,5 +1,5 @@
-export type { ErrorCode, ActionResult } from "./action-result"
-export type { Game, GameDetail, FavoriteGame } from "./game"
-export { gameInclude, gameDetailInclude } from "./game"
-export type { User, UserWithGames } from "./user"
-export { userProfileSelect, userWithGamesInclude } from "./user"
+export type { ErrorCode, ActionResult } from './action-result'
+export type { Game, FavoriteGame } from './game'
+export { gameInclude, gameDetailInclude } from './game'
+export type { User } from './user'
+export { userProfileSelect, userWithGamesInclude } from './user'
