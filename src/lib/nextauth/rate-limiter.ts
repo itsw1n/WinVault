@@ -1,10 +1,6 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from '@/lib/prisma'
 
-export async function rateLimit(
-  key: string,
-  limit: number,
-  windowMs: number
-): Promise<boolean> {
+export async function rateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
   const now = new Date()
   const resetAt = new Date(now.getTime() + windowMs)
 

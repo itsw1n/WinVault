@@ -1,15 +1,15 @@
-import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { verifyPassword } from "@/lib/password"
-import { prisma } from "@/lib/prisma"
+import NextAuth from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import { verifyPassword } from '@/lib/password'
+import { prisma } from '@/lib/prisma'
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, signIn, auth } = NextAuth({
   providers: [
     Credentials({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        login: { label: "Username or Email" },
-        password: { label: "Password", type: "password" },
+        login: { label: 'Username or Email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.login || !credentials?.password) return null
@@ -38,11 +38,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
     maxAge: 60 * 60 * 24 * 7,
   },
   pages: {
-    signIn: "/sign-in",
+    signIn: '/sign-in',
   },
   callbacks: {
     async jwt({ token, user, trigger }) {
@@ -55,7 +55,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.tokenVersion = dbUser?.tokenVersion ?? 0
       }
 
-      if (trigger === "update") {
+      if (trigger === 'update') {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { tokenVersion: true },
