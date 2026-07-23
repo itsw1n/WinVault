@@ -55,7 +55,7 @@ model Favorite {
   createdAt DateTime @default(now())
 
   @@unique([userId, gameId])
-  @@index([gameId])
+  @@index([createdAt, gameId])
 }
 
 model Comment {
