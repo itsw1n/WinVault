@@ -29,7 +29,8 @@ export function CommentItem({
     setDeleting(true)
     const formData = new FormData()
     formData.set('commentId', comment.id)
-    await removeComment(null, formData)
+    const result = await removeComment(null, formData)
+    if (!result.success) setDeleting(false)
   }
 
   if (editing) {
@@ -102,5 +103,9 @@ function formatTimeAgo(date: Date) {
   if (hours < 24) return `${hours}h ago`
   const days = Math.floor(hours / 24)
   if (days < 7) return `${days}d ago`
-  return new Date(date).toLocaleDateString()
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 }
