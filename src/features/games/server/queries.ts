@@ -20,7 +20,7 @@ export async function getTrendingGames() {
     by: ['gameId'],
     where: { createdAt: { gte: sevenDaysAgo } },
     _count: { id: true },
-    orderBy: { _count: { id: 'desc' } },
+    orderBy: [{ _count: { id: 'desc' } }, { gameId: 'asc' }],
     take: 6,
   })
 
