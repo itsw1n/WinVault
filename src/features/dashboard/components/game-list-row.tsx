@@ -18,7 +18,12 @@ export function GameListRow({ game, onDelete }: GameListRowProps) {
       <div className="flex items-center justify-between border-b border-pv-border px-4 py-3 last:border-b-0">
         <div className="flex min-w-0 items-center gap-3">
           <div className="h-10 w-10 shrink-0 overflow-hidden rounded-pv-sm bg-pv-border">
-            <Thumbnail src={game.thumbnailUrl} alt="" className="h-full w-full object-cover" />
+            <Thumbnail
+              src={game.thumbnailUrl}
+              alt=""
+              sizes="40px"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className="truncate text-sm font-medium text-pv-text">{game.title}</span>
