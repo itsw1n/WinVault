@@ -27,7 +27,7 @@ export async function checkUrlLocal(url: string): Promise<string | null> {
 
   if (!['http:', 'https:'].includes(parsed.protocol)) return 'Only http and https URLs are allowed'
 
-  const hostname = parsed.hostname.replace(/^www\./, '')
+  const hostname = parsed.hostname.replace(/^www\./, '').replace(/\.$/, '')
   const candidates = [hostname, ...getParentDomains(hostname)]
 
   const blocked = await prisma.blockedDomain.findFirst({
