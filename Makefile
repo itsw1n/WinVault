@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 .PHONY: dev stop restart logs rebuild reset-db migrate studio seed lint \
-        migrate-prod seed-prod build-prod deploy help
+        seed-blocklist migrate-prod seed-prod build-prod deploy help
 
 COMPOSE_DEV   = -f compose.yml -f compose.dev.yml
 
@@ -36,6 +36,12 @@ studio: ## Open Prisma Studio
 
 seed: ## Seed the database with sample data (dev)
 	docker compose $(COMPOSE_DEV) exec app npx prisma db seed
+
+seed-blocklist: ## Refresh BlockedDomain table (dev — local Docker)
+	npx env-cmd -f .env.development ts-node --compiler-options '{"module":"CommonJS"}' prisma/seed-blocklist.ts
+
+seed-blocklist-prod: ## Refresh BlockedDomain table (prod — Supabase)
+	npx env-cmd -f .env.production ts-node --compiler-options '{"module":"CommonJS"}' prisma/seed-blocklist.ts
 
 lint: ## Run ESLint
 	npm run lint
