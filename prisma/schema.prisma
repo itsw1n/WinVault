@@ -75,6 +75,10 @@ model Comment {
   @@index([gameId, parentId])
 }
 
+model BlockedDomain {
+  domain String @id
+}
+
 model RateLimit {
   key     String   @id
   count   Int      @default(1)
