@@ -142,6 +142,10 @@ async function main() {
   console.log('Seeded 5 users and 7 games')
 
   // --- Blocklist seeding ---
+  function normalizeDomain(domain: string): string {
+    return domain.replace(/^www\./, '').replace(/\.$/, '')
+  }
+
   console.log('Downloading blocklist...')
   const res = await fetch(
     'https://raw.githubusercontent.com/blocklistproject/Lists/master/porn.txt'
@@ -155,22 +159,27 @@ async function main() {
     if (!trimmed || trimmed.startsWith('#')) continue
     const parts = trimmed.split(/\s+/)
     if (parts.length >= 2) {
-      const domain = parts[1].toLowerCase()
+      const domain = normalizeDomain(parts[1].toLowerCase())
       if (domain) domains.push(domain)
     }
   }
 
   const BATCH_SIZE = 10_000
   let inserted = 0
-  for (let i = 0; i < domains.length; i += BATCH_SIZE) {
-    const batch = domains.slice(i, i + BATCH_SIZE)
-    await prisma.blockedDomain.createMany({
-      data: batch.map((domain) => ({ domain })),
-      skipDuplicates: true,
-    })
-    inserted += batch.length
-    process.stdout.write(`\rInserted ${inserted} / ${domains.length} blocked domains`)
-  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.blockedDomain.deleteMany()
+
+    for (let i = 0; i < domains.length; i += BATCH_SIZE) {
+      const batch = domains.slice(i, i + BATCH_SIZE)
+      await tx.blockedDomain.createMany({
+        data: batch.map((domain) => ({ domain })),
+      })
+      inserted += batch.length
+      process.stdout.write(`\rInserted ${inserted} / ${domains.length} blocked domains`)
+    }
+  })
+
   console.log(`\nSeeded ${inserted} blocked domains`)
 }
 

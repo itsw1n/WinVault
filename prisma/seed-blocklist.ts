@@ -2,6 +2,10 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+function normalizeDomain(domain: string): string {
+  return domain.replace(/^www\./, '').replace(/\.$/, '')
+}
+
 /** Download the upstream blocklist and replace the local BlockedDomain table. */
 async function main() {
   console.log('Downloading blocklist...')
@@ -17,24 +21,27 @@ async function main() {
     if (!trimmed || trimmed.startsWith('#')) continue
     const parts = trimmed.split(/\s+/)
     if (parts.length >= 2) {
-      const domain = parts[1].toLowerCase()
+      const domain = normalizeDomain(parts[1].toLowerCase())
       if (domain) domains.push(domain)
     }
   }
 
-  console.log(`Deleting ${await prisma.blockedDomain.count()} existing rows...`)
-  await prisma.blockedDomain.deleteMany()
-
   const BATCH_SIZE = 10_000
   let inserted = 0
-  for (let i = 0; i < domains.length; i += BATCH_SIZE) {
-    const batch = domains.slice(i, i + BATCH_SIZE)
-    await prisma.blockedDomain.createMany({
-      data: batch.map((domain) => ({ domain })),
-    })
-    inserted += batch.length
-    process.stdout.write(`\rInserted ${inserted} / ${domains.length} blocked domains`)
-  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.blockedDomain.deleteMany()
+
+    for (let i = 0; i < domains.length; i += BATCH_SIZE) {
+      const batch = domains.slice(i, i + BATCH_SIZE)
+      await tx.blockedDomain.createMany({
+        data: batch.map((domain) => ({ domain })),
+      })
+      inserted += batch.length
+      process.stdout.write(`\rInserted ${inserted} / ${domains.length} blocked domains`)
+    }
+  })
+
   console.log(`\nSeeded ${inserted} blocked domains`)
 }
 
