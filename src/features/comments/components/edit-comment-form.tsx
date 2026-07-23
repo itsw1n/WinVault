@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui'
 import { editComment } from '../server/actions'
 
@@ -14,7 +14,15 @@ export function EditCommentForm({
   onDone: () => void
 }) {
   const [content, setContent] = useState(initialContent)
-  const [, action, pending] = useActionState(editComment, null)
+  const [state, action, pending] = useActionState(editComment, null)
+  const onDoneRef = useRef(onDone)
+  useEffect(() => {
+    onDoneRef.current = onDone
+  }, [onDone])
+
+  useEffect(() => {
+    if (state?.success) onDoneRef.current()
+  }, [state])
 
   return (
     <form action={action} className="space-y-2">

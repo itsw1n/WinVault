@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui'
 import { addComment } from '../server/actions'
 
@@ -15,10 +15,18 @@ export function CommentForm({
   onDone?: () => void
   placeholder?: string
 }) {
-  const [, action, pending] = useActionState(addComment, null)
+  const [state, action, pending] = useActionState(addComment, null)
+  const onDoneRef = useRef(onDone)
+  useEffect(() => {
+    onDoneRef.current = onDone
+  }, [onDone])
+
+  useEffect(() => {
+    if (state?.success) onDoneRef.current?.()
+  }, [state])
 
   return (
-    <form action={action} onSubmit={onDone} className="space-y-2">
+    <form action={action} className="space-y-2">
       <input type="hidden" name="gameId" value={gameId} />
       {parentId && <input type="hidden" name="parentId" value={parentId} />}
       <textarea
