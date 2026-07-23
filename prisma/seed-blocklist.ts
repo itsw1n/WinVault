@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
+/** Download the upstream blocklist and replace the local BlockedDomain table. */
 async function main() {
   console.log('Downloading blocklist...')
   const res = await fetch(

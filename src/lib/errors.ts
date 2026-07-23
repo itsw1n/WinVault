@@ -9,6 +9,7 @@ const ErrorMessages: Record<ErrorCode, string> = {
   INTERNAL: 'Something went wrong',
 }
 
+/** Error with an ErrorCode that can be safely returned to the client. */
 export class ActionError extends Error {
   constructor(
     public readonly code: ErrorCode,
@@ -20,10 +21,12 @@ export class ActionError extends Error {
   }
 }
 
+/** Return a successful ActionResult wrapping the given data. */
 export function ok<T>(data: T): ActionResult<T> {
   return { success: true, data }
 }
 
+/** Return a failed ActionResult with the given error code and optional message. */
 export function fail(code: ErrorCode, message?: string, details?: unknown): ActionResult<never> {
   return {
     success: false,
@@ -33,6 +36,7 @@ export function fail(code: ErrorCode, message?: string, details?: unknown): Acti
   }
 }
 
+/** Execute an async function and wrap its result or thrown ActionError in an ActionResult. */
 export async function wrap<T>(fn: () => Promise<T>): Promise<ActionResult<T>> {
   try {
     const data = await fn()

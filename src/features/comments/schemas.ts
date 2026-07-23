@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+/** Zod schema for validating comment creation. */
 export const createCommentSchema = z.object({
   content: z
     .string()
@@ -9,6 +10,7 @@ export const createCommentSchema = z.object({
   parentId: z.string().optional(),
 })
 
+/** Zod schema for validating comment edits. */
 export const updateCommentSchema = z.object({
   commentId: z.string(),
   content: z

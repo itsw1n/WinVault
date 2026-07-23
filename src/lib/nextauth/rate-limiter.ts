@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 
+/** Check if an action is within rate limits. Returns true if allowed, false if rate-limited. */
 export async function rateLimit(key: string, limit: number, windowMs: number): Promise<boolean> {
   const now = new Date()
   const resetAt = new Date(now.getTime() + windowMs)

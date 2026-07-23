@@ -8,6 +8,7 @@ import { createComment, updateComment, deleteComment } from './mutations'
 import { getCommentWithGame } from './queries'
 import type { ActionResult } from '@/types'
 
+/** Add a comment or reply to a game. Requires authentication. */
 export async function addComment(_prevState: ActionResult<unknown> | null, formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) return fail('UNAUTHORIZED')
@@ -35,6 +36,7 @@ export async function addComment(_prevState: ActionResult<unknown> | null, formD
   return { success: true, data: result.data } as const
 }
 
+/** Edit an existing comment. Only the author can edit. */
 export async function editComment(_prevState: ActionResult<unknown> | null, formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) return fail('UNAUTHORIZED')
@@ -58,6 +60,7 @@ export async function editComment(_prevState: ActionResult<unknown> | null, form
   return { success: true, data: result.data } as const
 }
 
+/** Delete a comment. The author or game owner can delete. */
 export async function removeComment(_prevState: ActionResult<unknown> | null, formData: FormData) {
   const session = await auth()
   if (!session?.user?.id) return fail('UNAUTHORIZED')

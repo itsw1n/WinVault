@@ -10,6 +10,10 @@ import { uploadThumbnail, deleteThumbnail } from '@/lib/storage'
 import { wrap, fail } from '@/lib/errors'
 import { revalidatePath } from 'next/cache'
 
+/**
+ * Create a new game listing.
+ * Validates input against the blocklist and Safe Browsing before persisting.
+ */
 export async function createGame(_prev: unknown, formData: FormData) {
   const session = await auth()
   const userId = session?.user?.id
@@ -56,6 +60,10 @@ export async function createGame(_prev: unknown, formData: FormData) {
   return result
 }
 
+/**
+ * Update an existing game listing.
+ * Ownership is verified before allowing the update.
+ */
 export async function updateGame(_prev: unknown, formData: FormData) {
   const session = await auth()
   const userId = session?.user?.id
@@ -111,6 +119,7 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   return result
 }
 
+/** Delete a game listing. Ownership is verified before proceeding. */
 export async function deleteGame(id: string) {
   const session = await auth()
   const userId = session?.user?.id
@@ -130,6 +139,7 @@ export async function deleteGame(id: string) {
   return result
 }
 
+/** Toggle a user's favorite status for a game. */
 export async function toggleFavorite(gameId: string) {
   const session = await auth()
   const userId = session?.user?.id

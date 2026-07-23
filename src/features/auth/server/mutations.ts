@@ -3,6 +3,7 @@ import { hashPassword } from '@/lib/password'
 import { ActionError } from '@/lib/errors'
 import { isUsernameTaken, isEmailTaken } from '@/features/auth/server/queries'
 
+/** Create a new user with hashed password. Throws CONFLICT if username or email is taken. */
 export async function createUser(username: string, email: string, password: string) {
   const [usernameTaken, emailTaken] = await Promise.all([
     isUsernameTaken(username),
@@ -19,6 +20,7 @@ export async function createUser(username: string, email: string, password: stri
   })
 }
 
+/** Update a user's profile. Increments tokenVersion if password changes. */
 export async function updateUser(
   id: string,
   data: {
@@ -51,6 +53,7 @@ export async function updateUser(
   return prisma.user.update({ where: { id }, data })
 }
 
+/** Invalidate all active sessions for a user by incrementing their token version. */
 export async function revokeSessions(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user) throw new ActionError('NOT_FOUND', 'User not found')

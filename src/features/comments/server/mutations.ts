@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import { ActionError } from '@/lib/errors'
 
+/** Create a new comment (or reply) on a game. */
 export async function createComment(data: {
   content: string
   userId: string
@@ -28,6 +29,7 @@ export async function createComment(data: {
   return comment
 }
 
+/** Update a comment's content. Throws NOT_FOUND if it doesn't exist. */
 export async function updateComment(commentId: string, content: string) {
   try {
     const comment = await prisma.comment.update({
@@ -50,6 +52,7 @@ export async function updateComment(commentId: string, content: string) {
   }
 }
 
+/** Delete a comment by ID. Throws NOT_FOUND if it doesn't exist. */
 export async function deleteComment(commentId: string) {
   try {
     await prisma.comment.deleteMany({ where: { id: commentId } })

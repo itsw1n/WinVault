@@ -17,6 +17,7 @@ function createClient(): S3Client | null {
 
 const client = createClient()
 
+/** Upload a thumbnail buffer to S3 storage. Returns the public URL or null. */
 export async function uploadThumbnail(
   buffer: Buffer,
   mimeType: string,
@@ -36,6 +37,7 @@ export async function uploadThumbnail(
   return `${env.STORAGE_PUBLIC_URL}/${fileName}`
 }
 
+/** Delete a thumbnail from S3 storage by its public URL. */
 export async function deleteThumbnail(url: string) {
   if (!client || !env.STORAGE_PUBLIC_URL) return
 
