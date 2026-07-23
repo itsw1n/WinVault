@@ -4,7 +4,7 @@ import { auth } from '@/lib/nextauth/auth'
 import { createGameSchema, updateGameSchema } from '@/features/games/schemas'
 import * as mutations from '@/features/games/server/mutations'
 import * as queries from '@/features/games/server/queries'
-import { checkUrlRemote } from '@/lib/security/url-safety'
+import { checkUrlLocal, checkUrlRemote } from '@/lib/security/url-safety'
 import { processThumbnail } from '@/lib/process-thumbnail'
 import { uploadThumbnail, deleteThumbnail } from '@/lib/storage'
 import { wrap, fail } from '@/lib/errors'
@@ -40,6 +40,9 @@ export async function createGame(_prev: unknown, formData: FormData) {
   if (!parsed.success) {
     return fail('VALIDATION', parsed.error.errors[0].message)
   }
+
+  const blocklistReason = await checkUrlLocal(parsed.data.externalUrl)
+  if (blocklistReason) return fail('VALIDATION', blocklistReason)
 
   const sbReason = await checkUrlRemote(parsed.data.externalUrl)
   if (sbReason) return fail('VALIDATION', sbReason)
@@ -91,6 +94,9 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   if (!parsed.success) {
     return fail('VALIDATION', parsed.error.errors[0].message)
   }
+
+  const blocklistReason = await checkUrlLocal(parsed.data.externalUrl)
+  if (blocklistReason) return fail('VALIDATION', blocklistReason)
 
   const sbReasonUpdate = await checkUrlRemote(parsed.data.externalUrl)
   if (sbReasonUpdate) return fail('VALIDATION', sbReasonUpdate)

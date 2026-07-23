@@ -1,17 +1,10 @@
 import { z } from 'zod'
-import { checkUrlLocal } from '@/lib/security/url-safety'
 
 export const createGameSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100),
   thumbnailUrl: z.string().url('Must be a valid URL').or(z.literal('')),
   shortDescription: z.string().min(1, 'Description is required').max(500),
-  externalUrl: z
-    .string()
-    .url('Must be a valid URL')
-    .superRefine((val, ctx) => {
-      const reason = checkUrlLocal(val)
-      if (reason) ctx.addIssue({ code: z.ZodIssueCode.custom, message: reason })
-    }),
+  externalUrl: z.string().url('Must be a valid URL'),
   genre: z.string().min(1, 'Genre is required'),
   tags: z
     .string()
