@@ -1,19 +1,36 @@
-import { BLOCKED_DOMAINS } from './blocklist'
 import { env } from '@/lib/env'
+import { prisma } from '@/lib/prisma'
 
 const SAFE_BROWSING_URL = 'https://safebrowsing.googleapis.com/v4/threatMatches:find'
 
-export function checkUrlLocal(url: string): string | null {
+function getParentDomains(hostname: string): string[] {
+  const parts = hostname.split('.')
+  const parents: string[] = []
+  for (let i = 1; i < parts.length - 1; i++) {
+    parents.push(parts.slice(i).join('.'))
+  }
+  return parents
+}
+
+export async function checkUrlLocal(url: string): Promise<string | null> {
+  let parsed: URL
   try {
-    const parsed = new URL(url)
-    if (!['http:', 'https:'].includes(parsed.protocol))
-      return 'Only http and https URLs are allowed'
-    const hostname = parsed.hostname.replace(/^www\./, '')
-    if (BLOCKED_DOMAINS.some((d) => hostname === d || hostname.endsWith(`.${d}`)))
-      return 'This domain is not allowed'
+    parsed = new URL(url)
   } catch {
     return 'Invalid URL'
   }
+
+  if (!['http:', 'https:'].includes(parsed.protocol)) return 'Only http and https URLs are allowed'
+
+  const hostname = parsed.hostname.replace(/^www\./, '')
+  const candidates = [hostname, ...getParentDomains(hostname)]
+
+  const blocked = await prisma.blockedDomain.findFirst({
+    where: { domain: { in: candidates } },
+  })
+
+  if (blocked) return 'This domain is not allowed'
+
   return null
 }
 
