@@ -7,5 +7,7 @@ COPY package.json package-lock.json ./
 COPY prisma ./prisma
 RUN npm ci
 RUN npx prisma generate
+RUN chown -R node:node /app
+USER node
 EXPOSE 3000
 CMD ["npm", "run", "dev"]
