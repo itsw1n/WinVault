@@ -2,11 +2,20 @@
 
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/nextauth/auth'
-import { wrap, fail } from '@/lib/errors'
+import { wrap, fail, ActionError } from '@/lib/errors'
 import { createCommentSchema, updateCommentSchema } from '../schemas'
 import { createComment, updateComment, deleteComment } from './mutations'
 import { getCommentWithGame } from './queries'
 import type { ActionResult } from '@/types'
+
+async function getCommentOrNull(commentId: string) {
+  try {
+    return await getCommentWithGame(commentId)
+  } catch (error) {
+    if (error instanceof ActionError && error.code === 'NOT_FOUND') return null
+    throw error
+  }
+}
 
 /** Add a comment or reply to a game. Requires authentication. */
 export async function addComment(_prevState: ActionResult<unknown> | null, formData: FormData) {
@@ -49,7 +58,7 @@ export async function editComment(_prevState: ActionResult<unknown> | null, form
   const parsed = updateCommentSchema.safeParse(raw)
   if (!parsed.success) return fail('VALIDATION', parsed.error.errors[0]?.message)
 
-  const comment = await getCommentWithGame(parsed.data.commentId).catch(() => null)
+  const comment = await getCommentOrNull(parsed.data.commentId)
   if (!comment) return fail('NOT_FOUND')
   if (comment.userId !== session.user.id) return fail('FORBIDDEN')
 
@@ -68,7 +77,7 @@ export async function removeComment(_prevState: ActionResult<unknown> | null, fo
   const commentId = formData.get('commentId')
   if (typeof commentId !== 'string' || !commentId) return fail('VALIDATION')
 
-  const comment = await getCommentWithGame(commentId).catch(() => null)
+  const comment = await getCommentOrNull(commentId)
   if (!comment) return fail('NOT_FOUND')
 
   const isAuthor = comment.userId === session.user.id

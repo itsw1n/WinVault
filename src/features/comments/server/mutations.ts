@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client'
+
 import { prisma } from '@/lib/prisma'
 import { ActionError } from '@/lib/errors'
 
@@ -8,6 +10,16 @@ export async function createComment(data: {
   gameId: string
   parentId?: string
 }) {
+  if (data.parentId) {
+    const parent = await prisma.comment.findUnique({
+      where: { id: data.parentId },
+      select: { gameId: true },
+    })
+    if (!parent) throw new ActionError('NOT_FOUND', 'Parent comment not found')
+    if (parent.gameId !== data.gameId)
+      throw new ActionError('VALIDATION', 'Parent comment belongs to a different game')
+  }
+
   const comment = await prisma.comment.create({
     data: {
       content: data.content,
@@ -47,16 +59,16 @@ export async function updateComment(commentId: string, content: string) {
       },
     })
     return comment
-  } catch {
-    throw new ActionError('NOT_FOUND', 'Comment not found')
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+      throw new ActionError('NOT_FOUND', 'Comment not found')
+    }
+    throw error
   }
 }
 
 /** Delete a comment by ID. Throws NOT_FOUND if it doesn't exist. */
 export async function deleteComment(commentId: string) {
-  try {
-    await prisma.comment.deleteMany({ where: { id: commentId } })
-  } catch {
-    throw new ActionError('NOT_FOUND', 'Comment not found')
-  }
+  const result = await prisma.comment.deleteMany({ where: { id: commentId } })
+  if (result.count === 0) throw new ActionError('NOT_FOUND', 'Comment not found')
 }
