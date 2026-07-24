@@ -1,0 +1,14 @@
+#!/bin/sh
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Allow dev to push anywhere
+[ "$branch" = "dev" ] && exit 0
+
+# Only block pushes to main from non-dev branches
+echo "$@" | grep -q "refs/heads/main" || exit 0
+
+echo "$branch" | grep -qE '^(feat|fix|chore|refactor|docs|style|test)/' && {
+  echo "❌ Direct push to main from '$branch' is not allowed."
+  echo "   Use a PR: https://github.com/itsw1n/WinVault/compare/main...$branch"
+  exit 1
+}
