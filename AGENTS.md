@@ -58,10 +58,7 @@ These are hard constraints. Violating them will break the project.
 
 - Always use a PR to merge `dev` → `main` unless explicitly told "push directly" or "merge directly"
 - Exception allowed for small urgent fixes when the user explicitly asks for a direct merge
-
-### AI policy
-
-**Suggest git commands, never run them.** Present the proposed command and wait for approval: "I suggest running `git add <file>` then `git commit -m "..."`. Shall I proceed?"
+- **Suggest git commands, never run them.** Present the proposed command and wait for approval: "I suggest running `git add <file>` then `git commit -m "..."`. Shall I proceed?"
 
 ---
 
@@ -377,8 +374,8 @@ Utility:
 
 ### Linting
 
-- ESLint is configured via `.eslintrc.json` with `{ "extends": "next/core-web-vitals" }` (ESLint 9).
-- Run `make lint` after every change (maps to `npm run lint` which runs `next lint`).
+- ESLint is configured via `eslint.config.js` (ESLint 9) with the Next.js core-web-vitals preset.
+- Run `make lint` after every change (maps to `npm run lint` which runs `eslint .`).
 - Never present code as complete if it contains ESLint violations.
 
 ### TypeScript
