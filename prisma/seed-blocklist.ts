@@ -26,6 +26,10 @@ async function main() {
     }
   }
 
+  const unique = [...new Set(domains)]
+  domains.length = 0
+  domains.push(...unique)
+
   const BATCH_SIZE = 10_000
   let inserted = 0
 
