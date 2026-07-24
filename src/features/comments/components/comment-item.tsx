@@ -29,8 +29,12 @@ export function CommentItem({
     setDeleting(true)
     const formData = new FormData()
     formData.set('commentId', comment.id)
-    const result = await removeComment(null, formData)
-    if (!result.success) setDeleting(false)
+    try {
+      const result = await removeComment(null, formData)
+      if (!result.success) setDeleting(false)
+    } catch {
+      setDeleting(false)
+    }
   }
 
   if (editing) {
