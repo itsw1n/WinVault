@@ -139,5 +139,5 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
     return ok({ requiresReauth: true })
   }
 
-  return result
+  return ok({})
 }
