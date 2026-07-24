@@ -54,7 +54,11 @@ export function CreateGameForm({ onSuccess }: CreateGameFormProps) {
     const result = await createGame(undefined, formData)
 
     if (!result.success) {
-      setError('root', { message: result.message })
+      if (result.details && typeof result.details === 'object' && 'field' in result.details) {
+        setError((result.details as { field: 'externalUrl' }).field, { message: result.message })
+      } else {
+        setError('root', { message: result.message })
+      }
       return
     }
 

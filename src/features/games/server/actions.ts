@@ -46,10 +46,10 @@ export async function createGame(_prev: unknown, formData: FormData) {
   }
 
   const blocklistReason = await checkUrlLocal(parsed.data.externalUrl)
-  if (blocklistReason) return fail('VALIDATION', blocklistReason)
+  if (blocklistReason) return fail('VALIDATION', blocklistReason, { field: 'externalUrl' })
 
   const sbReason = await checkUrlRemote(parsed.data.externalUrl)
-  if (sbReason) return fail('VALIDATION', sbReason)
+  if (sbReason) return fail('VALIDATION', sbReason, { field: 'externalUrl' })
 
   const result = await wrap(() => mutations.createGame({ ...parsed.data, ownerId: userId }))
 
@@ -104,10 +104,10 @@ export async function updateGame(_prev: unknown, formData: FormData) {
   }
 
   const blocklistReason = await checkUrlLocal(parsed.data.externalUrl)
-  if (blocklistReason) return fail('VALIDATION', blocklistReason)
+  if (blocklistReason) return fail('VALIDATION', blocklistReason, { field: 'externalUrl' })
 
   const sbReasonUpdate = await checkUrlRemote(parsed.data.externalUrl)
-  if (sbReasonUpdate) return fail('VALIDATION', sbReasonUpdate)
+  if (sbReasonUpdate) return fail('VALIDATION', sbReasonUpdate, { field: 'externalUrl' })
 
   const { id, ...data } = parsed.data
 
