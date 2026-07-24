@@ -1,17 +1,11 @@
 import { z } from 'zod'
-import { checkUrlLocal } from '@/lib/security/url-safety'
 
+/** Zod schema for validating game creation form data. */
 export const createGameSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100),
   thumbnailUrl: z.string().url('Must be a valid URL').or(z.literal('')),
   shortDescription: z.string().min(1, 'Description is required').max(500),
-  externalUrl: z
-    .string()
-    .url('Must be a valid URL')
-    .superRefine((val, ctx) => {
-      const reason = checkUrlLocal(val)
-      if (reason) ctx.addIssue({ code: z.ZodIssueCode.custom, message: reason })
-    }),
+  externalUrl: z.string().url('Must be a valid URL'),
   genre: z.string().min(1, 'Genre is required'),
   tags: z
     .string()
@@ -25,10 +19,12 @@ export const createGameSchema = z.object({
     .pipe(z.array(z.string().max(30, 'Each tag must be at most 30 characters')).max(10)),
 })
 
+/** Zod schema for validating game update form data (extends create with an id field). */
 export const updateGameSchema = createGameSchema.extend({
   id: z.string(),
 })
 
+/** Available game genre options for the listing form. */
 export const GENRES = [
   'Action',
   'Adventure',

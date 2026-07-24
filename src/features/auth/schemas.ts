@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+/** Zod schema for registering a new account (includes password confirmation). */
 export const signUpSchema = z
   .object({
     username: z
@@ -21,11 +22,13 @@ export const signUpSchema = z
     path: ['confirmPassword'],
   })
 
+/** Zod schema for sign-in (username/email + password). */
 export const signInSchema = z.object({
   login: z.string().min(1, 'Username or email is required'),
   password: z.string().min(1, 'Password is required'),
 })
 
+/** Zod schema for updating profile fields (optional password change). */
 export const updateProfileSchema = z.object({
   username: z
     .string()

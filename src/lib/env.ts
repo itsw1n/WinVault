@@ -15,8 +15,15 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse(process.env)
 
 if (!parsed.success) {
-  console.error('Invalid environment variables:', parsed.error.flatten().fieldErrors)
+  const errors = parsed.error.flatten().fieldErrors
+  console.error('Missing or invalid environment variables:', JSON.stringify(errors, null, 2))
+  process.exit(1)
 }
 
 type Env = z.infer<typeof envSchema>
-export const env: Env = parsed.success ? parsed.data : ({} as Env)
+
+/**
+ * Validated environment variables.
+ * Exits with a clear error listing missing vars if validation fails.
+ */
+export const env: Env = parsed.data

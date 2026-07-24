@@ -7,9 +7,12 @@ interface ThumbnailProps {
   src: string
   alt: string
   className?: string
+  sizes?: string
 }
 
-export function Thumbnail({ src, alt, className = '' }: ThumbnailProps) {
+const DEFAULT_SIZES = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+
+export function Thumbnail({ src, alt, className = '', sizes = DEFAULT_SIZES }: ThumbnailProps) {
   const [imgError, setImgError] = useState(false)
 
   if (!src || imgError) {
@@ -31,7 +34,7 @@ export function Thumbnail({ src, alt, className = '' }: ThumbnailProps) {
         fill
         className="object-cover"
         onError={() => setImgError(true)}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes={sizes}
       />
     </div>
   )

@@ -19,6 +19,7 @@ function getClientIp(headersList: Headers): string {
   )
 }
 
+/** Authenticate a user with credentials and redirect to callbackUrl. Rate-limited per IP. */
 export async function signInAction(callbackUrl: string, _prev: unknown, formData: FormData) {
   const ip = getClientIp(await headers())
   if (!(await rateLimit(`signin:${ip}`, 5, 15 * 60 * 1000))) {
@@ -50,6 +51,7 @@ export async function signInAction(callbackUrl: string, _prev: unknown, formData
   redirect(callbackUrl)
 }
 
+/** Register a new account and auto-sign-in. Rate-limited per IP. */
 export async function signUp(_prev: unknown, formData: FormData) {
   const ip = getClientIp(await headers())
   if (!(await rateLimit(`signup:${ip}`, 5, 15 * 60 * 1000))) {
@@ -89,6 +91,7 @@ export async function signUp(_prev: unknown, formData: FormData) {
   redirect('/dashboard')
 }
 
+/** Update the authenticated user's profile. Password change requires current password verification. */
 export async function updateProfile(_prev: unknown, formData: FormData) {
   const session = await auth()
   const userId = session?.user?.id
@@ -136,5 +139,5 @@ export async function updateProfile(_prev: unknown, formData: FormData) {
     return ok({ requiresReauth: true })
   }
 
-  return result
+  return ok({})
 }

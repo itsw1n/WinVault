@@ -1,6 +1,7 @@
 import sharp from 'sharp'
 import { ActionError } from '@/lib/errors'
 
+/** Resize and convert an uploaded thumbnail to WebP (1280x720 max). */
 export async function processThumbnail(file: File): Promise<{
   buffer: Buffer
   mimeType: string

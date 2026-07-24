@@ -46,6 +46,7 @@ export default async function GameDetailPage(props: { params: Promise<{ id: stri
           <Thumbnail
             src={game.thumbnailUrl}
             alt={game.title}
+            sizes="(max-width: 1023px) 100vw, 50vw"
             className="aspect-[16/10] w-full object-cover"
           />
         </Card>

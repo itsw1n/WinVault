@@ -14,10 +14,10 @@ Publish your game, find something new, favorite the ones you love. No store fees
 
 ## Architecture
 
-| Environment | Stack |
-|---|---|
-| **Development** | Docker Compose (Postgres + MinIO + Next.js) |
-| **Production** | Vercel (hosting) + Supabase (PostgreSQL + S3 Storage) |
+| Environment     | Stack                                                 |
+| --------------- | ----------------------------------------------------- |
+| **Development** | Docker Compose (Postgres + MinIO + Next.js)           |
+| **Production**  | Vercel (hosting) + Supabase (PostgreSQL + S3 Storage) |
 
 ## Local dev
 
@@ -31,23 +31,28 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### Commands
 
-| `make dev` | Start development environment |
-|------------|-------------------------------|
-| `make stop` | Stop development environment |
-| `make restart` | Restart development environment |
-| `make logs` | Tail all logs |
-| `make rebuild` | Rebuild Docker images and restart |
-| `make reset-db` | Wipe volumes, restart, auto-migrate |
-| `make migrate name=xyz` | Create + apply a migration |
-| `make studio` | Open Prisma Studio |
-| `make seed` | Seed sample data |
-| `make lint` | Run ESLint |
+| `make dev`              | Start development environment              |
+| ----------------------- | ------------------------------------------ |
+| `make stop`             | Stop development environment               |
+| `make restart`          | Restart development environment            |
+| `make logs`             | Tail all logs                              |
+| `make rebuild`          | Rebuild Docker images and restart          |
+| `make reset-db`         | Wipe volumes, restart, auto-migrate        |
+| `make migrate name=xyz` | Create + apply a migration                 |
+| `make studio`           | Open Prisma Studio                         |
+| `make seed`             | Seed sample data                           |
+| `make lint`             | Run ESLint                                 |
+| `make migrate-prod`     | Apply migrations to Supabase production DB |
+| `make seed-prod`        | Seed the Supabase production DB            |
+| `make build-prod`       | Build for production                       |
+| `make deploy`           | `npx vercel --prod`                        |
 
 ## Deploy (Vercel + Supabase)
 
 ### 1. Create a Supabase project
 
 Go to [supabase.com](https://supabase.com) and create a new project. Once it's ready, go to **Settings → Database** and copy:
+
 - **Connection Pooling URI** → `DATABASE_URL`
 - **Direct Connection** → `DIRECT_URL`
 
@@ -55,20 +60,22 @@ Then go to **Settings → Storage → S3 Compatibility** and copy the access key
 
 ### 2. Set environment variables in Vercel
 
+> All environment variables are documented in [`.env.example`](.env.example).
+
 In the **Vercel Dashboard → Settings → Environment Variables**, add these (all marked **Production**):
 
-| Variable | Required | Value |
-|---|---|---|
-| `DATABASE_URL` | Yes | Supabase pooled connection string |
-| `DIRECT_URL` | Yes | Supabase direct connection string |
-| `AUTH_SECRET` | Yes | Run `openssl rand -base64 32` and paste the output |
-| `NEXT_PUBLIC_APP_URL` | Yes | `https://your-project.vercel.app` |
-| `STORAGE_ENDPOINT` | Yes | `https://[PROJECT].supabase.co/storage/v1/s3` |
-| `STORAGE_ACCESS_KEY` | Yes | From Supabase Storage S3 settings |
-| `STORAGE_SECRET_KEY` | Yes | From Supabase Storage S3 settings |
-| `STORAGE_BUCKET` | Yes | `thumbnails` |
-| `STORAGE_PUBLIC_URL` | Yes | `https://[PROJECT].supabase.co/storage/v1/object/public/thumbnails` |
-| `GOOGLE_SAFE_BROWSING_API_KEY` | No | Leave empty or set to `not-configured` |
+| Variable                       | Required | Value                                                               |
+| ------------------------------ | -------- | ------------------------------------------------------------------- |
+| `DATABASE_URL`                 | Yes      | Supabase pooled connection string                                   |
+| `DIRECT_URL`                   | Yes      | Supabase direct connection string                                   |
+| `AUTH_SECRET`                  | Yes      | Run `openssl rand -base64 32` and paste the output                  |
+| `NEXT_PUBLIC_APP_URL`          | Yes      | `https://your-project.vercel.app`                                   |
+| `STORAGE_ENDPOINT`             | Yes      | `https://[PROJECT].supabase.co/storage/v1/s3`                       |
+| `STORAGE_ACCESS_KEY`           | Yes      | From Supabase Storage S3 settings                                   |
+| `STORAGE_SECRET_KEY`           | Yes      | From Supabase Storage S3 settings                                   |
+| `STORAGE_BUCKET`               | Yes      | `thumbnails`                                                        |
+| `STORAGE_PUBLIC_URL`           | Yes      | `https://[PROJECT].supabase.co/storage/v1/object/public/thumbnails` |
+| `GOOGLE_SAFE_BROWSING_API_KEY` | No       | Leave empty or set to `not-configured`                              |
 
 ### 3. Connect your repo to Vercel
 
@@ -84,6 +91,15 @@ make deploy         # npx vercel --prod
 
 These steps are **intentionally separate** — if a migration fails, you fix it and retry without redeploying.
 
+## CI / Quality
+
+On every push or PR, a GitHub Action runs:
+
+- **TypeScript** (`tsc --noEmit`)
+- **ESLint** (`eslint .`)
+
+A Husky pre-commit hook auto-formats staged files via lint-staged. PRs to `main` require passing CI.
+
 ## Layout
 
 ```
@@ -97,6 +113,7 @@ src/
 ├── features/              # Feature-based modules
 │   ├── auth/              #   actions, mutations, queries, schemas, components
 │   ├── games/             #   actions, mutations, queries, schemas, components
+│   ├── comments/          #   threaded replies on game pages
 │   └── dashboard/         #   components (game forms, stats, list)
 ├── hooks/                 # useModal
 ├── lib/                   # Auth config, Prisma, env, errors, storage, utils

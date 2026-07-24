@@ -3,6 +3,7 @@ import { commentWithRepliesSelect } from '@/types'
 import { ActionError } from '@/lib/errors'
 import type { CommentWithReplies } from '@/types'
 
+/** Fetch top-level comments for a game, each with nested replies. */
 export async function getCommentsByGameId(gameId: string): Promise<CommentWithReplies[]> {
   const comments = await prisma.comment.findMany({
     where: { gameId, parentId: null },
@@ -12,6 +13,7 @@ export async function getCommentsByGameId(gameId: string): Promise<CommentWithRe
   return comments
 }
 
+/** Fetch the author ID of a comment. Throws NOT_FOUND if missing. */
 export async function getCommentAuthorId(commentId: string): Promise<string> {
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
@@ -21,6 +23,7 @@ export async function getCommentAuthorId(commentId: string): Promise<string> {
   return comment.userId
 }
 
+/** Fetch a comment's userId and gameId (with ownerId). Throws NOT_FOUND if missing. */
 export async function getCommentWithGame(commentId: string) {
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },

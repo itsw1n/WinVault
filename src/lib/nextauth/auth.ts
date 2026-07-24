@@ -3,6 +3,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { verifyPassword } from '@/lib/password'
 import { prisma } from '@/lib/prisma'
 
+/** NextAuth configuration with credentials strategy, JWT sessions, and token-version invalidation. */
 export const { handlers, signIn, auth } = NextAuth({
   providers: [
     Credentials({

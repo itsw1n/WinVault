@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { ActionError } from '@/lib/errors'
 import { gameInclude, gameDetailInclude } from '@/types'
 
+/** Return up to 6 featured games. */
 export async function getFeaturedGames() {
   return prisma.game.findMany({
     where: { isFeatured: true },
@@ -11,6 +12,7 @@ export async function getFeaturedGames() {
   })
 }
 
+/** Return up to 6 games with the most favorites in the last 7 days. */
 export async function getTrendingGames() {
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
 
@@ -18,7 +20,7 @@ export async function getTrendingGames() {
     by: ['gameId'],
     where: { createdAt: { gte: sevenDaysAgo } },
     _count: { id: true },
-    orderBy: { _count: { id: 'desc' } },
+    orderBy: [{ _count: { id: 'desc' } }, { gameId: 'asc' }],
     take: 6,
   })
 
@@ -33,6 +35,7 @@ export async function getTrendingGames() {
   return games.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0))
 }
 
+/** Return up to 6 most recently created games. */
 export async function getNewReleases() {
   return prisma.game.findMany({
     include: gameInclude,
@@ -41,6 +44,7 @@ export async function getNewReleases() {
   })
 }
 
+/** Search and filter games by query and genre. */
 export async function getGames(params: { search?: string; genre?: string; take?: number }) {
   const where: Record<string, unknown> = {}
 
@@ -59,6 +63,7 @@ export async function getGames(params: { search?: string; genre?: string; take?:
   })
 }
 
+/** Fetch a single game by ID. Throws NOT_FOUND if missing. */
 export async function getGameById(id: string) {
   const game = await prisma.game.findUnique({
     where: { id },
@@ -69,6 +74,7 @@ export async function getGameById(id: string) {
   return game
 }
 
+/** Fetch all games owned by a specific user. */
 export async function getGamesByOwner(ownerId: string) {
   return prisma.game.findMany({
     where: { ownerId },
@@ -77,6 +83,7 @@ export async function getGamesByOwner(ownerId: string) {
   })
 }
 
+/** Count total favorites received across all games owned by a user. */
 export async function getTotalFavoritesReceived(userId: string) {
   const result = await prisma.favorite.aggregate({
     _count: { id: true },
@@ -87,14 +94,17 @@ export async function getTotalFavoritesReceived(userId: string) {
   return result._count.id
 }
 
+/** Count how many games a user has published. */
 export async function getPublishedGameCount(ownerId: string) {
   return prisma.game.count({ where: { ownerId } })
 }
 
+/** Count how many games a user has favorited. */
 export async function getFavoritedGameCount(userId: string) {
   return prisma.favorite.count({ where: { userId } })
 }
 
+/** Fetch all favorite records for a user with full game data. */
 export async function getGamesFavoritedByUser(userId: string) {
   return prisma.favorite.findMany({
     where: { userId },
@@ -107,12 +117,14 @@ export async function getGamesFavoritedByUser(userId: string) {
   })
 }
 
+/** Count distinct users who have published at least one game. */
 export async function getDeveloperCount() {
   return prisma.user.count({
     where: { games: { some: {} } },
   })
 }
 
+/** Return array of game IDs that a user has favorited. */
 export async function getFavoritedGameIds(userId: string): Promise<string[]> {
   const favorites = await prisma.favorite.findMany({
     where: { userId },
