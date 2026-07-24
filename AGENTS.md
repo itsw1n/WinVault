@@ -34,18 +34,31 @@ These are hard constraints. Violating them will break the project.
 ## Section 3 — Git Rules
 
 ### Branching
-- `main` — default branch, deployable at all times
+
+- `main` — production, deployable at all times
+- `dev` — staging, accepts direct pushes
 - Feature branches: `feat/descriptive-name`
 - Fix branches: `fix/descriptive-name`
 
+### Push rules
+
+- `dev` → `main`: allowed directly (hook permits it)
+- `feat/*`, `fix/*`, etc → `main`: **blocked** — must use a PR
+- Enforced by `.husky/pre-push` hook locally
+- CI runs on all branches via `.github/workflows/ci.yml`
+
 ### Workflow
-1. Branch from `main`
+
+1. Branch from `dev` (or `main` if `dev` doesn't exist yet)
 2. Make changes in one logical unit per commit
-3. Open PR when ready
-4. Merge squash to `main`
+3. Open PR against `dev` or `main` — **always PR by default**
+4. Merge squash to `dev` or `main`
 
 ### AI policy
-**Suggest git commands, never run them.** Present the proposed command and wait for approval: "I suggest running `git add <file>` then `git commit -m "..."`. Shall I proceed?"
+
+- Always use a PR to merge `dev` → `main` unless explicitly told "push directly" or "merge directly"
+- Exception allowed for small urgent fixes when the user explicitly asks for a direct merge
+- **Suggest git commands, never run them.** Present the proposed command and wait for approval: "I suggest running `git add <file>` then `git commit -m "..."`. Shall I proceed?"
 
 ---
 
@@ -53,28 +66,29 @@ These are hard constraints. Violating them will break the project.
 
 Format: `type(scope):lowercase description`
 
-| Type | When to use |
-|---|---|
-| `feat` | New capability in one layer |
-| `fix` | Bug fix in one layer |
-| `refactor` | Restructure without behavior change |
-| `docs` | Documentation only (README, AGENTS) |
-| `style` | Formatting, spacing, no logic change |
-| `chore` | Deps, config, tooling, Docker, Makefile |
-| `test` | Adding or updating tests |
+| Type       | When to use                             |
+| ---------- | --------------------------------------- |
+| `feat`     | New capability in one layer             |
+| `fix`      | Bug fix in one layer                    |
+| `refactor` | Restructure without behavior change     |
+| `docs`     | Documentation only (README, AGENTS)     |
+| `style`    | Formatting, spacing, no logic change    |
+| `chore`    | Deps, config, tooling, Docker, Makefile |
+| `test`     | Adding or updating tests                |
 
-| Scope | Where the change lives |
-|---|---|
-| `docker` | Compose files, Dockerfile |
-| `config` | Makefile, env files, next.config, tsconfig |
-| `deps` | package.json dependencies |
-| `auth` | Authentication/authorization |
-| `backend` | Server actions, mutations, queries, lib |
-| `ui` | React components, styles, layout |
-| `routes` | app/ route files, page/layout/loading/error |
-| `db` | Prisma schema, migrations |
+| Scope     | Where the change lives                      |
+| --------- | ------------------------------------------- |
+| `docker`  | Compose files, Dockerfile                   |
+| `config`  | Makefile, env files, next.config, tsconfig  |
+| `deps`    | package.json dependencies                   |
+| `auth`    | Authentication/authorization                |
+| `backend` | Server actions, mutations, queries, lib     |
+| `ui`      | React components, styles, layout            |
+| `routes`  | app/ route files, page/layout/loading/error |
+| `db`      | Prisma schema, migrations                   |
 
 **Examples:**
+
 ```
 feat(backend):add S3 storage abstraction and thumbnail processor
 feat(ui):add NotifDialog component with single okay button
@@ -89,15 +103,15 @@ refactor(backend):migrate url-safety to use imported env object
 
 This project uses **Server Actions** for all data mutations. API Routes (`app/api/`) exist only for the NextAuth catch-all (`[...nextauth]/route.ts`).
 
-| Task | Use | Reason |
-|---|---|---|
-| Sign up, sign in, update profile | Server action | Mutation + redirect |
-| Create, update, delete games | Server action | Mutation + revalidate |
-| Toggle favorite | Server action | Mutation + revalidate |
-| Check URL safety | Server action helper | Called from game actions |
-| Auth callbacks | API route (`api/auth/[...nextauth]`) | Required by NextAuth |
-| Read data in a page/layout | Direct `async` component or query | Server component, no action needed |
-| Read data in a client component | Server action or hook | Use `useActionState` for form state |
+| Task                             | Use                                  | Reason                              |
+| -------------------------------- | ------------------------------------ | ----------------------------------- |
+| Sign up, sign in, update profile | Server action                        | Mutation + redirect                 |
+| Create, update, delete games     | Server action                        | Mutation + revalidate               |
+| Toggle favorite                  | Server action                        | Mutation + revalidate               |
+| Check URL safety                 | Server action helper                 | Called from game actions            |
+| Auth callbacks                   | API route (`api/auth/[...nextauth]`) | Required by NextAuth                |
+| Read data in a page/layout       | Direct `async` component or query    | Server component, no action needed  |
+| Read data in a client component  | Server action or hook                | Use `useActionState` for form state |
 
 **Never create a new API route unless there's a specific reason (webhook, external API, NextAuth).** Default to server actions for everything data-related.
 
@@ -180,6 +194,7 @@ src/
 ```
 
 **Rules:**
+
 - Feature logic goes in `features/<name>/`. Never put game logic in `lib/` or `components/`.
 - Reusable UI goes in `components/ui/` with barrel export.
 - Layout-specific components go in `components/layout/`.
@@ -191,6 +206,7 @@ src/
 ## Section 7 — Coding Standards
 
 ### TypeScript
+
 - Use `strict: true` — no `any` unless absolutely necessary and justified
 - `@/*` path alias maps to `./src/*` — always use this, never relative imports outside the same directory
 - Prefer `interface` over `type` for object shapes; use `type` for unions, aliases
@@ -198,6 +214,7 @@ src/
 - Use PascalCase for types/interfaces, camelCase for functions/variables, UPPER_SNAKE for constants
 
 ### Naming
+
 - Server actions: `verbNoun` — `createGame`, `signIn`, `toggleFavorite`
 - Mutations: same as action but focused on DB — `updateUser`, `deleteGame`
 - Queries: `getNoun` — `getGames`, `getGameById`, `getFavoritedGameIds`
@@ -205,17 +222,21 @@ src/
 - Files: kebab-case — `sign-out-button.tsx`, `auth-aware-link.tsx`
 
 ### Error handling
+
 All server actions must use the `wrap()`/`ok()`/`fail()` pattern from `@/lib/errors`:
+
 ```ts
-import { wrap, fail } from "@/lib/errors"
-import { ActionError } from "@/lib/errors"
+import { wrap, fail } from '@/lib/errors'
+import { ActionError } from '@/lib/errors'
 
 const result = await wrap(() => someOperation())
 if (!result.success) return result
 ```
+
 Mutations throw `ActionError`, `wrap()` catches it and returns `fail(code, message)`.
 
 ### What to avoid
+
 - No `tailwind-merge` usage in the current codebase — use `clsx` or `cn()` from `@/lib/utils`
 - No `zsa` usage — removed from deps, don't re-add
 - No inline `process.env` access — import `env` from `@/lib/env` instead
@@ -223,6 +244,7 @@ Mutations throw `ActionError`, `wrap()` catches it and returns `fail(code, messa
 - No `"use client"` on components that don't need it (server components by default)
 
 ### Component styling
+
 - Use custom `pv-*` Tailwind tokens: `bg-pv-primary`, `border-pv-border`, `text-pv-text`, `text-pv-muted`, `bg-pv-card`, `rounded-pv`/`rounded-pv-sm`
 - Themed border style: `border-[2.5px] border-pv-border rounded-pv` is the standard card/box style
 
@@ -242,14 +264,14 @@ All server actions return `ActionResult<T>`:
 
 Error codes and their default messages:
 
-| Code | Default message | When thrown |
-|---|---|---|
-| `UNAUTHORIZED` | "You must be signed in to do that" | Session check fails |
-| `NOT_FOUND` | "Resource not found" | DB query returns empty |
-| `VALIDATION` | "Invalid data provided" | Zod parse fails |
-| `CONFLICT` | "This resource already exists" | Unique constraint violation |
-| `FORBIDDEN` | "You don't have permission to do that" | Owner check fails |
-| `INTERNAL` | "Something went wrong" | Unhandled error |
+| Code           | Default message                        | When thrown                 |
+| -------------- | -------------------------------------- | --------------------------- |
+| `UNAUTHORIZED` | "You must be signed in to do that"     | Session check fails         |
+| `NOT_FOUND`    | "Resource not found"                   | DB query returns empty      |
+| `VALIDATION`   | "Invalid data provided"                | Zod parse fails             |
+| `CONFLICT`     | "This resource already exists"         | Unique constraint violation |
+| `FORBIDDEN`    | "You don't have permission to do that" | Owner check fails           |
+| `INTERNAL`     | "Something went wrong"                 | Unhandled error             |
 
 Import: `import type { ActionResult, ErrorCode } from "@/types"`
 
@@ -258,19 +280,23 @@ Import: `import type { ActionResult, ErrorCode } from "@/types"`
 ## Section 9 — Database Rules
 
 ### Prisma client
+
 - Singleton via `@/lib/prisma` — uses global caching in dev
 - Never create a new `PrismaClient()` — always import `prisma` from `@/lib/prisma`
 
 ### Read/write separation
+
 - **Queries** (`features/*/server/queries.ts`) — pure reads via `prisma.game.findMany()`, etc. Throw `ActionError` if not found.
 - **Mutations** (`features/*/server/mutations.ts`) — pure writes via `prisma.game.create()`, etc. Throw `ActionError` on missing records.
 
 ### Migrations
+
 - Never edit existing migration files in `prisma/migrations/`
 - Create new migrations: `make migrate name=descriptive_name`
 - Always `npx prisma generate` after schema changes (done automatically by `migrate dev`)
 
 ### No raw SQL
+
 Never use `$queryRaw` or `$executeRaw` — Prisma's query API is sufficient.
 
 ---
@@ -341,24 +367,29 @@ Utility:
 ## Section 13 — Linting, Formatting, and Quality Rules
 
 ### Formatting
+
 - No Prettier config exists yet. The codebase uses **implicit conventions**: single quotes, no semicolons, 2-space indentation. Match the existing file style.
 - If `.prettierrc` is added later, all files must conform.
 - Trailing commas on multiline (ES5 standard).
 
 ### Linting
-- ESLint is configured via `.eslintrc.json` with `{ "extends": "next/core-web-vitals" }` (ESLint 9).
-- Run `make lint` after every change (maps to `npm run lint` which runs `next lint`).
+
+- ESLint is configured via `eslint.config.js` (ESLint 9) with the Next.js core-web-vitals preset.
+- Run `make lint` after every change (maps to `npm run lint` which runs `eslint .`).
 - Never present code as complete if it contains ESLint violations.
 
 ### TypeScript
+
 - Run `npx tsc --noEmit` to verify type correctness.
 - Fix all type errors before marking work as done.
 
 ### Testing
+
 - No test framework is configured yet.
 - For any new non-trivial logic, include an `assert`-based demo check if possible.
 
 ### Server vs Client Components
+
 - **Server component by default.** Only add `"use client"` when you need:
   - `useState`, `useEffect`, `useActionState`
   - `useSession` from `next-auth/react`
@@ -368,11 +399,13 @@ Utility:
 - Example: `navbar.tsx` is a server component that calls `auth()` and passes `session` as a prop to `MobileNav` (client). `MobileNav` needs `"use client"` because it has interactive state (open/close drawer).
 
 ### Security
+
 - Never log user data, tokens, or secrets
 - Never expose tokens in client components
 - Never skip auth checks — every server action that mutates data must call `auth()` and validate `userId`
 - Never pass `session` from a parent to bypass auth in a child — each action re-checks on the server
 
 ### When to ask vs when to proceed
+
 - **Proceed** with: fixing obvious bugs, adding validated features, updating config files, refactoring within established patterns
 - **Ask** before: adding new dependencies, changing the database schema, creating new API routes, restructuring folders, running destructive commands
