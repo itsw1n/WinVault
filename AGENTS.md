@@ -42,7 +42,7 @@ These are hard constraints. Violating them will break the project.
 
 ### Push rules
 
-- `dev` → `main`: allowed directly
+- `dev` → `main`: allowed directly (hook permits it)
 - `feat/*`, `fix/*`, etc → `main`: **blocked** — must use a PR
 - Enforced by `.husky/pre-push` hook locally
 - CI runs on all branches via `.github/workflows/ci.yml`
@@ -51,8 +51,13 @@ These are hard constraints. Violating them will break the project.
 
 1. Branch from `dev` (or `main` if `dev` doesn't exist yet)
 2. Make changes in one logical unit per commit
-3. Open PR against `dev` or `main`
+3. Open PR against `dev` or `main` — **always PR by default**
 4. Merge squash to `dev` or `main`
+
+### AI policy
+
+- Always use a PR to merge `dev` → `main` unless explicitly told "push directly" or "merge directly"
+- Exception allowed for small urgent fixes when the user explicitly asks for a direct merge
 
 ### AI policy
 
